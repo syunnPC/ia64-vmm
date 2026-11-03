@@ -1,0 +1,7030 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# FP helper expansions (docs/floating-point.md; rulelib.py "expand"), written by
+# fpfast_gen.py. Rules are tried in order; the first whose insn,
+# precision, addend and host match and whose mode is enabled expands.
+
+expand fma_s_fused
+  insn      FMA
+  precision s
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x0, $s
+            .ap:
+            vfmadd213ss x1, x2, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_s_f0
+  insn      FMA
+  precision s
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            mulss x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_s_fused
+  insn      FMS
+  precision s
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x0, $s
+            .ap:
+            vfmadd213ss x1, x2, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_s_f0
+  insn      FMS
+  precision s
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            mulss x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_s_fused
+  insn      FNMA
+  precision s
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x0, $s
+            .ap:
+            vfmadd213ss x1, x2, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_s_f0
+  insn      FNMA
+  precision s
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            mulss x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fmpy_s
+  insn      FMPY
+  precision s
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .ap:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .bp:
+            mulss x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, a.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fadd_s
+  insn      FADD
+  precision s
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x0, $s
+            .ap:
+            addss x1, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fsub_s
+  insn      FSUB
+  precision s
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .ap:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x0, $s
+            .bp:
+            addss x1, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnorm_s
+  insn      FNORM
+  precision s
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            movabs64 $s, 0x3f800000
+            movq x2, $s
+            mulss x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_d_fused
+  insn      FMA
+  precision d
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            vfmadd213sd x1, x2, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_d_f0
+  insn      FMA
+  precision d
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_d_fused
+  insn      FMS
+  precision d
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            vfmadd213sd x1, x2, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_d_f0
+  insn      FMS
+  precision d
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_d_fused
+  insn      FNMA
+  precision d
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            vfmadd213sd x1, x2, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_d_f0
+  insn      FNMA
+  precision d
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fmpy_d
+  insn      FMPY
+  precision d
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .ap:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .bp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, a.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fadd_d
+  insn      FADD
+  precision d
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fsub_d
+  insn      FSUB
+  precision d
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .ap:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x0, $s
+            .bp:
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnorm_d
+  insn      FNORM
+  precision d
+  addend    any
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1032
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            movabs64 $s, 0x3ff0000000000000
+            movq x2, $s
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fpma_fused
+  insn      FPMA
+  precision s
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl0
+            in $s, b.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .bl0:
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl1
+            in $s, b.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .bl1:
+            in $s, b.sig
+            movq x1, $s
+            in $s, c.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, c.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl0
+            in $s, c.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .cl0:
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl1
+            in $s, c.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .cl1:
+            in $s, c.sig
+            movq x2, $s
+            in $s, a.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, a.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .al0
+            in $s, a.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .al0:
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .al1
+            in $s, a.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .al1:
+            in $s, a.sig
+            movq x0, $s
+            vfmadd213ps x1, x2, x0
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r0
+            je .r0m
+            movq $s, x1
+            shl64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            jz .r0
+            in $s, c.sig
+            shl64 $s, 33
+            jnz $BAIL
+            jmp .r0
+            .r0m:
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .r0:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r1
+            je .r1m
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jz .r1
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jnz $BAIL
+            jmp .r1
+            .r1m:
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jz $BAIL
+            .r1:
+            out d.sig, x1
+            out d.meta, 0x1003e
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fpma_f0
+  insn      FPMA
+  precision s
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl0
+            in $s, b.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .bl0:
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl1
+            in $s, b.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .bl1:
+            in $s, b.sig
+            movq x1, $s
+            in $s, c.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, c.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl0
+            in $s, c.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .cl0:
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl1
+            in $s, c.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .cl1:
+            in $s, c.sig
+            movq x2, $s
+            mulps x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r0
+            je .r0m
+            movq $s, x1
+            shl64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            jz .r0
+            in $s, c.sig
+            shl64 $s, 33
+            jnz $BAIL
+            jmp .r0
+            .r0m:
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .r0:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r1
+            je .r1m
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jz .r1
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jnz $BAIL
+            jmp .r1
+            .r1m:
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jz $BAIL
+            .r1:
+            out d.sig, x1
+            out d.meta, 0x1003e
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fpms_fused
+  insn      FPMS
+  precision s
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl0
+            in $s, b.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .bl0:
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl1
+            in $s, b.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .bl1:
+            in $s, b.sig
+            movq x1, $s
+            in $s, c.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, c.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl0
+            in $s, c.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .cl0:
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl1
+            in $s, c.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .cl1:
+            in $s, c.sig
+            movq x2, $s
+            in $s, a.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, a.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .al0
+            in $s, a.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .al0:
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .al1
+            in $s, a.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .al1:
+            in $s, a.sig
+            movq x0, $s
+            movabs64 $s, 0x8000000080000000
+            movq x3, $s
+            pxor x0, x3
+            vfmadd213ps x1, x2, x0
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r0
+            je .r0m
+            movq $s, x1
+            shl64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            jz .r0
+            in $s, c.sig
+            shl64 $s, 33
+            jnz $BAIL
+            jmp .r0
+            .r0m:
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .r0:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r1
+            je .r1m
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jz .r1
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jnz $BAIL
+            jmp .r1
+            .r1m:
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jz $BAIL
+            .r1:
+            out d.sig, x1
+            out d.meta, 0x1003e
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fpms_f0
+  insn      FPMS
+  precision s
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl0
+            in $s, b.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .bl0:
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl1
+            in $s, b.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .bl1:
+            in $s, b.sig
+            movq x1, $s
+            in $s, c.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, c.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl0
+            in $s, c.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .cl0:
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl1
+            in $s, c.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .cl1:
+            in $s, c.sig
+            movq x2, $s
+            mulps x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r0
+            je .r0m
+            movq $s, x1
+            shl64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            jz .r0
+            in $s, c.sig
+            shl64 $s, 33
+            jnz $BAIL
+            jmp .r0
+            .r0m:
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .r0:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r1
+            je .r1m
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jz .r1
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jnz $BAIL
+            jmp .r1
+            .r1m:
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jz $BAIL
+            .r1:
+            out d.sig, x1
+            out d.meta, 0x1003e
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fpnma_fused
+  insn      FPNMA
+  precision s
+  addend    reg
+  host      fma3
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl0
+            in $s, b.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .bl0:
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl1
+            in $s, b.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .bl1:
+            in $s, b.sig
+            movq x1, $s
+            movabs64 $s, 0x8000000080000000
+            movq x3, $s
+            pxor x1, x3
+            in $s, c.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, c.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl0
+            in $s, c.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .cl0:
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl1
+            in $s, c.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .cl1:
+            in $s, c.sig
+            movq x2, $s
+            in $s, a.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, a.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .al0
+            in $s, a.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .al0:
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .al1
+            in $s, a.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .al1:
+            in $s, a.sig
+            movq x0, $s
+            vfmadd213ps x1, x2, x0
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r0
+            je .r0m
+            movq $s, x1
+            shl64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            jz .r0
+            in $s, c.sig
+            shl64 $s, 33
+            jnz $BAIL
+            jmp .r0
+            .r0m:
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .r0:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r1
+            je .r1m
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jz .r1
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jnz $BAIL
+            jmp .r1
+            .r1m:
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jz $BAIL
+            .r1:
+            out d.sig, x1
+            out d.meta, 0x1003e
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fpnma_f0
+  insn      FPNMA
+  precision s
+  addend    f0
+  host      base
+  mode      exact
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl0
+            in $s, b.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .bl0:
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .bl1
+            in $s, b.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .bl1:
+            in $s, b.sig
+            movq x1, $s
+            movabs64 $s, 0x8000000080000000
+            movq x3, $s
+            pxor x1, x3
+            in $s, c.meta
+            cmp64 $s, 0x1fffe
+            je $BAIL
+            in $s, c.sig
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl0
+            in $s, c.sig
+            shl64 $s, 41
+            jnz $BAIL
+            .cl0:
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            test64 $s, $s
+            jnz .cl1
+            in $s, c.sig
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            .cl1:
+            in $s, c.sig
+            movq x2, $s
+            mulps x1, x2
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r0
+            je .r0m
+            movq $s, x1
+            shl64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 33
+            jz .r0
+            in $s, c.sig
+            shl64 $s, 33
+            jnz $BAIL
+            jmp .r0
+            .r0m:
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .r0:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 56
+            cmp64 $s, 0xff
+            je $BAIL
+            cmp64 $s, 1
+            ja .r1
+            je .r1m
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jz .r1
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 33
+            jnz $BAIL
+            jmp .r1
+            .r1m:
+            movq $s, x1
+            shl64 $s, 9
+            shr64 $s, 41
+            jz $BAIL
+            .r1:
+            out d.sig, x1
+            out d.meta, 0x1003e
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_s_approx
+  insn      FMA
+  precision s
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x0, $s
+            .ap:
+            mulss x1, x2
+            addss x1, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_s_approx
+  insn      FMS
+  precision s
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x0, $s
+            .ap:
+            mulss x1, x2
+            addss x1, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_s_approx
+  insn      FNMA
+  precision s
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, b.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 31
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 23
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, c.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xff81
+            cmp64 $s, 0xfd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 23
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            shl64 $s, 24
+            jnz $BAIL
+            in $s, a.sig
+            shl64 $s, 1
+            shr64 $s, 41
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 31
+            movq x0, $s
+            .ap:
+            mulss x1, x2
+            addss x1, x0
+            movq $s, x1
+            shl64 $s, 33
+            jz .rz
+            shr64 $s, 56
+            sub64 $s, 1
+            cmp64 $s, 0xfd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 41
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 33
+            shr64 $s, 56
+            add64 $s, 0xff80
+            movq x2, $s
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 40
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shl64 $s, 32
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_d_approx
+  insn      FMA
+  precision d
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            mulsd x1, x2
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_d_approx
+  insn      FMS
+  precision d
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            mulsd x1, x2
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_d_approx
+  insn      FNMA
+  precision d
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1030
+            cmp64 $s, 0x1000
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            mulsd x1, x2
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_x_fused
+  insn      FMA
+  precision none
+  addend    reg
+  host      fma3
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            vfmadd213sd x1, x2, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_x_approx
+  insn      FMA
+  precision none
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            mulsd x1, x2
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fma_x_f0
+  insn      FMA
+  precision none
+  addend    f0
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_x_fused
+  insn      FMS
+  precision none
+  addend    reg
+  host      fma3
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            vfmadd213sd x1, x2, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_x_approx
+  insn      FMS
+  precision none
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            mulsd x1, x2
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fms_x_f0
+  insn      FMS
+  precision none
+  addend    f0
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_x_fused
+  insn      FNMA
+  precision none
+  addend    reg
+  host      fma3
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            vfmadd213sd x1, x2, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_x_approx
+  insn      FNMA
+  precision none
+  addend    reg
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            mulsd x1, x2
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnma_x_f0
+  insn      FNMA
+  precision none
+  addend    f0
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .cz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, c.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .cp
+            .cz:
+            in $s, c.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, c.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .cp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, c.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fmpy_x
+  insn      FMPY
+  precision none
+  addend    any
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .ap:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x2, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x2, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x2, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x2, $s
+            .bp:
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, a.sig
+            test64 $s, $s
+            jz .rzok
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            .rzok:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fadd_x
+  insn      FADD
+  precision none
+  addend    any
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x0, $s
+            .ap:
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fsub_x
+  insn      FSUB
+  precision none
+  addend    any
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .az
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, a.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .ap
+            .az:
+            in $s, a.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, a.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, a.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .ap:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x0, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x0, x3
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x3, $s
+            por x0, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            xor64 $s, 1
+            shl64 $s, 63
+            movq x0, $s
+            .bp:
+            addsd x1, x0
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end
+
+expand fnorm_x
+  insn      FNORM
+  precision none
+  addend    any
+  host      base
+  mode      approx
+  emit      in $s, qp
+            test64 $s, $s
+            jz .skip
+            in $s, fpsr
+            test64 $s, 32
+            jz $BAIL
+            shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
+            and64 $s, 0x1038
+            cmp64 $s, 0x1008
+            jne $BAIL
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            sub64 $s, 0xfc01
+            cmp64 $s, 0x7fd
+            ja .bz
+            add64 $s, 1
+            shl64 $s, 52
+            movq x1, $s
+            in $s, b.sig
+            test64 $s, $s
+            jns $BAIL
+            test64 $s, 0x7ff
+            jnz $BAIL
+            shl64 $s, 1
+            shr64 $s, 12
+            movq x3, $s
+            por x1, x3
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x3, $s
+            por x1, x3
+            jmp .bp
+            .bz:
+            in $s, b.meta
+            and64 $s, 0x1ffff
+            jnz $BAIL
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            in $s, b.meta
+            shr64 $s, 17
+            shl64 $s, 63
+            movq x1, $s
+            .bp:
+            movabs64 $s, 0x3ff0000000000000
+            movq x2, $s
+            mulsd x1, x2
+            movq $s, x1
+            shl64 $s, 1
+            jz .rz
+            shr64 $s, 53
+            sub64 $s, 1
+            cmp64 $s, 0x7fd
+            ja $BAIL
+            test64 $s, $s
+            jnz .rn
+            movq $s, x1
+            shl64 $s, 12
+            jz $BAIL
+            .rn:
+            movq $s, x1
+            shl64 $s, 1
+            shr64 $s, 53
+            add64 $s, 0xfc00
+            movq x2, $s
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            movq x0, $s
+            por x2, x0
+            out d.meta, x2
+            psllq x1, 11
+            pcmpeqd x3, x3
+            psllq x3, 63
+            por x1, x3
+            out d.sig, x1
+            out mf, #mf
+            jmp $DONE
+            .rz:
+            in $s, b.sig
+            test64 $s, $s
+            jnz $BAIL
+            out d.sig, 0
+            movq $s, x1
+            shr64 $s, 63
+            shl64 $s, 17
+            out d.meta, $s
+            out mf, #mf
+            jmp $DONE
+            .skip:
+            in $s, d.sig
+            out d.sig, $s
+            in $s, d.meta
+            out d.meta, $s
+            out mf, 0
+            jmp $DONE
+end

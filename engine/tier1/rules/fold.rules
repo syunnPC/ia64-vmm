@@ -1,0 +1,349 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Tier1 IR fold rules, parsed by rulelib.py and generated into fold_rules.h.
+# make test-tier1-rules proves pattern/result equivalence for admitted inputs.
+
+# ---------------------------------------------------------------- constants
+# Two constant operands: integer ops (SDM Vol.3 add, sub, and, andcm, or,
+# xor; sem_ia64.py cites each).
+
+fold add_cc
+  match   (ADD (CONST #a) (CONST #b))
+  result  (CONST (add #a #b))
+end
+
+fold sub_cc
+  match   (SUB (CONST #a) (CONST #b))
+  result  (CONST (sub #a #b))
+end
+
+fold and_cc
+  match   (AND (CONST #a) (CONST #b))
+  result  (CONST (and #a #b))
+end
+
+fold andcm_cc
+  match   (ANDCM (CONST #a) (CONST #b))
+  result  (CONST (and #a (not #b)))
+end
+
+fold or_cc
+  match   (OR (CONST #a) (CONST #b))
+  result  (CONST (or #a #b))
+end
+
+fold xor_cc
+  match   (XOR (CONST #a) (CONST #b))
+  result  (CONST (xor #a #b))
+end
+
+# Variable shifts by a constant count: IA-64 takes the count unsigned, and
+# counts >= 64 give 0 (shl, shr.u) or the sign fill (shr).
+fold shl_cc
+  match   (SHL (CONST #a) (CONST #c))
+  when    (range #c 0 63)
+  result  (CONST (shl #a #c))
+end
+
+fold shl_cc_big
+  match   (SHL (CONST #a) (CONST #c))
+  when    (in (ltu #c 64) 0)
+  result  (CONST 0)
+end
+
+fold shru_cc
+  match   (SHRU (CONST #a) (CONST #c))
+  when    (range #c 0 63)
+  result  (CONST (shru #a #c))
+end
+
+fold shru_cc_big
+  match   (SHRU (CONST #a) (CONST #c))
+  when    (in (ltu #c 64) 0)
+  result  (CONST 0)
+end
+
+fold shr_cc
+  match   (SHR (CONST #a) (CONST #c))
+  when    (range #c 0 63)
+  result  (CONST (shr #a #c))
+end
+
+fold shr_cc_big
+  match   (SHR (CONST #a) (CONST #c))
+  when    (in (ltu #c 64) 0)
+  result  (CONST (shr #a 63))
+end
+
+# Immediate shifts and bitfields of a constant (shladd's shift, dep.z imm8,
+# folded extr/extr.u/dep.z/sxt/zxt operands). A field with pos + len >= 64
+# runs to bit 63 (the effective length 64 - pos, SDM Vol.3 extr, dep.z).
+
+fold shl_imm_c
+  match   (SHL_IMM #c (CONST #a))
+  result  (CONST (shl #a #c))
+end
+
+fold extru_c_top
+  match   (EXTRU #p #l (CONST #a))
+  when    (range (add #p #l) 64 127)
+  result  (CONST (shru #a #p))
+end
+
+fold extru_c
+  match   (EXTRU #p #l (CONST #a))
+  when    (range (add #p #l) 1 63)
+  result  (CONST (shru (shl #a (sub 64 #p #l)) (sub 64 #l)))
+end
+
+fold extr_c_top
+  match   (EXTR #p #l (CONST #a))
+  when    (range (add #p #l) 64 127)
+  result  (CONST (shr #a #p))
+end
+
+fold extr_c
+  match   (EXTR #p #l (CONST #a))
+  when    (range (add #p #l) 1 63)
+  result  (CONST (shr (shl #a (sub 64 #p #l)) (sub 64 #l)))
+end
+
+fold depz_c_top
+  match   (DEPZ #p #l (CONST #a))
+  when    (range (add #p #l) 64 127)
+  result  (CONST (shl #a #p))
+end
+
+fold depz_c
+  match   (DEPZ #p #l (CONST #a))
+  when    (range (add #p #l) 1 63)
+  result  (CONST (shru (shl #a (sub 64 #l)) (sub 64 #l #p)))
+end
+
+fold sxt_c
+  match   (SXT #w (CONST #a))
+  result  (CONST (shr (shl #a (sub 64 #w)) (sub 64 #w)))
+end
+
+fold zxt_c
+  match   (ZXT #w (CONST #a))
+  result  (CONST (and #a (sub (shl 1 #w) 1)))
+end
+
+# Compares of two constants (an I1 CONST, 0 or 1). cmp4 compares bits
+# 31:0: shifted to the top they compare as the 32-bit values do, signed
+# and unsigned.
+
+fold cmp_eq_cc
+  match   (CMP eq 64 (CONST #a) (CONST #b))
+  result  (CONST (eq #a #b))
+end
+
+fold cmp_lt_cc
+  match   (CMP lt 64 (CONST #a) (CONST #b))
+  result  (CONST (lt #a #b))
+end
+
+fold cmp_ltu_cc
+  match   (CMP ltu 64 (CONST #a) (CONST #b))
+  result  (CONST (ltu #a #b))
+end
+
+fold cmp4_eq_cc
+  match   (CMP eq 32 (CONST #a) (CONST #b))
+  result  (CONST (eq (shl #a 32) (shl #b 32)))
+end
+
+fold cmp4_lt_cc
+  match   (CMP lt 32 (CONST #a) (CONST #b))
+  result  (CONST (lt (shl #a 32) (shl #b 32)))
+end
+
+fold cmp4_ltu_cc
+  match   (CMP ltu 32 (CONST #a) (CONST #b))
+  result  (CONST (ltu (shl #a 32) (shl #b 32)))
+end
+
+# br.cloop on a constant LC (both results).
+fold cloop_c_taken
+  match   (CLOOP (CONST #a))@taken
+  result  (CONST (ne #a 0))
+end
+
+fold cloop_c_next
+  match   (CLOOP (CONST #a))@next
+  result  (CONST (sub #a (ne #a 0)))
+end
+
+# ---------------------------------------------------------------- identities
+# Canonical forms the isel rules cover directly ('s proved IR
+# identities, now table entries): fields that run to bit 63 are plain
+# shifts, a variable shift by a constant is an immediate shift or a
+# constant, the 8/16/32-bit low fields are sxt/zxt, and the identity
+# simplification ADD(x, 0) -> x.
+
+fold depz_top_shl_imm
+  match   (DEPZ #p #l $a)
+  when    (range (add #p #l) 64 127)
+  result  (SHL_IMM #p $a)
+end
+
+fold extru_top_shru
+  match   (EXTRU #p #l $a)
+  when    (range (add #p #l) 64 127)
+  result  (SHRU $a (CONST #p))
+end
+
+fold extr_top_shr
+  match   (EXTR #p #l $a)
+  when    (range (add #p #l) 64 127)
+  result  (SHR $a (CONST #p))
+end
+
+fold shl_const_imm
+  match   (SHL $a (CONST #c))
+  when    (range #c 0 63)
+  result  (SHL_IMM #c $a)
+end
+
+fold shl_const_big
+  match   (SHL $a (CONST #c))
+  when    (in (ltu #c 64) 0)
+  result  (CONST 0)
+end
+
+fold shru_const_big
+  match   (SHRU $a (CONST #c))
+  when    (in (ltu #c 64) 0)
+  result  (CONST 0)
+end
+
+fold shr_const_big
+  match   (SHR $a (CONST #c))
+  when    (in (ltu #c 64) 0)
+  result  (SHR $a (CONST 63))
+end
+
+fold extru_low_zxt
+  match   (EXTRU #p #l $a)
+  when    (and (in #p 0) (in #l 8 16 32))
+  result  (ZXT #l $a)
+end
+
+fold extr_low_sxt
+  match   (EXTR #p #l $a)
+  when    (and (in #p 0) (in #l 8 16 32))
+  result  (SXT #l $a)
+end
+
+fold depz_low_zxt
+  match   (DEPZ #p #l $a)
+  when    (and (in #p 0) (in #l 8 16 32))
+  result  (ZXT #l $a)
+end
+
+fold add_zero
+  match   (ADD $a (CONST 0))
+  result  $a
+end
+
+# Same SSA input: these rules concern the I64 data value only. The
+# separately lifted NaT propagation remains an independent live value.
+fold sub_same
+  match   (SUB $a $a)
+  result  (CONST 0)
+end
+
+fold xor_same
+  match   (XOR $a $a)
+  result  (CONST 0)
+end
+
+fold andcm_same
+  match   (ANDCM $a $a)
+  result  (CONST 0)
+end
+
+fold and_same
+  match   (AND $a $a)
+  result  $a
+end
+
+fold or_same
+  match   (OR $a $a)
+  result  $a
+end
+
+fold setf_sig_value
+  match (SETF_SIG $a)
+  result $a
+end
+
+fold getf_sig_value
+  match (GETF_SIG $a)
+  result $a
+end
+
+fold frnattest_meta
+  match (FRNATTEST $sig (CONST #meta))
+  when (in (eq #meta 131070) 0)
+  result (CONST 0)
+end
+
+fold frnattest_sig
+  match (FRNATTEST (CONST #sig) $meta)
+  when (in (eq #sig 0) 0)
+  result (CONST 0)
+end
+
+fold frnattest_cc
+  match (FRNATTEST (CONST #sig) (CONST #meta))
+  result (CONST (and (eq #sig 0) (eq #meta 131070)))
+end
+
+# Absorbing constants determine the data result independently of the
+# other data operand. NaT propagation remains a separate I1 computation.
+fold and_zero_right
+  match   (AND $a (CONST 0))
+  result  (CONST 0)
+end
+
+fold and_zero_left
+  match   (AND (CONST 0) $a)
+  result  (CONST 0)
+end
+
+fold or_ones_right
+  match   (OR $a (CONST -1))
+  result  (CONST -1)
+end
+
+fold or_ones_left
+  match   (OR (CONST -1) $a)
+  result  (CONST -1)
+end
+
+fold andcm_zero_left
+  match   (ANDCM (CONST 0) $a)
+  result  (CONST 0)
+end
+
+fold andcm_ones_right
+  match   (ANDCM $a (CONST -1))
+  result  (CONST 0)
+end
+
+# Zero stays zero for every unsigned count, including counts >= 64.
+fold shl_zero_value
+  match   (SHL (CONST 0) $count)
+  result  (CONST 0)
+end
+
+fold shr_zero_value
+  match   (SHR (CONST 0) $count)
+  result  (CONST 0)
+end
+
+fold shru_zero_value
+  match   (SHRU (CONST 0) $count)
+  result  (CONST 0)
+end

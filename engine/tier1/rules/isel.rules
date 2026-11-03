@@ -1,0 +1,1538 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Tier1 instruction-selection rules, parsed by rulelib.py.
+#
+# Lifted forms the patterns assume (the lifter's contract, the
+# conformance test checks each against ia64_execute):
+#   add r1 = r2, r3, 1        ADD(ADD(r2, r3), CONST 1)
+#   sub r1 = r2, r3, 1        SUB(SUB(r2, r3), CONST 1)
+#   sub r1 = imm8, r3         SUB(CONST imm8, r3)
+#   adds/addl r1 = imm, r3    ADD(r3, CONST imm)  (either order is matched)
+#   and/or/xor r1 = imm8, r3  AND/OR/XOR(CONST imm8, r3)  (either order)
+#   andcm r1 = imm8, r3       ANDCM(CONST imm8, r3)
+#   shladd r1 = r2, c, r3     ADD(SHL_IMM c r2, r3)
+#   shr/shr.u r1 = r3, c      EXTR/EXTRU pos c len 64 - c
+#   shl r1 = r2, c            SHL_IMM c r2 (or DEPZ pos c len 64 - c)
+#   dep.z r1 = imm8, p, l     DEPZ(p, l, CONST sign_ext(imm8, 8))
+#   movl, mov r1 = imm22      CONST
+#   cmp rel p1, p2 = imm8, r3 CMP(rel, CONST imm8, r3): the immediate is the
+#                             first operand (ia64_integer: a = imm)
+#   ld w r1 = [r3], inc       LOAD(r3) (the site, below); r3 = ADD(r3, inc)
+#   st w [r3] = r2, imm9      STORE(r3, r2); r3 = ADD(r3, CONST imm9)
+# A CONST operand is matched by value: the matcher treats a CONST leaf as
+# rematerializable (never a cut point), or the immediate forms never fire.
+#
+# Format 2 (rules.h): immediate expressions as template operands
+# and displacements, FIELD parts (EXTRU #p #l $a) and relation checks in
+# `when`; LOAD/STORE rules for the access of a memory site. The matcher
+# evaluates the checks (struct t1_icheck) after binding the immediates.
+# I1 values (CMP, NOT1, AND1, OR1, I1 SELECT and CONST) are 0 or 1 in all 64
+# bits of a register (rules.h).
+
+# Optional scalar forms. isel derives each rule's feature requirements
+# from its encoder operations before considering its cost.
+rule bmi1_andcm cost 1
+  match   (ANDCM $a $b)
+  outputs $d = (ANDCM $a $b)@value
+  emit    mov64 $d, $b
+          andn64 $d, $a
+  flags   clobbered
+end
+
+rule bmi1_blsi cost 1
+  match   (AND (SUB (CONST 0) $a) $a)
+  outputs $d = (AND (SUB (CONST 0) $a) $a)@value
+  emit    blsi64 $d, $a
+  flags   clobbered
+end
+
+rule bmi1_blsmsk cost 1
+  match   (XOR (SUB $a (CONST 1)) $a)
+  outputs $d = (XOR (SUB $a (CONST 1)) $a)@value
+  emit    blsmsk64 $d, $a
+  flags   clobbered
+end
+
+rule bmi1_blsr cost 1
+  match   (AND (SUB $a (CONST 1)) $a)
+  outputs $d = (AND (SUB $a (CONST 1)) $a)@value
+  emit    blsr64 $d, $a
+  flags   clobbered
+end
+
+rule bmi2_ror_depz cost 1
+  match   (OR (DEPZ #c #l $a) (EXTRU #p #r $a))
+  when    (and (range (add #c #p) 64 64) (range (add #c #l) 64 127) (range (add #p #r) 64 127))
+  outputs $d = (OR (DEPZ #c #l $a) (EXTRU #p #r $a))@value
+  tie     $d = $a
+  emit    rorx64 $d, #p
+  flags   preserved
+end
+
+rule bmi1_blsmsk_add cost 1
+  match   (XOR (ADD $a (CONST -1)) $a)
+  outputs $d = (XOR (ADD $a (CONST -1)) $a)@value
+  emit    blsmsk64 $d, $a
+  flags   clobbered
+end
+
+rule bmi1_blsr_add cost 1
+  match   (AND (ADD $a (CONST -1)) $a)
+  outputs $d = (AND (ADD $a (CONST -1)) $a)@value
+  emit    blsr64 $d, $a
+  flags   clobbered
+end
+
+rule bmi2_ror cost 1
+  match   (OR (SHL_IMM $a #c) (EXTRU #p #l $a))
+  when    (and (range (add #c #p) 64 64) (range (add #l #p) 64 64))
+  outputs $d = (OR (SHL_IMM $a #c) (EXTRU #p #l $a))@value
+  tie     $d = $a
+  emit    rorx64 $d, #p
+  flags   preserved
+end
+
+rule bmi2_shl cost 3
+  match   (SHL $a $c)
+  outputs $d = (SHL $a $c)@value
+  temps   $t0
+  tie     $d = $a
+  emit    xor32 $t0, $t0
+          shlx64 $d, $c
+          cmp64 $c, 63
+          cmova64 $d, $t0
+  flags   clobbered
+end
+
+rule bmi2_shru cost 3
+  match   (SHRU $a $c)
+  outputs $d = (SHRU $a $c)@value
+  temps   $t0
+  tie     $d = $a
+  emit    xor32 $t0, $t0
+          shrx64 $d, $c
+          cmp64 $c, 63
+          cmova64 $d, $t0
+  flags   clobbered
+end
+
+rule bmi2_shr cost 4
+  match   (SHR $a $c)
+  outputs $d = (SHR $a $c)@value
+  temps   $t0
+  tie     $d = $a
+  emit    mov64 $t0, $d
+          sar64 $t0, 63
+          sarx64 $d, $c
+          cmp64 $c, 63
+          cmova64 $d, $t0
+  flags   clobbered
+end
+
+rule cmp_lt_branch cost 2
+  match   (BRANCH (CMP lt 64 $a $b)@value $T $F)
+  labels  $T $F
+  emit    cmp64 $a, $b
+          jl    $T
+          jmp   $F
+  flags   dead-after
+end
+
+rule cloop cost 3
+  match   (BRANCH (CLOOP $lc)@taken $T $F)
+  outputs $n = (CLOOP $lc)@next
+  tie     $n = $lc
+  labels  $T $F
+  emit    test64 $lc, $lc
+          jz     $F            # LC = 0: not taken, LC unchanged
+          sub64  $n, 1
+          jmp    $T
+  flags   dead-after
+end
+
+# br.cloop's results on their own, for a CLOOP whose BRANCH did not take it
+# into the cloop rule above (a fallback; the lifter emits BRANCH(@taken)).
+rule cloop_next cost 3
+  match   (CLOOP $lc)@next
+  outputs $n = (CLOOP $lc)@next
+  temps   $t0
+  tie     $n = $lc
+  emit    lea64    $t0, [$lc - 1]
+          test64   $lc, $lc
+          cmovne64 $n, $t0      # LC = 0 stays 0
+  flags   clobbered
+end
+
+rule cloop_taken cost 3
+  match   (CLOOP $lc)@taken
+  outputs $p = (CLOOP $lc)@taken
+  emit    test64    $lc, $lc
+          setne8    $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule shladd_lea cost 1
+  match   (ADD (SHL_IMM $a #c) $b)
+  when    (in #c 1 2 3)
+  outputs $d = (ADD (SHL_IMM $a #c) $b)@value
+  emit    lea64 $d, [$b + $a * (1 << #c)]
+  flags   preserved
+end
+
+# shladd's count 4 has no lea scale (16): two lea, flags preserved.
+rule shladd4 cost 2
+  match   (ADD (SHL_IMM $a #c) $b)
+  when    (in #c 4)
+  outputs $d = (ADD (SHL_IMM $a #c) $b)@value
+  temps   $t0
+  emit    lea64 $t0, [$a * 8]
+          lea64 $d, [$b + $t0 * 2]
+  flags   preserved
+end
+
+# An I1 result is 0 or 1 in all 64 bits: set<cc>8 writes only bits 7:0.
+rule cmp4_ltu cost 3
+  match   (CMP ltu 32 $a $b)
+  outputs $p = (CMP ltu 32 $a $b)@value
+  emit    cmp32     $a, $b
+          setb8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule shl_var cost 4
+  match   (SHL $a $c)
+  outputs $d = (SHL $a $c)@value
+  temps   $t0
+  tie     $d = $a
+  fixed   $c = rcx
+  emit    xor32   $t0, $t0
+          shl64   $d, cl       # x86 masks the count to 6 bits
+          cmp64   $c, 63       # flags must come from cmp, not shl
+          cmova64 $d, $t0      # IA-64: count > 63 gives 0
+  flags   clobbered
+end
+
+# ---------------------------------------------------------------- integer
+# Two-address forms tie the output to the left input; isel copies a tied
+# input that is still live. lea forms leave the flags alone and need
+# no tie; format 2 takes the displacement from the CONST binder, so
+# immediate adds (adds/addl, post-increments) are one lea.
+
+rule add_rr cost 1
+  match   (ADD $a $b)
+  outputs $d = (ADD $a $b)@value
+  emit    lea64 $d, [$a + $b * 1]
+  flags   preserved
+end
+
+rule add_ri cost 1
+  match   (ADD $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (ADD $a (CONST #k))@value
+  emit    lea64 $d, [$a + #k]
+  flags   preserved
+end
+
+rule add_ir cost 1
+  match   (ADD (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (ADD (CONST #k) $b)@value
+  emit    lea64 $d, [$b + #k]
+  flags   preserved
+end
+
+# add r1 = r2, r3, 1
+rule add_one cost 1
+  match   (ADD (ADD $a $b) (CONST 1))
+  outputs $d = (ADD (ADD $a $b) (CONST 1))@value
+  emit    lea64 $d, [$a + $b * 1 + 1]
+  flags   preserved
+end
+
+rule sub_rr cost 1
+  match   (SUB $a $b)
+  outputs $d = (SUB $a $b)@value
+  tie     $d = $a
+  emit    sub64 $d, $b
+  flags   clobbered
+end
+
+# a - k as a + (-k): -k must be a disp32, so k = -2^31 is excluded and
+# k = 2^31 included.
+rule sub_ri cost 1
+  match   (SUB $a (CONST #k))
+  when    (range #k -2147483647 2147483648)
+  outputs $d = (SUB $a (CONST #k))@value
+  emit    lea64 $d, [$a + (neg #k)]
+  flags   preserved
+end
+
+# sub r1 = imm8, r3
+rule sub_ir cost 2
+  match   (SUB (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SUB (CONST #k) $b)@value
+  emit    mov64 $d, #k
+          sub64 $d, $b
+  flags   clobbered
+end
+
+# sub r1 = r2, r3, 1
+rule sub_one cost 2
+  match   (SUB (SUB $a $b) (CONST 1))
+  outputs $d = (SUB (SUB $a $b) (CONST 1))@value
+  tie     $d = $a
+  emit    sub64 $d, $b
+          sub64 $d, 1
+  flags   clobbered
+end
+
+rule and_rr cost 1
+  match   (AND $a $b)
+  outputs $d = (AND $a $b)@value
+  tie     $d = $a
+  emit    and64 $d, $b
+  flags   clobbered
+end
+
+rule and_ri cost 1
+  match   (AND $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (AND $a (CONST #k))@value
+  tie     $d = $a
+  emit    and64 $d, #k
+  flags   clobbered
+end
+
+rule and_ir cost 1
+  match   (AND (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (AND (CONST #k) $b)@value
+  tie     $d = $b
+  emit    and64 $d, #k
+  flags   clobbered
+end
+
+rule or_rr cost 1
+  match   (OR $a $b)
+  outputs $d = (OR $a $b)@value
+  tie     $d = $a
+  emit    or64 $d, $b
+  flags   clobbered
+end
+
+rule or_ri cost 1
+  match   (OR $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (OR $a (CONST #k))@value
+  tie     $d = $a
+  emit    or64 $d, #k
+  flags   clobbered
+end
+
+rule or_ir cost 1
+  match   (OR (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (OR (CONST #k) $b)@value
+  tie     $d = $b
+  emit    or64 $d, #k
+  flags   clobbered
+end
+
+rule xor_rr cost 1
+  match   (XOR $a $b)
+  outputs $d = (XOR $a $b)@value
+  tie     $d = $a
+  emit    xor64 $d, $b
+  flags   clobbered
+end
+
+rule xor_ri cost 1
+  match   (XOR $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (XOR $a (CONST #k))@value
+  tie     $d = $a
+  emit    xor64 $d, #k
+  flags   clobbered
+end
+
+rule xor_ir cost 1
+  match   (XOR (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (XOR (CONST #k) $b)@value
+  tie     $d = $b
+  emit    xor64 $d, #k
+  flags   clobbered
+end
+
+# a & ~b without BMI1 (Sandy Bridge lacks andn).
+rule andcm_rr cost 3
+  match   (ANDCM $a $b)
+  outputs $d = (ANDCM $a $b)@value
+  emit    mov64 $d, $b
+          not64 $d
+          and64 $d, $a
+  flags   clobbered
+end
+
+# andcm r1 = imm8, r3
+rule andcm_ir cost 3
+  match   (ANDCM (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (ANDCM (CONST #k) $b)@value
+  emit    mov64 $d, $b
+          not64 $d
+          and64 $d, #k
+  flags   clobbered
+end
+
+# ---------------------------------------------------------------- shifts
+
+rule shl_imm cost 1
+  match   (SHL_IMM $a #c)
+  outputs $d = (SHL_IMM $a #c)@value
+  tie     $d = $a
+  emit    shl64 $d, #c
+  flags   clobbered
+end
+
+# Shifts by a constant count. shr/shr.u/shl by an immediate arrive as
+# EXTR/EXTRU/DEPZ with pos + len >= 64 (the assembler emits dep.z for
+# shl, so SHL_IMM comes only from shladd), and a variable shift whose count
+# folded to a constant as SHL/SHR/SHRU(a, CONST c). The fold rewrites the
+# field forms to SHL_IMM pos, SHRU/SHR(a, CONST pos) and counts >= 64 to
+# their results (prove.py IR_IDENTITIES), so each is one instruction.
+rule shl_const cost 1
+  match   (SHL $a (CONST #c))
+  when    (range #c 0 63)
+  outputs $d = (SHL $a (CONST #c))@value
+  tie     $d = $a
+  emit    shl64 $d, #c
+  flags   clobbered
+end
+
+rule shru_const cost 1
+  match   (SHRU $a (CONST #c))
+  when    (range #c 0 63)
+  outputs $d = (SHRU $a (CONST #c))@value
+  tie     $d = $a
+  emit    shr64 $d, #c
+  flags   clobbered
+end
+
+rule shr_const cost 1
+  match   (SHR $a (CONST #c))
+  when    (range #c 0 63)
+  outputs $d = (SHR $a (CONST #c))@value
+  tie     $d = $a
+  emit    sar64 $d, #c
+  flags   clobbered
+end
+
+# IA-64 shr.u: count > 63 gives 0; x86 masks the count, so the cmp after the
+# shift (shifts by a non-zero count write the flags) selects the zero.
+rule shru_var cost 4
+  match   (SHRU $a $c)
+  outputs $d = (SHRU $a $c)@value
+  temps   $t0
+  tie     $d = $a
+  fixed   $c = rcx
+  emit    xor32   $t0, $t0
+          shr64   $d, cl
+          cmp64   $c, 63
+          cmova64 $d, $t0
+  flags   clobbered
+end
+
+# IA-64 shr: count > 63 gives the sign fill (a >> 63), computed first.
+rule shr_var cost 5
+  match   (SHR $a $c)
+  outputs $d = (SHR $a $c)@value
+  temps   $t0
+  tie     $d = $a
+  fixed   $c = rcx
+  emit    mov64   $t0, $d
+          sar64   $t0, 63
+          sar64   $d, cl
+          cmp64   $c, 63
+          cmova64 $d, $t0
+  flags   clobbered
+end
+
+# ---------------------------------------------------------------- bitfields
+# Literal fields that are plain extensions, then any field by its parts
+# (format 2): a field with pos + len >= 64 runs to bit 63 (effective length
+# 64 - pos), so it is one shift by pos; otherwise two shifts by derived
+# counts move it to the top and back. Every count is 0..63 (proved).
+
+rule extru_0_8 cost 1
+  match   (EXTRU 0 8 $a)
+  outputs $d = (EXTRU 0 8 $a)@value
+  emit    movzx32_8 $d, $a
+  flags   preserved
+end
+
+rule extru_0_16 cost 1
+  match   (EXTRU 0 16 $a)
+  outputs $d = (EXTRU 0 16 $a)@value
+  emit    movzx32_16 $d, $a
+  flags   preserved
+end
+
+rule extru_0_32 cost 1
+  match   (EXTRU 0 32 $a)
+  outputs $d = (EXTRU 0 32 $a)@value
+  emit    mov32 $d, $a
+  flags   preserved
+end
+
+rule extr_0_8 cost 1
+  match   (EXTR 0 8 $a)
+  outputs $d = (EXTR 0 8 $a)@value
+  emit    movsx64_8 $d, $a
+  flags   preserved
+end
+
+rule extr_0_16 cost 1
+  match   (EXTR 0 16 $a)
+  outputs $d = (EXTR 0 16 $a)@value
+  emit    movsx64_16 $d, $a
+  flags   preserved
+end
+
+rule extr_0_32 cost 1
+  match   (EXTR 0 32 $a)
+  outputs $d = (EXTR 0 32 $a)@value
+  emit    movsx64_32 $d, $a
+  flags   preserved
+end
+
+# shr.u r1 = r3, count arrives as EXTRU count, 64 - count.
+rule extru_top cost 1
+  match   (EXTRU #p #l $a)
+  when    (range (add #p #l) 64 127)
+  outputs $d = (EXTRU #p #l $a)@value
+  tie     $d = $a
+  emit    shr64 $d, #p
+  flags   clobbered
+end
+
+rule bmi1_extru cost 2
+  match   (EXTRU #p #l $a)
+  when    (range (add #p #l) 1 63)
+  outputs $d = (EXTRU #p #l $a)@value
+  temps   $ctl
+  tie     $d = $a
+  emit    mov32 $ctl, (add #p (shl #l 8))
+          bextr64 $d, $ctl
+  flags   clobbered
+end
+
+rule extru_field cost 2
+  match   (EXTRU #p #l $a)
+  when    (range (add #p #l) 1 63)
+  outputs $d = (EXTRU #p #l $a)@value
+  tie     $d = $a
+  emit    shl64 $d, (sub 64 #p #l)     # the field's top bit to bit 63
+          shr64 $d, (sub 64 #l)
+  flags   clobbered
+end
+
+# shr r1 = r3, count arrives as EXTR count, 64 - count.
+rule extr_top cost 1
+  match   (EXTR #p #l $a)
+  when    (range (add #p #l) 64 127)
+  outputs $d = (EXTR #p #l $a)@value
+  tie     $d = $a
+  emit    sar64 $d, #p
+  flags   clobbered
+end
+
+rule extr_field cost 2
+  match   (EXTR #p #l $a)
+  when    (range (add #p #l) 1 63)
+  outputs $d = (EXTR #p #l $a)@value
+  tie     $d = $a
+  emit    shl64 $d, (sub 64 #p #l)
+          sar64 $d, (sub 64 #l)
+  flags   clobbered
+end
+
+# shl r1 = r2, count arrives as DEPZ count, 64 - count (the assembler's
+# dep.z); bits beyond 63 fall off.
+rule depz_top cost 1
+  match   (DEPZ #p #l $a)
+  when    (range (add #p #l) 64 127)
+  outputs $d = (DEPZ #p #l $a)@value
+  tie     $d = $a
+  emit    shl64 $d, #p
+  flags   clobbered
+end
+
+rule depz_field cost 2
+  match   (DEPZ #p #l $a)
+  when    (range (add #p #l) 1 63)
+  outputs $d = (DEPZ #p #l $a)@value
+  tie     $d = $a
+  emit    shl64 $d, (sub 64 #l)        # zero_ext(a, len) at the top
+          shr64 $d, (sub 64 #l #p)     # down to pos
+  flags   clobbered
+end
+
+rule sxt1 cost 1
+  match   (SXT 8 $a)
+  outputs $d = (SXT 8 $a)@value
+  emit    movsx64_8 $d, $a
+  flags   preserved
+end
+
+rule sxt2 cost 1
+  match   (SXT 16 $a)
+  outputs $d = (SXT 16 $a)@value
+  emit    movsx64_16 $d, $a
+  flags   preserved
+end
+
+rule sxt4 cost 1
+  match   (SXT 32 $a)
+  outputs $d = (SXT 32 $a)@value
+  emit    movsx64_32 $d, $a
+  flags   preserved
+end
+
+rule zxt1 cost 1
+  match   (ZXT 8 $a)
+  outputs $d = (ZXT 8 $a)@value
+  emit    movzx32_8 $d, $a
+  flags   preserved
+end
+
+rule zxt2 cost 1
+  match   (ZXT 16 $a)
+  outputs $d = (ZXT 16 $a)@value
+  emit    movzx32_16 $d, $a
+  flags   preserved
+end
+
+# A 32-bit write zero-extends into bits 63:32.
+rule zxt4 cost 1
+  match   (ZXT 32 $a)
+  outputs $d = (ZXT 32 $a)@value
+  emit    mov32 $d, $a
+  flags   preserved
+end
+
+# ---------------------------------------------------------------- constants
+# movl, mov r1 = imm22, folded contract state, I1 constants (0/1).
+
+rule const_zero cost 1
+  match   (CONST 0)
+  outputs $d = (CONST 0)@value
+  emit    xor32 $d, $d
+  flags   clobbered
+end
+
+rule const_u32 cost 1
+  match   (CONST #k)
+  when    (range #k 0 4294967295)
+  outputs $d = (CONST #k)@value
+  emit    mov32 $d, #k
+  flags   preserved
+end
+
+rule const_s32 cost 2
+  match   (CONST #k)
+  when    (range #k -2147483648 -1)
+  outputs $d = (CONST #k)@value
+  emit    mov64 $d, #k
+  flags   preserved
+end
+
+rule const_any cost 3
+  match   (CONST #k)
+  outputs $d = (CONST #k)@value
+  emit    movabs64 $d, #k
+  flags   preserved
+end
+
+# ---------------------------------------------------------------- predicates
+# Normal compares p1 = c, p2 = NOT1 c (under qp: SELECT);.unc
+# compares p1 = AND1(qp, c), p2 = AND1(qp, NOT1 c); br.cond on a
+# predicate register; predicated pure results SELECT(qp, new, old).
+
+rule not1 cost 1
+  match   (NOT1 $a)
+  outputs $d = (NOT1 $a)@value
+  tie     $d = $a
+  emit    xor64 $d, 1
+  flags   clobbered
+end
+
+rule and1 cost 1
+  match   (AND1 $a $b)
+  outputs $d = (AND1 $a $b)@value
+  tie     $d = $a
+  emit    and64 $d, $b
+  flags   clobbered
+end
+
+rule or1 cost 1
+  match   (OR1 $a $b)
+  outputs $d = (OR1 $a $b)@value
+  tie     $d = $a
+  emit    or64 $d, $b
+  flags   clobbered
+end
+
+# The p2 target of a .unc compare: qp & ~c.
+rule and1_not cost 2
+  match   (AND1 $a (NOT1 $b))
+  outputs $d = (AND1 $a (NOT1 $b))@value
+  emit    mov64 $d, $b
+          xor64 $d, 1
+          and64 $d, $a
+  flags   clobbered
+end
+
+rule select cost 2
+  match   (SELECT $c $t $f)
+  outputs $d = (SELECT $c $t $f)@value
+  tie     $d = $f
+  emit    test64   $c, $c
+          cmovne64 $d, $t
+  flags   clobbered
+end
+
+# ---------------------------------------------------------------- compares
+# Value forms set<cc>8 + movzx (an I1 is 0/1 in 64 bits); cmp4 compares the
+# low 32 bits (cmp32: jl/setl signed, jb/setb unsigned on bits 31:0). The
+# _ir forms are the IA-64 immediate forms k REL b, i.e. b REL' k with the
+# swapped condition; _ri forms arise from folded register operands.
+
+rule cmp_eq cost 3
+  match   (CMP eq 64 $a $b)
+  outputs $p = (CMP eq 64 $a $b)@value
+  emit    cmp64     $a, $b
+          sete8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_lt cost 3
+  match   (CMP lt 64 $a $b)
+  outputs $p = (CMP lt 64 $a $b)@value
+  emit    cmp64     $a, $b
+          setl8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_ltu cost 3
+  match   (CMP ltu 64 $a $b)
+  outputs $p = (CMP ltu 64 $a $b)@value
+  emit    cmp64     $a, $b
+          setb8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_eq cost 3
+  match   (CMP eq 32 $a $b)
+  outputs $p = (CMP eq 32 $a $b)@value
+  emit    cmp32     $a, $b
+          sete8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_lt cost 3
+  match   (CMP lt 32 $a $b)
+  outputs $p = (CMP lt 32 $a $b)@value
+  emit    cmp32     $a, $b
+          setl8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_eq_ir cost 3
+  match   (CMP eq 64 (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP eq 64 (CONST #k) $b)@value
+  emit    cmp64     $b, #k
+          sete8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_lt_ir cost 3
+  match   (CMP lt 64 (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP lt 64 (CONST #k) $b)@value
+  emit    cmp64     $b, #k
+          setg8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_ltu_ir cost 3
+  match   (CMP ltu 64 (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP ltu 64 (CONST #k) $b)@value
+  emit    cmp64     $b, #k
+          seta8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_eq_ir cost 3
+  match   (CMP eq 32 (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP eq 32 (CONST #k) $b)@value
+  emit    cmp32     $b, #k
+          sete8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_lt_ir cost 3
+  match   (CMP lt 32 (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP lt 32 (CONST #k) $b)@value
+  emit    cmp32     $b, #k
+          setg8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_ltu_ir cost 3
+  match   (CMP ltu 32 (CONST #k) $b)
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP ltu 32 (CONST #k) $b)@value
+  emit    cmp32     $b, #k
+          seta8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_eq_ri cost 3
+  match   (CMP eq 64 $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP eq 64 $a (CONST #k))@value
+  emit    cmp64     $a, #k
+          sete8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_lt_ri cost 3
+  match   (CMP lt 64 $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP lt 64 $a (CONST #k))@value
+  emit    cmp64     $a, #k
+          setl8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_ltu_ri cost 3
+  match   (CMP ltu 64 $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP ltu 64 $a (CONST #k))@value
+  emit    cmp64     $a, #k
+          setb8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_eq_ri cost 3
+  match   (CMP eq 32 $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP eq 32 $a (CONST #k))@value
+  emit    cmp32     $a, #k
+          sete8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_lt_ri cost 3
+  match   (CMP lt 32 $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP lt 32 $a (CONST #k))@value
+  emit    cmp32     $a, #k
+          setl8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp4_ltu_ri cost 3
+  match   (CMP ltu 32 $a (CONST #k))
+  when    (range #k -2147483648 2147483647)
+  outputs $p = (CMP ltu 32 $a (CONST #k))@value
+  emit    cmp32     $a, #k
+          setb8     $p
+          movzx32_8 $p, $p
+  flags   clobbered
+end
+
+rule cmp_eq_branch cost 2
+  match   (BRANCH (CMP eq 64 $a $b)@value $T $F)
+  labels  $T $F
+  emit    cmp64     $a, $b
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_ltu_branch cost 2
+  match   (BRANCH (CMP ltu 64 $a $b)@value $T $F)
+  labels  $T $F
+  emit    cmp64     $a, $b
+          jb        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_eq_branch cost 2
+  match   (BRANCH (CMP eq 32 $a $b)@value $T $F)
+  labels  $T $F
+  emit    cmp32     $a, $b
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_lt_branch cost 2
+  match   (BRANCH (CMP lt 32 $a $b)@value $T $F)
+  labels  $T $F
+  emit    cmp32     $a, $b
+          jl        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_ltu_branch cost 2
+  match   (BRANCH (CMP ltu 32 $a $b)@value $T $F)
+  labels  $T $F
+  emit    cmp32     $a, $b
+          jb        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_eq_ir_branch cost 2
+  match   (BRANCH (CMP eq 64 (CONST #k) $b)@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp64     $b, #k
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_lt_ir_branch cost 2
+  match   (BRANCH (CMP lt 64 (CONST #k) $b)@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp64     $b, #k
+          jg        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_ltu_ir_branch cost 2
+  match   (BRANCH (CMP ltu 64 (CONST #k) $b)@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp64     $b, #k
+          ja        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_eq_ir_branch cost 2
+  match   (BRANCH (CMP eq 32 (CONST #k) $b)@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp32     $b, #k
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_lt_ir_branch cost 2
+  match   (BRANCH (CMP lt 32 (CONST #k) $b)@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp32     $b, #k
+          jg        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_ltu_ir_branch cost 2
+  match   (BRANCH (CMP ltu 32 (CONST #k) $b)@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp32     $b, #k
+          ja        $T
+          jmp       $F
+  flags   dead-after
+end
+
+# Register-constant forms (a compare whose second operand folded, e.g.
+# cmp.eq p8, p9 = r16, r0 with r0 = CONST 0), and the zero tests as test.
+
+# The zero tests first: at equal cost they win the tie (no immediate).
+rule cmp_eq_zero_branch cost 2
+  match   (BRANCH (CMP eq 64 $a (CONST 0))@value $T $F)
+  labels  $T $F
+  emit    test64    $a, $a
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_eq_zero_ir_branch cost 2
+  match   (BRANCH (CMP eq 64 (CONST 0) $b)@value $T $F)
+  labels  $T $F
+  emit    test64    $b, $b
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_eq_zero_branch cost 2
+  match   (BRANCH (CMP eq 32 $a (CONST 0))@value $T $F)
+  labels  $T $F
+  emit    test32    $a, $a
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_eq_zero_ir_branch cost 2
+  match   (BRANCH (CMP eq 32 (CONST 0) $b)@value $T $F)
+  labels  $T $F
+  emit    test32    $b, $b
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_eq_ri_branch cost 2
+  match   (BRANCH (CMP eq 64 $a (CONST #k))@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp64     $a, #k
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_lt_ri_branch cost 2
+  match   (BRANCH (CMP lt 64 $a (CONST #k))@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp64     $a, #k
+          jl        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp_ltu_ri_branch cost 2
+  match   (BRANCH (CMP ltu 64 $a (CONST #k))@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp64     $a, #k
+          jb        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_eq_ri_branch cost 2
+  match   (BRANCH (CMP eq 32 $a (CONST #k))@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp32     $a, #k
+          je        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_lt_ri_branch cost 2
+  match   (BRANCH (CMP lt 32 $a (CONST #k))@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp32     $a, #k
+          jl        $T
+          jmp       $F
+  flags   dead-after
+end
+
+rule cmp4_ltu_ri_branch cost 2
+  match   (BRANCH (CMP ltu 32 $a (CONST #k))@value $T $F)
+  when    (range #k -2147483648 2147483647)
+  labels  $T $F
+  emit    cmp32     $a, #k
+          jb        $T
+          jmp       $F
+  flags   dead-after
+end
+
+# Branches on predicate combinations (I1 values are 0/1): .unc compares
+# under a predicate give AND1(qp, c) and AND1(qp, NOT1 c), e.g.
+# a gather/filter loop's (p7) cmp.eq.unc p10 = ... ;; (p10) br. For 0/1 values a & ~b is
+# a >u b and ~a & b is a <u b.
+rule br_and1 cost 2
+  match   (BRANCH (AND1 $a $b)@value $T $F)
+  labels  $T $F
+  emit    test64 $a, $b
+          jnz    $T
+          jmp    $F
+  flags   dead-after
+end
+
+rule br_and1_not cost 2
+  match   (BRANCH (AND1 $a (NOT1 $b)@value)@value $T $F)
+  labels  $T $F
+  emit    cmp64  $a, $b
+          ja     $T
+          jmp    $F
+  flags   dead-after
+end
+
+rule br_not_and1 cost 2
+  match   (BRANCH (AND1 (NOT1 $a)@value $b)@value $T $F)
+  labels  $T $F
+  emit    cmp64  $a, $b
+          jb     $T
+          jmp    $F
+  flags   dead-after
+end
+
+rule br_or1 cost 3
+  match   (BRANCH (OR1 $a $b)@value $T $F)
+  labels  $T $F
+  emit    test64 $a, $a
+          jnz    $T
+          test64 $b, $b
+          jnz    $T
+          jmp    $F
+  flags   dead-after
+end
+
+# ---------------------------------------------------------------- generic branches
+# br.cond on an I1 value in a register: the fallback when the compare is a
+# cut (multi-use) value. Last, so that a tie at the BRANCH node resolves to
+# the fused compare-and-branch rules above (ties by rule order); the
+# matcher should compare total tree-cover cost anyway.
+
+rule br_pred cost 2
+  match   (BRANCH $c $T $F)
+  labels  $T $F
+  emit    test64 $c, $c
+          jnz    $T
+          jmp    $F
+  flags   dead-after
+end
+
+rule br_not cost 2
+  match   (BRANCH (NOT1 $c)@value $T $F)
+  labels  $T $F
+  emit    test64 $c, $c
+          jz     $T
+          jmp    $F
+  flags   dead-after
+end
+
+# ---------------------------------------------------------------- selects
+# A predicated pure result is SELECT(qp, new, old); when qp is
+# a compare used only here, the compare sets the flags for the cmov
+# directly. $d is tied to the old value (the false arm).
+
+rule select_cmp_eq cost 2
+  match   (SELECT (CMP eq 64 $a $b)@value $t $f)
+  outputs $d = (SELECT (CMP eq 64 $a $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $a, $b
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_eq_ri cost 2
+  match   (SELECT (CMP eq 64 $a (CONST #k))@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP eq 64 $a (CONST #k))@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $a, #k
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_eq_ir cost 2
+  match   (SELECT (CMP eq 64 (CONST #k) $b)@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP eq 64 (CONST #k) $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $b, #k
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_lt cost 2
+  match   (SELECT (CMP lt 64 $a $b)@value $t $f)
+  outputs $d = (SELECT (CMP lt 64 $a $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $a, $b
+          cmovl64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_lt_ri cost 2
+  match   (SELECT (CMP lt 64 $a (CONST #k))@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP lt 64 $a (CONST #k))@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $a, #k
+          cmovl64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_lt_ir cost 2
+  match   (SELECT (CMP lt 64 (CONST #k) $b)@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP lt 64 (CONST #k) $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $b, #k
+          cmovg64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_ltu cost 2
+  match   (SELECT (CMP ltu 64 $a $b)@value $t $f)
+  outputs $d = (SELECT (CMP ltu 64 $a $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $a, $b
+          cmovb64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_ltu_ri cost 2
+  match   (SELECT (CMP ltu 64 $a (CONST #k))@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP ltu 64 $a (CONST #k))@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $a, #k
+          cmovb64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_ltu_ir cost 2
+  match   (SELECT (CMP ltu 64 (CONST #k) $b)@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP ltu 64 (CONST #k) $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp64   $b, #k
+          cmova64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_eq cost 2
+  match   (SELECT (CMP eq 32 $a $b)@value $t $f)
+  outputs $d = (SELECT (CMP eq 32 $a $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $a, $b
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_eq_ri cost 2
+  match   (SELECT (CMP eq 32 $a (CONST #k))@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP eq 32 $a (CONST #k))@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $a, #k
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_eq_ir cost 2
+  match   (SELECT (CMP eq 32 (CONST #k) $b)@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP eq 32 (CONST #k) $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $b, #k
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_lt cost 2
+  match   (SELECT (CMP lt 32 $a $b)@value $t $f)
+  outputs $d = (SELECT (CMP lt 32 $a $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $a, $b
+          cmovl64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_lt_ri cost 2
+  match   (SELECT (CMP lt 32 $a (CONST #k))@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP lt 32 $a (CONST #k))@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $a, #k
+          cmovl64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_lt_ir cost 2
+  match   (SELECT (CMP lt 32 (CONST #k) $b)@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP lt 32 (CONST #k) $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $b, #k
+          cmovg64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_ltu cost 2
+  match   (SELECT (CMP ltu 32 $a $b)@value $t $f)
+  outputs $d = (SELECT (CMP ltu 32 $a $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $a, $b
+          cmovb64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_ltu_ri cost 2
+  match   (SELECT (CMP ltu 32 $a (CONST #k))@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP ltu 32 $a (CONST #k))@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $a, #k
+          cmovb64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_ltu_ir cost 2
+  match   (SELECT (CMP ltu 32 (CONST #k) $b)@value $t $f)
+  when    (range #k -2147483648 2147483647)
+  outputs $d = (SELECT (CMP ltu 32 (CONST #k) $b)@value $t $f)@value
+  tie     $d = $f
+  emit    cmp32   $b, #k
+          cmova64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp_eq_zero cost 2
+  match   (SELECT (CMP eq 64 $a (CONST 0))@value $t $f)
+  outputs $d = (SELECT (CMP eq 64 $a (CONST 0))@value $t $f)@value
+  tie     $d = $f
+  emit    test64   $a, $a
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_cmp4_eq_zero cost 2
+  match   (SELECT (CMP eq 32 $a (CONST 0))@value $t $f)
+  outputs $d = (SELECT (CMP eq 32 $a (CONST 0))@value $t $f)@value
+  tie     $d = $f
+  emit    test32   $a, $a
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+rule select_not cost 2
+  match   (SELECT (NOT1 $c)@value $t $f)
+  outputs $d = (SELECT (NOT1 $c)@value $t $f)@value
+  tie     $d = $f
+  emit    test64  $c, $c
+          cmove64 $d, $t
+  flags   clobbered
+end
+
+# (qp) adds r = k, r with k = 1, 2, 4, 8: r + qp * k, since qp is 0/1
+# (a predicated counter; one lea, no flags, no branch).
+
+rule select_add1 cost 1
+  match   (SELECT $c (ADD $f (CONST 1))@value $f)
+  outputs $d = (SELECT $c (ADD $f (CONST 1))@value $f)@value
+  emit    lea64 $d, [$f + $c * 1]
+  flags   preserved
+end
+
+rule select_add2 cost 1
+  match   (SELECT $c (ADD $f (CONST 2))@value $f)
+  outputs $d = (SELECT $c (ADD $f (CONST 2))@value $f)@value
+  emit    lea64 $d, [$f + $c * 2]
+  flags   preserved
+end
+
+rule select_add4 cost 1
+  match   (SELECT $c (ADD $f (CONST 4))@value $f)
+  outputs $d = (SELECT $c (ADD $f (CONST 4))@value $f)@value
+  emit    lea64 $d, [$f + $c * 4]
+  flags   preserved
+end
+
+rule select_add8 cost 1
+  match   (SELECT $c (ADD $f (CONST 8))@value $f)
+  outputs $d = (SELECT $c (ADD $f (CONST 8))@value $f)@value
+  emit    lea64 $d, [$f + $c * 8]
+  flags   preserved
+end
+
+# ---------------------------------------------------------------- memory sites
+# The access of a memory site (`mov rDST, [rGVA + r11]` after the tag
+# check; mir.h T1_MIR_SITE). The rules prove the value side:
+# ld1/ld2/ld4/ld8 zero-extend (SDM Vol.3 ld), st1..st8 write the low bytes
+# (st), .acq/.rel are plain moves on WB memory under TSO. The
+# address is the guest address register plus the window delta $w (R11 in
+# the site sequence); the window invariant host = gva + delta is hostwin's
+# and is tested. Post-increments are ADD(base, inc): add_ri/add_rr.
+
+rule load1 cost 1
+  match   (LOAD #m $a)
+  when    (in (bytes #m) 1)
+  outputs $d = (LOAD #m $a)@value
+  window  $w
+  emit    load8zx $d, [$a + $w * 1]
+  flags   preserved
+end
+
+rule store1 cost 1
+  match   (STORE #m $a $v)
+  when    (in (bytes #m) 1)
+  window  $w
+  emit    store8 [$a + $w * 1], $v
+  flags   preserved
+end
+
+rule load2 cost 1
+  match   (LOAD #m $a)
+  when    (in (bytes #m) 2)
+  outputs $d = (LOAD #m $a)@value
+  window  $w
+  emit    load16zx $d, [$a + $w * 1]
+  flags   preserved
+end
+
+rule store2 cost 1
+  match   (STORE #m $a $v)
+  when    (in (bytes #m) 2)
+  window  $w
+  emit    store16 [$a + $w * 1], $v
+  flags   preserved
+end
+
+rule load4 cost 1
+  match   (LOAD #m $a)
+  when    (in (bytes #m) 4)
+  outputs $d = (LOAD #m $a)@value
+  window  $w
+  emit    load32 $d, [$a + $w * 1]
+  flags   preserved
+end
+
+rule store4 cost 1
+  match   (STORE #m $a $v)
+  when    (in (bytes #m) 4)
+  window  $w
+  emit    store32 [$a + $w * 1], $v
+  flags   preserved
+end
+
+rule load8 cost 1
+  match   (LOAD #m $a)
+  when    (in (bytes #m) 8)
+  outputs $d = (LOAD #m $a)@value
+  window  $w
+  emit    load64 $d, [$a + $w * 1]
+  flags   preserved
+end
+
+rule store8 cost 1
+  match   (STORE #m $a $v)
+  when    (in (bytes #m) 8)
+  window  $w
+  emit    store64 [$a + $w * 1], $v
+  flags   preserved
+end
+
+# SDM Vol.3 xma.l; AMD64 IMUL's low half is independent of signedness.
+rule xma_l cost 3
+  match (XMA_L $a $b $c)
+  outputs $d = (XMA_L $a $b $c)@value
+  emit mov64 $d, $a
+       imul64 $d, $b
+       add64 $d, $c
+  flags clobbered
+end
+
+rule xma_l_zero cost 2
+  match (XMA_L $a $b (CONST 0))
+  outputs $d = (XMA_L $a $b (CONST 0))@value
+  emit mov64 $d, $a
+       imul64 $d, $b
+  flags clobbered
+end
+
+rule xma_hu cost 6
+  match (XMA_HU $a $b $c)
+  outputs $d = (XMA_HU $a $b $c)@value
+  temps $lo $hi
+  fixed $lo = rax, $hi = rdx
+  emit mov64 $lo, $a
+       mov64 $hi, $b
+       mulpair64 $lo, $hi
+       add64 $lo, $c
+       adc64 $hi, 0
+       mov64 $d, $hi
+  flags clobbered
+end
+
+rule xma_h cost 6
+  match (XMA_H $a $b $c)
+  outputs $d = (XMA_H $a $b $c)@value
+  temps $lo $hi
+  fixed $lo = rax, $hi = rdx
+  emit mov64 $lo, $a
+       mov64 $hi, $b
+       imulpair64 $lo, $hi
+       add64 $lo, $c
+       adc64 $hi, 0
+       mov64 $d, $hi
+  flags clobbered
+end
+
+# Byte definitions may change registers at allocation splits; normalize
+# after SETcc, as in the compare rules, before using the full value.
+rule frnattest cost 7
+  match (FRNATTEST $sig $meta)
+  outputs $d = (FRNATTEST $sig $meta)@value
+  temps $tag
+  emit test64 $sig, $sig
+       sete8 $d
+       movzx32_8 $d, $d
+       cmp64 $meta, 131070
+       sete8 $tag
+       movzx32_8 $tag, $tag
+       and64 $d, $tag
+  flags clobbered
+end
+
+# Transfer fallback rules remain available if identity folding is skipped.
+rule setf_sig cost 1
+  match (SETF_SIG $a)
+  outputs $d = (SETF_SIG $a)@value
+  emit mov64 $d, $a
+  flags preserved
+end
+
+rule getf_sig cost 1
+  match (GETF_SIG $a)
+  outputs $d = (GETF_SIG $a)@value
+  emit mov64 $d, $a
+  flags preserved
+end

@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Generated from build/ia64-test --coverage. Partial operands and unsupported
+# execution modes of otherwise implemented instructions are not listed.
+# ILLEGAL delivers its architectural fault; it is not an executable opcode.
+ILLEGAL

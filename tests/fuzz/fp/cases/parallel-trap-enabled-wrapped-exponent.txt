@@ -1,0 +1,28 @@
+# Parallel FP (fpma/fpms/fpnma) overflow/underflow trap-ENABLED response
+# writes the wrong single exponent field.
+#
+# SDM Rev1.1 Vol.1 5.4.2 / 5.4.3: the enabled O (U) response "for all
+# Parallel-FP arithmetic instructions is to return the true biased exponent
+# value MOD 2^8"; the significand is rounded to 24 bits. ia64/fp_parallel.c
+# instead converts the scalar lane result (exponent already wrapped MOD 2^17
+# with the 0xFFFF register bias) through ia64_fp_to_ieee(), i.e. the
+# stfs bit transfer {exp[16], exp[6:0]}. That matches neither reading:
+#   single bias  (E+127) mod 256   : wrong whenever E > 128 or E < -127
+#   register bias (E+0xFFFF) mod 256: wrong at E = 128 and E = -127
+# ISR.code (0x901: fp, HI.o, LO.u) and FPSR flags are correct; only the lane
+# images in f6 are wrong, so a trap handler cannot rebuild the true result.
+#
+# Replay: build/fpaudit-harness < tests/fuzz/fp/cases/parallel-trap-enabled-wrapped-exponent.txt
+#
+# Case 1: fpma.s0 f6 = f8, f9, f0 (fpmpy); FPSR.traps = 0x27 (O,U enabled),
+#   sf0 = RN.  HI lane 2^127 * 4 = 2^129 (E=129), LO lane 2^-100 * 2^-100 = 2^-200.
+# expected kind=fault fault=fp_trap info=0x901 fpsr=0x30327 f6=0:1003e:000000005b800000
+#          (HI (129+127) mod 256 = 0x00 -> 0x00000000, LO (-200+127) mod 256 = 0xb7 -> 0x5b800000)
+# actual   kind=fault fault=fp_trap info=0x901 fpsr=0x30327 f6=0:1003e:400000001b800000
+u=F raw=13048800180 fpsr=327 psr=0 pr=1 f8=0:1003e:7f0000000d800000 f9=0:1003e:408000000d800000
+#
+# Case 2 (shows the register-bias reading does not hold either): HI 2^127 * 2
+#   = 2^128, LO 2^-63 * 2^-64 = 2^-127.
+# actual   f6=0:1003e:7f80000000000000  (= single-bias reading; register-bias
+#          reading would give 0x3f800000 / 0x40000000)
+u=F raw=13048800180 fpsr=327 psr=0 pr=1 f8=0:1003e:7f00000020000000 f9=0:1003e:400000001f800000

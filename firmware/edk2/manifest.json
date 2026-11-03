@@ -1,0 +1,2944 @@
+{
+  "recipes": {
+    "Fat/DEBUG_ELFGCC/IPF/FatPkg/EnhancedFatDxe/Fat": {
+      "includes": [
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/FatPkg/EnhancedFatDxe/Fat",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "FatPkg/EnhancedFatDxe/Fat.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "Fat",
+      "sources": [
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Hash.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Delete.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/DiskCache.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/ComponentName.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Misc.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/DirectoryCache.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Open.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Data.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/UnicodeCollation.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/FileSpace.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Flush.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/DirectoryManage.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Info.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/OpenVolume.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/FileName.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Fat.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/Init.c",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/FatPkg/EnhancedFatDxe/Fat/AutoGen.c",
+        "third_party/edk2-ipf/FatPkg/EnhancedFatDxe/ReadWrite.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseDebugLibNull",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseDebugLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseDebugLibNull/DebugLib.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseLib/BaseLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultU64x64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LongJump.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwitchStack.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/HighBitSet32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/FilePaths.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LowBitSet64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/GetPowerOfTwo64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LRotU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RRotU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/ModU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivS64x64Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Cpu.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x64Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RRotU32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SetJump.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LRotU32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LowBitSet32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/ARShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x32Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/FlushCacheRange.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SafeString.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/String.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/CpuDeadLoop.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Math64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes16.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/GetPowerOfTwo32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/CheckSum.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/InternalSwitchStack.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/BitField.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/HighBitSet64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultS64x64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/Unaligned.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LinkedList.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/SetJmp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessKr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadCpuid.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessKr7.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/CpuPause.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AsmPalCall.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/InternalFlushCacheRange.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessEicr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadCr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/LongJmp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadAr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ExecFc.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessGcr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessGp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessPmr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/SwitchStack.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessPsr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/GetInterruptState.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessDbr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AsmCpuMisc.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessMsr.s"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseMemoryLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CopyMem.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CopyMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem16Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem64Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/IsZeroBufferWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem8Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem32Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CompareMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/MemLibGeneric.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem64Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem16Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem32Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ZeroMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/MemLibGuid.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePcdLibNull",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePcdLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePcdLibNull/PcdLib.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePrintLib/BasePrintLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePrintLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib/PrintLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib/PrintLibInternal.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiBootServicesTableLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiBootServicesTableLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiDevicePathLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathUtilities.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathToText.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathFromText.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDriverEntryPoint",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiDriverEntryPoint",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDriverEntryPoint/DriverEntryPoint.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiLib/UefiLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiNotTiano.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/Console.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiDriverModel.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiLibPrint.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiMemoryAllocationLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiMemoryAllocationLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiMemoryAllocationLib/MemoryAllocationLib.c"
+      ]
+    },
+    "Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeServicesTableLib",
+        "firmware/edk2/generated/Fat/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiRuntimeServicesTableLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseDebugLibNull",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseDebugLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseDebugLibNull/DebugLib.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseLib/BaseLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RRotU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivS64x64Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/InternalSwitchStack.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwitchStack.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/FlushCacheRange.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RRotU32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LowBitSet32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LRotU32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultS64x64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/Unaligned.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x32Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LinkedList.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultU64x64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Cpu.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LongJump.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Math64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/FilePaths.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/GetPowerOfTwo64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/ModU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/CheckSum.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/BitField.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/HighBitSet64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SetJump.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/ARShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/String.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes16.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SafeString.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/CpuDeadLoop.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/HighBitSet32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x64Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LowBitSet64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/GetPowerOfTwo32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LRotU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessKr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessMsr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessGcr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessKr7.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadCpuid.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AsmPalCall.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/InternalFlushCacheRange.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AsmCpuMisc.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/SwitchStack.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/SetJmp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessEicr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/LongJmp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadCr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ExecFc.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessGp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessPmr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/GetInterruptState.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessPsr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessDbr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadAr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/CpuPause.s"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseMemoryLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CopyMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem64Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem16Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/IsZeroBufferWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem8Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CopyMem.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem32Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CompareMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/MemLibGeneric.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem64Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem32Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem16Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ZeroMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/MemLibGuid.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePcdLibNull",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePcdLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePcdLibNull/PcdLib.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePrintLib/BasePrintLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePrintLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib/PrintLibInternal.c",
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib/PrintLib.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiApplicationEntryPoint",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint.inf",
+      "kind": "UEFI_APPLICATION",
+      "libraries": [],
+      "name": "UefiApplicationEntryPoint",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiApplicationEntryPoint/ApplicationEntryPoint.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiBootServicesTableLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiBootServicesTableLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiDevicePathLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathUtilities.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathToText.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathFromText.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDriverEntryPoint",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiDriverEntryPoint",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDriverEntryPoint/DriverEntryPoint.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiLib/UefiLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiNotTiano.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiLibPrint.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiDriverModel.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/Console.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiMemoryAllocationLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiMemoryAllocationLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiMemoryAllocationLib/MemoryAllocationLib.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeServicesTableLib",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiRuntimeServicesTableLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Driver": {
+      "includes": [
+        "firmware/new/gate",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Driver",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "firmware/new/gate/Driver.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib"
+      ],
+      "name": "GateDriver",
+      "sources": [
+        "firmware/new/gate/driver.c",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Driver/AutoGen.c"
+      ]
+    },
+    "Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Hello": {
+      "includes": [
+        "firmware/new/gate",
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Hello",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "firmware/new/gate/Hello.inf",
+      "kind": "UEFI_APPLICATION",
+      "libraries": [
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint",
+        "Gate/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib"
+      ],
+      "name": "GateHello",
+      "sources": [
+        "firmware/edk2/generated/Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Hello/AutoGen.c",
+        "firmware/new/gate/hello.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaAtapiPassThru",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "AtaAtapiPassThruDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/IdeMode.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AhciMode.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaBusDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "AtaBusDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaBusDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBus.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Ata/AtaBusDxe/AtaPassThruExecute.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic"
+      ],
+      "name": "Ps2KeyboardDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2Keyboard.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KbdTextIn.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KbdCtrller.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "EhciDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe/EhciDebug.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe/EhciReg.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe/UsbHcMem.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe/Ehci.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe/EhciSched.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe/EhciUrb.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/EhciDxe/ComponentName.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib"
+      ],
+      "name": "NvmExpressDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressHci.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressBlockIo.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDiskInfo.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressPassthru.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpress.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffLib/BasePeCoffLib"
+      ],
+      "name": "PciBusDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciEnumerator.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciIo.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciPowerManagement.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciRomTable.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciCommand.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciResourceSupport.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciLib.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciEnumeratorSupport.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciHotPlugSupport.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciDeviceSupport.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciBus.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciOptionRomSupport.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/PciDriverOverride.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/PciBusDxe/ComponentName.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/SataControllerDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib"
+      ],
+      "name": "SataController",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/SataControllerDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/SataControllerDxe/SataController.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/UhciDxe/UhciDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/UhciDxe/UhciDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Bus/Pci/UhciDxe/UhciDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "UhciDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe/Uhci.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe/UhciSched.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe/UhciQueue.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe/UsbHcMem.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe/UhciReg.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe/ComponentName.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/UhciDxe/UhciDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/UhciDxe/UhciDebug.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/XhciDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "XhciDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/XhciDxe/UsbHcMem.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/XhciDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/XhciDxe/Xhci.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/XhciDxe/XhciSched.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Pci/XhciDxe/XhciReg.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Scsi/ScsiBusDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiScsiLib/UefiScsiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "ScsiBus",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Scsi/ScsiBusDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBus.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Scsi/ScsiDiskDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiScsiLib/UefiScsiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "ScsiDisk",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDisk.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ComponentName.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbBusDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "UsbBusDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbDesc.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbHub.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbEnumer.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBus.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbBusDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbUtility.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbKbDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiUsbLib/UefiUsbLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiLib/UefiHiiLib"
+      ],
+      "name": "UsbKbDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbKbDxe/KeyBoard.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbKbDxe/EfiKey.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbKbDxe/ComponentName.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbMassStorageDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "UsbMassStorageDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassDiskInfo.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassBoot.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassCbi.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassBot.c",
+        "third_party/edk2-ipf/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassImpl.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/Dxe/DxeMain": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/DxeMain",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Dispatcher",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Event",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVol",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVolBlock",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Gcd",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Hand",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Library",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Image",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/SectionExtraction",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/Dxe/DxeMain",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Core/Dxe/DxeMain.inf",
+      "kind": "DXE_CORE",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePalLibNull/BasePalLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseCacheMaintenanceLib/BaseCacheMaintenanceLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffLib/BasePeCoffLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesLib/DxeServicesLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib"
+      ],
+      "name": "DxeCore",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/SectionExtraction/CoreSectionExtraction.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc/PropertiesTable.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVolBlock/FwVolBlock.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Event/Event.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem/Page.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/DxeMain/DxeProtocolNotify.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc/InstallConfigurationTable.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Image/Image.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVol/FwVolAttrib.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Gcd/Gcd.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Hand/Notify.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc/MemoryProtection.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/Dxe/DxeMain/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Hand/Handle.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem/HeapGuard.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem/MemData.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Hand/Locate.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem/Pool.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc/DebugImageInfo.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVol/Ffs.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVol/FwVolWrite.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Event/Timer.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVol/FwVol.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Event/Tpl.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc/MemoryAttributesTable.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Hand/DriverSupport.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Library/Library.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc/Stall.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/DxeMain/DxeMain.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/FwVol/FwVolRead.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Dispatcher/Dispatcher.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Misc/SetWatchdogTimer.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Dispatcher/Dependency.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem/MemoryProfileRecord.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/RuntimeDxe/RuntimeDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Core/RuntimeDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/RuntimeDxe/RuntimeDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePalLibNull/BasePalLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffLib/BasePeCoffLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseCacheMaintenanceLib/BaseCacheMaintenanceLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "RuntimeDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Core/RuntimeDxe/Runtime.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/RuntimeDxe/RuntimeDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Core/RuntimeDxe/Crc32.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/AuthVariableLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [],
+      "name": "AuthVariableLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/BaseSortLib/BaseSortLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/BaseSortLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/BaseSortLib/BaseSortLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/BaseSortLib/BaseSortLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "BaseSortLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/BaseSortLib/BaseSortLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/CpuExceptionHandlerLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull.inf",
+      "kind": "PEIM",
+      "libraries": [],
+      "name": "CpuExceptionHandlerLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DebugAgentLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "DebugAgentLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DxeCoreMemoryAllocationLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib.inf",
+      "kind": "DXE_CORE",
+      "libraries": [],
+      "name": "DxeCoreMemoryAllocationLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DxeCoreMemoryAllocationLib/MemoryAllocationLib.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryProfileLibNull.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [],
+      "name": "DxeCrc32GuidedSectionExtractLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DxeSecurityManagementLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [],
+      "name": "DxeSecurityManagementLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/TpmMeasurementLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "TpmMeasurementLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [],
+      "name": "UefiBootManagerLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmLoadOption.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmMisc.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmHotkey.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmConnect.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmConsole.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmBootDescription.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmBoot.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmDriverHealth.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiLib/UefiHiiLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiHiiLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiLib/UefiHiiLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiHiiLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiHiiLib/HiiLib.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiHiiLib/HiiString.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiHiiLib/HiiLanguage.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiHiiServicesLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiHiiServicesLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckHiiLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiLib.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [],
+      "name": "VarCheckHiiLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiLibNullClass.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiGenFromFv.c",
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiGenFromHii.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckLib/VarCheckLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckLib/VarCheckLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [],
+      "name": "VarCheckLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckLib/VarCheckLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckPcdLib/VarCheckPcdLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckPcdLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckPcdLib/VarCheckPcdLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/VarCheckPcdLib/VarCheckPcdLib.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [],
+      "name": "VarCheckPcdLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckPcdLib/VarCheckPcdLibNullClass.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckUefiLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [],
+      "name": "VarCheckUefiLib",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLibNullClass.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/BdsDxe/BdsDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/BdsDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/BdsDxe/BdsDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/BdsDxe/BdsDxe.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/BaseSortLib/BaseSortLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiLib/UefiHiiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesLib/DxeServicesLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/PlatformBootManager"
+      ],
+      "name": "BdsDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/BdsDxe/HwErrRecSupport.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/BdsDxe/BdsDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/BdsDxe/Language.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/BdsDxe/BdsEntry.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/ConSplitterDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "ConSplitterDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/ConSplitterDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitter.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterGraphics.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/GraphicsConsoleDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/UefiHiiLib/UefiHiiLib"
+      ],
+      "name": "GraphicsConsoleDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/LaffStd.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsole.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/TerminalDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "TerminalDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/TerminalDxe/Vtutf8.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/TerminalDxe/Ansi.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/TerminalDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/TerminalDxe/TerminalConIn.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/TerminalDxe/Terminal.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Console/TerminalDxe/TerminalConOut.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/DevicePathDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "DevicePathDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/DevicePathDxe/DevicePath.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/DiskIoDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "DiskIoDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIo.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/DiskIoDxe/ComponentName.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/PartitionDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "PartitionDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/PartitionDxe/Partition.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/PartitionDxe/Mbr.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/PartitionDxe/ElTorito.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/PartitionDxe/ComponentName.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/PartitionDxe/Gpt.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "EnglishDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/UnicodeCollationEng.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/FaultTolerantWriteDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "FaultTolerantWriteDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/FaultTolerantWriteDxe/FtwMisc.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/FaultTolerantWriteDxe/UpdateWorkingBlock.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWrite.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib"
+      ],
+      "name": "HiiDatabase",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseEntry.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/ImageEx.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/Image.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/String.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/ConfigRouting.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/Font.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/Database.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/HiiDatabaseDxe/ConfigKeywordHandler.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Metronome/Metronome": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Metronome",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Metronome/Metronome",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Universal/Metronome/Metronome.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib"
+      ],
+      "name": "Metronome",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Metronome/Metronome.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Metronome/Metronome/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/SecurityStubDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesLib/DxeServicesLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull"
+      ],
+      "name": "SecurityStubDxe",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/SecurityStubDxe/SecurityStub.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/SecurityStubDxe/Defer3rdPartyImageLoad.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckLib/VarCheckLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesLib/DxeServicesLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckHiiLib/VarCheckHiiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Library/VarCheckPcdLib/VarCheckPcdLib"
+      ],
+      "name": "VariableRuntimeDxe",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe/AutoGen.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe/Reclaim.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe/TcgMorLockDxe.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableDxe.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe/VarCheck.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableExLib.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe/Measurement.c",
+        "third_party/edk2-ipf/MdeModulePkg/Universal/Variable/RuntimeDxe/Variable.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer": {
+      "includes": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/WatchdogTimerDxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint"
+      ],
+      "name": "WatchdogTimer",
+      "sources": [
+        "third_party/edk2-ipf/MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseCacheMaintenanceLib/BaseCacheMaintenanceLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseCacheMaintenanceLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseCacheMaintenanceLib/BaseCacheMaintenanceLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseCacheMaintenanceLib/BaseCacheMaintenanceLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseCacheMaintenanceLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseCacheMaintenanceLib/IpfCache.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseIoLibIntrinsic",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseIoLibIntrinsic",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseIoLibIntrinsic/IoHighLevel.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseIoLibIntrinsic/IoLibIpf.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseIoLibIntrinsic/IoLibMmioBuffer.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseLib/BaseLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RRotU32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Cpu.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LowBitSet32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/FlushCacheRange.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes16.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LRotU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultS64x64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LowBitSet64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/String.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RRotU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/ModU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwapBytes64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/BitField.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SwitchStack.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/HighBitSet64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/InternalSwitchStack.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SetJump.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/GetPowerOfTwo32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/HighBitSet32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/CheckSum.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivS64x64Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LinkedList.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/SafeString.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LongJump.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/ARShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Math64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/LRotU32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/MultU64x64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/FilePaths.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x32Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x64Remainder.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/DivU64x32.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/Unaligned.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/GetPowerOfTwo64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/RShiftU64.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/CpuDeadLoop.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/GetInterruptState.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessPmr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadCr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/LongJmp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AsmCpuMisc.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessGcr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadCpuid.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessMsr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/CpuPause.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/SwitchStack.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessPsr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessKr7.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessKr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ReadAr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/ExecFc.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessDbr.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/InternalFlushCacheRange.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AsmPalCall.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessGp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/SetJmp.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseLib/Ipf/AccessEicr.s"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseMemoryLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem16Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem32Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem16Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CopyMem.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/MemLibGuid.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CompareMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/MemLibGeneric.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem64Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/IsZeroBufferWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem64Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ZeroMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/CopyMemWrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/SetMem.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem32Wrapper.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseMemoryLib/ScanMem8Wrapper.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePalLibNull/BasePalLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePalLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePalLibNull/BasePalLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePalLibNull/BasePalLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePalLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePalLibNull/PalCall.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePcdLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePcdLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePcdLibNull/PcdLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffExtraActionLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "PeCoffExtraActionLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffExtraActionLibNull/PeCoffExtraActionLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffGetEntryPointLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePeCoffGetEntryPointLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffGetEntryPointLib/PeCoffGetEntryPoint.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffLib/BasePeCoffLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffLib/Ipf",
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePeCoffLib/BasePeCoffLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePeCoffLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffLib/Ipf/PeCoffLoaderEx.c",
+        "third_party/edk2-ipf/MdePkg/Library/BasePeCoffLib/BasePeCoff.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePerformanceLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePerformanceLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePerformanceLibNull/PerformanceLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BasePrintLib/BasePrintLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BasePrintLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib/PrintLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/BasePrintLib/PrintLibInternal.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseReportStatusCodeLibNull",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseReportStatusCodeLibNull",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib/Ipf",
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseSynchronizationLib/BaseSynchronizationLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseSynchronizationLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib/Ipf/InternalGetSpinLockProperties.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib/Ipf/Synchronization.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib/SynchronizationGcc.c",
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib/Ipf/InterlockedCompareExchange16.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib/Ipf/InterlockedCompareExchange64.s",
+        "third_party/edk2-ipf/MdePkg/Library/BaseSynchronizationLib/Ipf/InterlockedCompareExchange32.s"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseUefiDecompressLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "BaseUefiDecompressLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeCoreEntryPoint",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf",
+      "kind": "DXE_CORE",
+      "libraries": [],
+      "name": "DxeCoreEntryPoint",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeCoreHobLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib.inf",
+      "kind": "DXE_CORE",
+      "libraries": [],
+      "name": "DxeCoreHobLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeCoreHobLib/HobLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeExtractGuidedSectionLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [],
+      "name": "DxeExtractGuidedSectionLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeHobLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/DxeHobLib/DxeHobLib.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [],
+      "name": "DxeHobLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeHobLib/HobLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesLib/DxeServicesLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeServicesLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesLib/DxeServicesLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/DxeServicesLib/DxeServicesLib.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [],
+      "name": "DxeServicesLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeServicesLib/DxeServicesLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeServicesTableLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [],
+      "name": "DxeServicesTableLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiBootServicesTableLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiBootServicesTableLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiDevicePathLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathUtilities.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathFromText.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiDevicePathLib/DevicePathToText.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDriverEntryPoint",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiDriverEntryPoint",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiDriverEntryPoint/DriverEntryPoint.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiLib/UefiLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiLib.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiDriverModel.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/Console.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiLibPrint.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiLib/UefiNotTiano.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiMemoryAllocationLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiMemoryAllocationLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiMemoryAllocationLib/MemoryAllocationLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [],
+      "name": "UefiRuntimeLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeLib/RuntimeLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeServicesTableLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiRuntimeServicesTableLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiScsiLib/UefiScsiLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiScsiLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiScsiLib/UefiScsiLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiScsiLib/UefiScsiLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiScsiLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiScsiLib/UefiScsiLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiUsbLib/UefiUsbLib": {
+      "includes": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiUsbLib",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiUsbLib/UefiUsbLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "MdePkg/Library/UefiUsbLib/UefiUsbLib.inf",
+      "kind": "UEFI_DRIVER",
+      "libraries": [],
+      "name": "UefiUsbLib",
+      "sources": [
+        "third_party/edk2-ipf/MdePkg/Library/UefiUsbLib/Hid.c",
+        "third_party/edk2-ipf/MdePkg/Library/UefiUsbLib/UsbDxeLib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib": {
+      "includes": [
+        "firmware/new",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/DebugLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "VmmDebugLib",
+      "sources": [
+        "firmware/new/debug.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/PlatformBootManager": {
+      "includes": [
+        "firmware/new",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/PlatformBootManager",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/PlatformBootManager.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "VmmPlatformBootManager",
+      "sources": [
+        "firmware/new/bootmanager.c",
+        "firmware/new/media-observe.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib": {
+      "includes": [
+        "firmware/new",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/TimerLib.inf",
+      "kind": "BASE",
+      "libraries": [],
+      "name": "VmmTimerLib",
+      "sources": [
+        "firmware/new/timerlib.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/acpi/Platform": {
+      "includes": [
+        "firmware/new/sal",
+        "firmware/new/smbios",
+        "firmware/new/acpi",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/acpi/Platform",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/acpi/Platform.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib"
+      ],
+      "name": "VmmTables",
+      "sources": [
+        "firmware/new/acpi/driver.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/acpi/Platform/AutoGen.c",
+        "firmware/new/acpi/tables.c",
+        "firmware/new/smbios/smbios.c",
+        "firmware/new/acpi/aml.c",
+        "firmware/new/sal/runtime.c",
+        "firmware/new/sal/sal.c",
+        "firmware/new/sal/table.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Arch": {
+      "includes": [
+        "firmware/new/dxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Arch",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/dxe/Arch.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib"
+      ],
+      "name": "VmmArch",
+      "sources": [
+        "firmware/new/dxe/arch.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Arch/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Console": {
+      "includes": [
+        "firmware/new/dxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Console",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/dxe/Console.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib"
+      ],
+      "name": "VmmConsole",
+      "sources": [
+        "firmware/new/dxe/console.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Console/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Fvb": {
+      "includes": [
+        "firmware/new/dxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Fvb",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/dxe/Fvb.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib"
+      ],
+      "name": "VmmFvb",
+      "sources": [
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Fvb/AutoGen.c",
+        "firmware/new/dxe/fvb.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Runtime": {
+      "includes": [
+        "firmware/new/dxe",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Runtime",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "third_party/edk2-ipf/MdeModulePkg",
+        "third_party/edk2-ipf/MdeModulePkg/Include"
+      ],
+      "inf": "firmware/new/dxe/Runtime.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib"
+      ],
+      "name": "VmmRuntime",
+      "sources": [
+        "firmware/new/dxe/runtime.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Runtime/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/fpswa/Driver": {
+      "includes": [
+        "firmware/new/fpswa",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf",
+        "."
+      ],
+      "inf": "firmware/new/fpswa/Driver.inf",
+      "kind": "DXE_RUNTIME_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib"
+      ],
+      "name": "VmmFpswa",
+      "sources": [
+        "firmware/new/fpswa/driver.c",
+        "firmware/new/fpswa/assist.c",
+        "firmware/new/fpswa/fpswa-entry.S",
+        "firmware/new/fpswa/model-fp.c",
+        "firmware/new/fpswa/model-arith.c",
+        "firmware/new/fpswa/model-round.c",
+        "firmware/new/fpswa/model-parallel.c",
+        "firmware/new/fpswa/model-decode.c",
+        "firmware/new/fpswa/metadata.c",
+        "firmware/new/fpswa/support.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Keyboard": {
+      "includes": [
+        "firmware/new/pci",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Keyboard",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "firmware/new/pci/Keyboard.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib"
+      ],
+      "name": "VmmKeyboard",
+      "sources": [
+        "firmware/new/pci/keyboard.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Keyboard/AutoGen.c"
+      ]
+    },
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Root": {
+      "includes": [
+        "firmware/new/pci",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Root",
+        "third_party/edk2-ipf/MdePkg",
+        "third_party/edk2-ipf/MdePkg/Include",
+        "third_party/edk2-ipf/MdePkg/Include/Ipf"
+      ],
+      "inf": "firmware/new/pci/Root.inf",
+      "kind": "DXE_DRIVER",
+      "libraries": [
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePcdLibNull/BasePcdLibNull",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BasePrintLib/BasePrintLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/DebugLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseMemoryLib/BaseMemoryLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/BaseLib/BaseLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiLib/UefiLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint",
+        "VmmDxe/DEBUG_ELFGCC/IPF/MdePkg/Library/DxeHobLib/DxeHobLib",
+        "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/TimerLib"
+      ],
+      "name": "VmmPci",
+      "sources": [
+        "firmware/new/pci/root.c",
+        "firmware/edk2/generated/VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Root/AutoGen.c"
+      ]
+    }
+  },
+  "revision": "3e72ffe8afdd03f1f89eba65c921cbdcb004cfee",
+  "roots": [
+    "Fat/DEBUG_ELFGCC/IPF/FatPkg/EnhancedFatDxe/Fat",
+    "Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Driver",
+    "Gate/DEBUG_ELFGCC/IPF/firmware/new/gate/Hello",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/UhciDxe/UhciDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/Dxe/DxeMain",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Core/RuntimeDxe/RuntimeDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/BdsDxe/BdsDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Metronome/Metronome",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe",
+    "VmmDxe/DEBUG_ELFGCC/IPF/MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/acpi/Platform",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Arch",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Console",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Fvb",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/dxe/Runtime",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Keyboard",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/pci/Root",
+    "VmmDxe/DEBUG_ELFGCC/IPF/firmware/new/fpswa/Driver"
+  ],
+  "spdx": "/* SPDX-License-Identifier: GPL-2.0-or-later */"
+}

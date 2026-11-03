@@ -1,0 +1,19 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = GateDriver
+  FILE_GUID = 9f94e8d7-222b-4830-a760-0960b18489b1
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = GateDriver
+[Sources]
+  driver.c
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+[Protocols]
+  gEfiLoadedImageProtocolGuid
+[Depex]
+  TRUE

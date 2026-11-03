@@ -1,0 +1,23 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = VmmKeyboard
+  FILE_GUID = 0356392a-0198-480a-8f02-070060006041
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = VmmKeyboardEntry
+[Sources]
+  keyboard.c
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  HobLib
+  BaseMemoryLib
+  DebugLib
+[Protocols]
+  gEfiSioProtocolGuid
+  gEfiDevicePathProtocolGuid
+[Depex]
+  TRUE

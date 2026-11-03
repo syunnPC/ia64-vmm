@@ -1,0 +1,14 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = VmmTimerLib
+  FILE_GUID = 0356392a-0198-480a-8f02-070060006002
+  MODULE_TYPE = BASE
+  VERSION_STRING = 1.0
+  LIBRARY_CLASS = TimerLib
+[Sources]
+  timerlib.c
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+[LibraryClasses]

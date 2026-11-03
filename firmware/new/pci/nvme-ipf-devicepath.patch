@@ -1,0 +1,12 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later AND BSD-2-Clause */
+--- a/third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmBootDescription.c
++++ b/third_party/edk2-ipf/MdeModulePkg/Library/UefiBootManagerLib/BmBootDescription.c
+@@ -564,7 +564,7 @@
+ {
+   EFI_STATUS                               Status;
+   EFI_NVM_EXPRESS_PASS_THRU_PROTOCOL       *NvmePassthru;
+-  EFI_DEV_PATH_PTR                         DevicePath;
++  _Alignas(VOID *) EFI_DEV_PATH_PTR        DevicePath;
+   EFI_NVM_EXPRESS_PASS_THRU_COMMAND_PACKET CommandPacket;
+   EFI_NVM_EXPRESS_COMMAND                  Command;
+   EFI_NVM_EXPRESS_COMPLETION               Completion;

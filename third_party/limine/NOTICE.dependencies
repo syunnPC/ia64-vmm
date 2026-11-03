@@ -1,0 +1,1443 @@
+Licence and copyright notices for dependencies of the bundled Limine 11.4.1.
+Source: https://github.com/Limine-Bootloader/Limine/releases/download/v11.4.1/limine-11.4.1.tar.xz
+Archive SHA-256: 8eab0103c55bf4c268079a17dd1c2586c87dbbb3ed9037626aa6fbabeedd79db
+Dependency revisions are pinned by that release's bootstrap script.
+These notices supplement LICENSE and LICENSE.protocol; they do not replace them.
+
+
+freestnd-c-hdrs/LICENSE
+=======================
+
+Copyright (C) 2022-2026 Mintsuki and contributors.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+
+
+flanterm/LICENSE
+================
+
+Copyright (C) 2022-2026 Mintsuki and contributors.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+picoefi/COPYING
+===============
+
+A quick summary of the licenses used in this project is as follows:
+
+- BSD-2-Clause
+- BSD-2-Clause-Patent
+- BSD-3-Clause
+- LicenseRef-scancode-bsd-no-disclaimer-unmodified
+- MIT
+
+For more information about the
+LicenseRef-scancode-bsd-no-disclaimer-unmodified license used by parts
+of the project, see
+https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html
+and the LicenseRef file at
+LICENSES/LicenseRef-scancode-bsd-no-disclaimer-unmodified.txt.
+
+Some files are dual-licensed under one of the above licenses and the
+GNU General Public License version 2 or later.
+
+More in depth information and license text follows:
+
+All code inside the "src" directory is licensed under the conditions
+specified in each file's header.
+
+All code inside the "inc" directory is licensed under the BSD-2-Clause
+License as follows, unless, for any of the files therein, otherwise
+mentioned in such file's header:
+
+Copyright (c) 1998-2000 Intel Corporation
+
+Redistribution and use in source and binary forms, with or without modification, are permitted
+provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and
+the following disclaimer.
+
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+and the following disclaimer in the documentation and/or other materials provided with the
+distribution.
+
+THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE. THE EFI SPECIFICATION AND ALL OTHER INFORMATION
+ON THIS WEB SITE ARE PROVIDED "AS IS" WITH NO WARRANTIES, AND ARE SUBJECT
+TO CHANGE WITHOUT NOTICE.
+
+
+libfdt/BSD-2-Clause
+===================
+
+Valid-License-Identifier: BSD-2-Clause
+SPDX-URL: https://spdx.org/licenses/BSD-2-Clause.html
+Usage-Guide:
+  To use the BSD 2-clause "Simplified" License put the following SPDX
+  tag/value pair into a comment according to the placement guidelines in
+  the licensing rules documentation:
+    SPDX-License-Identifier: BSD-2-Clause
+License-Text:
+
+Copyright (c) <year> <owner> . All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+
+cc-runtime (Apache-2.0 WITH LLVM-exception)
+
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+// 2024/01/21 - Modified by mintsuki for use inside cc-runtime
+
+Full terms: LICENSES/Apache-2.0.txt and LICENSES/LLVM-exception.txt in the VMM distribution.
+
+
+stb_image.h (MIT alternative selected by Limine)
+
+ALTERNATIVE A - MIT License
+Copyright (c) 2017 Sean Barrett
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+------------------------------------------------------------------------------
+
+
+picoefi/ia32/entry.S
+
+/* crt0-efi-ia32.S - x86 EFI startup code.
+   Copyright (C) 1999 Hewlett-Packard Co.
+	Contributed by David Mosberger <davidm@hpl.hp.com>.
+   Copyright (C) 2022-2026 Mintsuki and contributors.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+    * Neither the name of Hewlett-Packard Co. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+    CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANYDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+*/
+
+
+picoefi/ia32/link_script.lds, picoefi/x86_64/link_script.lds, picoefi/riscv64/link_script.lds, picoefi/loongarch64/link_script.lds, picoefi/aarch64/link_script.lds
+
+/* Copyright (C) 2021-2026 Mintsuki and contributors.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+picoefi/ia32/reloc.c
+
+/* reloc_ia32.c - position independent x86 ELF shared object relocator
+   Copyright (C) 1999 Hewlett-Packard Co.
+   Contributed by David Mosberger <davidm@hpl.hp.com>.
+   Copyright (C) 2022-2026 Mintsuki and contributors.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+    * Neither the name of Hewlett-Packard Co. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+    CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANYDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+*/
+
+
+picoefi/x86_64/entry.S
+
+/* crt0-efi-x86_64.S - x86_64 EFI startup code.
+   Copyright (C) 1999 Hewlett-Packard Co.
+	Contributed by David Mosberger <davidm@hpl.hp.com>.
+   Copyright (C) 2005 Intel Co.
+	Contributed by Fenghua Yu <fenghua.yu@intel.com>.
+   Copyright (C) 2022-2026 Mintsuki and contributors.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+    * Neither the name of Hewlett-Packard Co. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+    CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANYDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+*/
+
+
+picoefi/x86_64/reloc.c
+
+/* reloc_x86_64.c - position independent x86_64 ELF shared object relocator
+   Copyright (C) 1999 Hewlett-Packard Co.
+    Contributed by David Mosberger <davidm@hpl.hp.com>.
+   Copyright (C) 2005 Intel Co.
+    Contributed by Fenghua Yu <fenghua.yu@intel.com>.
+   Copyright (C) 2022-2026 Mintsuki and contributors.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+    * Neither the name of Hewlett-Packard Co. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+    CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANYDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+*/
+
+
+picoefi/riscv64/entry.S
+
+/*
+ * crt0-efi-riscv64.S - PE/COFF header for RISC-V 64 EFI applications
+ *
+ * Copyright (C) 2014 Linaro Ltd. <ard.biesheuvel@linaro.org>
+ * Copyright (C) 2018 Alexander Graf <agraf@suse.de>
+ * Copyright (C) 2022-2026 Mintsuki and contributors.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice and this list of conditions, without modification.
+ * 2. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * Alternatively, this software may be distributed under the terms of the
+ * GNU General Public License as published by the Free Software Foundation;
+ * either version 2 of the License, or (at your option) any later version.
+ */
+
+
+picoefi/riscv64/reloc.c
+
+/* reloc_riscv64.c - position independent ELF shared object relocator
+   Copyright (C) 2018 Alexander Graf <agraf@suse.de>
+   Copyright (C) 2014 Linaro Ltd. <ard.biesheuvel@linaro.org>
+   Copyright (C) 1999 Hewlett-Packard Co.
+	Contributed by David Mosberger <davidm@hpl.hp.com>.
+   Copyright (C) 2022-2026 Mintsuki and contributors.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+    * Neither the name of Hewlett-Packard Co. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+    CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANYDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+*/
+
+
+picoefi/loongarch64/entry.S
+
+/*
+ * crt0-efi-loongarch64.S - PE/COFF header for LoongArch64 EFI applications
+ *
+ * Copyright (C) 2021 Loongson Technology Corporation Limited. <zhoumingtao@loongson.cn>
+ * Copyright (C) 2014 Linaro Ltd. <ard.biesheuvel@linaro.org>
+ * Copyright (C) 2022-2026 Mintsuki and contributors.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice and this list of conditions, without modification.
+ * 2. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * Alternatively, this software may be distributed under the terms of the
+ * GNU General Public License as published by the Free Software Foundation;
+ * either version 2 of the License, or (at your option) any later version.
+ */
+
+
+picoefi/loongarch64/reloc.c
+
+/* reloc_loongarch64.c - position independent loongarch64 ELF shared object relocator
+   Copyright (C) 2021 Loongson Technology Corporation Limited. <zhoumingtao@loongson.cn>
+   Copyright (C) 2014 Linaro Ltd. <ard.biesheuvel@linaro.org>
+   Copyright (C) 1999 Hewlett-Packard Co.
+    Contributed by David Mosberger <davidm@hpl.hp.com>.
+   Copyright (C) 2026 Mintsuki and contributors.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+    * Neither the name of Hewlett-Packard Co. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+    CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANYDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+*/
+
+
+picoefi/aarch64/entry.S
+
+/*
+ * crt0-efi-aarch64.S - PE/COFF header for AArch64 EFI applications
+ *
+ * Copyright (C) 2014 Linaro Ltd. <ard.biesheuvel@linaro.org>
+ * Copyright (C) 2022-2026 Mintsuki and contributors.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice and this list of conditions, without modification.
+ * 2. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * Alternatively, this software may be distributed under the terms of the
+ * GNU General Public License as published by the Free Software Foundation;
+ * either version 2 of the License, or (at your option) any later version.
+ */
+
+
+picoefi/aarch64/reloc.c
+
+/* reloc_aarch64.c - position independent x86 ELF shared object relocator
+   Copyright (C) 2014 Linaro Ltd. <ard.biesheuvel@linaro.org>
+   Copyright (C) 1999 Hewlett-Packard Co.
+	Contributed by David Mosberger <davidm@hpl.hp.com>.
+   Copyright (C) 2022-2026 Mintsuki and contributors.
+
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+    * Neither the name of Hewlett-Packard Co. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+    CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+    INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+    BE LIABLE FOR ANYDIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+    OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+    PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    SUCH DAMAGE.
+*/
+
+
+picoefi/inc/efi.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efi.h
+
+Abstract:
+
+    Public EFI header files
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efipart.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efipart.h
+    
+Abstract:   
+    Info about disk partitions and Master Boot Records
+
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efipoint.h
+
+/* Copyright (C) 2014 by John Cronin
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+
+picoefi/inc/efi/ia32/efibind.h, picoefi/inc/efi/x86_64/efibind.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efefind.h
+
+Abstract:
+
+    EFI to compile bindings
+
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efidebug.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efidebug.h
+
+Abstract:
+
+    EFI library debug functions
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efi_nii.h
+
+/*++
+Copyright (c) 2000  Intel Corporation
+
+Module name:
+    efi_nii.h
+
+Abstract:
+
+Revision history:
+    2000-Feb-18 M(f)J   GUID updated.
+                Structure order changed for machine word alignment.
+                Added StringId[4] to structure.
+
+    2000-Feb-14 M(f)J   Genesis.
+--*/
+
+
+picoefi/inc/efi/riscv64/efibind.h, picoefi/inc/efi/aarch64/efibind.h
+
+/*
+ * Copyright (C) 2014 - 2015 Linaro Ltd.
+ * Author: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice and this list of conditions, without modification.
+ * 2. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * Alternatively, this software may be distributed under the terms of the
+ * GNU General Public License as published by the Free Software Foundation;
+ * either version 2 of the License, or (at your option) any later version.
+ */
+
+
+picoefi/inc/efi/protocol/legacyboot.h
+
+/*++
+
+Copyright (c) 1999 Intel Corporation
+
+Module Name:
+
+    legacyboot
+
+Abstract:
+
+    EFI support for legacy boot
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/protocol/piflash64.h
+
+/*++
+
+Copyright (c) 1999  Intel Corporation
+
+Module Name:
+
+    PIflash64.h
+    
+Abstract:
+
+    Iflash64.efi protocol to abstract iflash from
+    the system.
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/protocol/adapterdebug.h
+
+/*++
+
+Copyright (c) 1999  Intel Corporation
+
+Module Name:
+
+    AdapterDebug.h
+    
+Abstract:
+
+    Protocol to debug the EDD 3.0 enablement of BIOS option ROMs
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/protocol/intload.h
+
+/*++
+
+Copyright (c) 1999 Intel Corporation
+
+Module Name:
+
+    intload
+
+Abstract:
+
+    EFI support for loading internally linked in apps
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/protocol/efivar.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+Abstract:
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/protocol/vgaclass.h
+
+/*++
+
+Copyright (c) 1999  Intel Corporation
+
+Module Name:
+
+    VgaClass.h
+    
+Abstract:
+
+    Vga Mini port binding to Vga Class protocol
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/protocol/riscv/efiboot.h
+
+/*
+ * Copright (C) 2023 xvanc
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice and this list of conditions, without modification.
+ * 2. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * Alternatively, this software may be distributed under the terms of the
+ * GNU General Public License as published by the Free Software Foundation;
+ * either version 2 of the License, or (at your option) any later version.
+ */
+
+
+picoefi/inc/efi/protocol/eficonsplit.h
+
+/*++
+
+Copyright (c) 1999  Intel Corporation
+
+Module Name:
+
+Abstract:
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efidef.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efidef.h
+
+Abstract:
+
+    EFI definitions
+
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efiip.h, picoefi/inc/efi/efitcp.h, picoefi/inc/efi/efiudp.h
+
+/*++
+Copyright (c) 2013  Intel Corporation
+
+--*/
+
+
+picoefi/inc/efi/efipxebc.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efipxebc.h
+
+Abstract:
+
+    EFI PXE Base Code Protocol
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/libsmbios.h
+
+/*++
+
+Copyright (c) 2000  Intel Corporation
+
+Module Name:
+
+    LibSmbios.h
+
+Abstract:
+
+    Lib include  for SMBIOS services. Used to get system serial number and GUID
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efiapi.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efiapi.h
+
+Abstract:
+
+    Global EFI runtime & boot service interfaces
+
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/eficon.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    eficon.h
+
+Abstract:
+
+    EFI console protocols
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efidevp.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    devpath.h
+
+Abstract:
+
+    Defines for parsing the EFI Device Path structures
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efigpt.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    EfiGpt.h
+    
+Abstract:
+    Include file for EFI partitioning scheme
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efishellintf.h
+
+/** @file
+  SHELL_INTERFACE_PROTOCOL from EDK shell (no spec).
+
+  Shell Interface - additional information (over image_info) provided
+  to an application started by the shell.
+
+  ConIo provides a file-style interface to the console.
+
+  The shell interface's and data (including ConIo) are only valid during
+  the applications Entry Point.  Once the application returns from it's
+  entry point the data is freed by the invoking shell.
+
+  Copyright (c) 2006 - 2010, Intel Corporation. All rights reserved.<BR>
+  This program and the accompanying materials
+  are licensed and made available under the terms and conditions of the BSD License
+  which accompanies this distribution.  The full text of the license may be found at
+  http://opensource.org/licenses/bsd-license.php
+
+  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+**/
+
+
+picoefi/inc/efi/efilink.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    link.h (renamed efilink.h to avoid conflicts)
+
+Abstract:
+
+    EFI link list macro's
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/elf_common.h
+
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2017, 2018 Dell EMC
+ * Copyright (c) 2000, 2001, 2008, 2011, David E. O'Brien
+ * Copyright (c) 1998 John D. Polstra.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+
+picoefi/inc/efi/eficonex.h
+
+/*++
+
+Copyright (c) 2020 Kagurazaka Kotori <kagurazakakotori@gmail.com>
+
+Module Name:
+
+    eficonex.h
+
+Abstract:
+
+    EFI console extension protocols
+
+--*/
+
+
+picoefi/inc/efi/elf32.h, picoefi/inc/efi/elf64.h
+
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 1996-1998 John D. Polstra.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+
+picoefi/inc/efi/loongarch64/efibind.h
+
+/*
+ * Copyright (C) 2014 - 2015 Linaro Ltd.
+ * Author: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+ * Copyright (C) 2017 Lemote Co.
+ * Author: Heiher <r@hev.cc>
+ * Copyright (C) 2021 Loongson Technology Corporation Limited.
+ * Author: zhoumingtao <zhoumingtao@loongson.cn>
+ * Copyright (C) 2025 mintsuki and contributors
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice and this list of conditions, without modification.
+ * 2. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * Alternatively, this software may be distributed under the terms of the
+ * GNU General Public License as published by the Free Software Foundation;
+ * either version 2 of the License, or (at your option) any later version.
+ */
+
+
+picoefi/inc/efi/pci22.h
+
+/*++
+
+Copyright (c) 1999  Intel Corporation
+
+Module Name:
+
+    pci22.h
+    
+Abstract:      
+    Support for PCI 2.2 standard.
+
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efifs.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efifs.h
+
+Abstract:
+
+    EFI File System structures
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/elf.h
+
+/* Copyright (C) 2021-2025 mintsuki and contributors.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+picoefi/inc/efi/efiser.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efiser.h
+
+Abstract:
+
+    EFI serial protocol
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efiprot.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efiprot.h
+
+Abstract:
+
+    EFI Protocols
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efierr.h
+
+/*++
+
+Copyright (c) 1998  Intel Corporation
+
+Module Name:
+
+    efierr.h
+
+Abstract:
+
+    EFI error codes
+
+
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efinet.h
+
+/*++
+Copyright (c) 1999  Intel Corporation
+
+Module Name:
+    efinet.h
+
+Abstract:
+    EFI Simple Network protocol
+
+Revision History
+--*/
+
+
+picoefi/inc/efi/efi_pxe.h
+
+/*++
+Copyright (c) Intel  1999
+
+Module name:
+    efi_pxe.h
+
+32/64-bit PXE specification:
+    alpha-4, 99-Dec-17
+
+Abstract:
+    This header file contains all of the PXE type definitions,
+    structure prototypes, global variables and constants that
+    are needed for porting PXE to EFI.
+--*/
+
+
+picoefi/inc/efi/eficompiler.h
+
+/*++
+
+Copyright (c) 2016 Pete Batard <pete@akeo.ie>
+
+Module Name:
+
+    eficompiler.h
+
+Abstract:
+
+    Compiler specific adjustments
+
+--*/
+
+
+picoefi/inc/efi/efiui.h
+
+/*++
+
+Copyright (c) 200  Intel Corporation
+
+Module Name:
+
+    EfiUi.h
+
+Abstract:
+    Protocol used to build User Interface (UI) stuff.
+
+    This protocol is just data. It is a multi dimentional array.
+    For each string there is an array of UI_STRING_ENTRY. Each string
+    is for a different language translation of the same string. The list
+    is terminated by a NULL UiString. There can be any number of
+    UI_STRING_ENTRY arrays. A NULL array terminates the list. A NULL array
+    entry contains all zeros.
+
+    Thus the shortest possible EFI_UI_PROTOCOL has three UI_STRING_ENTRY.
+    The String, it's NULL terminator, and the NULL terminator for the entire
+    thing.
+
+
+Revision History
+
+--*/
+
+
+picoefi/inc/efi/efishell.h
+
+/**
+  EFI Shell protocol as defined in the UEFI Shell Specification 2.2.
+
+  (C) Copyright 2014 Hewlett-Packard Development Company, L.P.<BR>
+  Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.<BR>
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+  This file is based on MdePkg/Include/Protocol/Shell.h from EDK2
+  Ported to gnu-efi by Jiaqing Zhao <jiaqing.zhao@intel.com>
+**/
+
+
+libfdt/src/fdt_rw.c, libfdt/src/libfdt.h, libfdt/src/fdt.c, libfdt/src/fdt_check.c, libfdt/src/libfdt_internal.h, libfdt/src/fdt_sw.c, libfdt/src/fdt_ro.c, libfdt/src/fdt_wip.c
+
+/*
+ * libfdt - Flat Device Tree manipulation
+ * Copyright (C) 2006 David Gibson, IBM Corporation.
+ */
+
+
+libfdt/src/fdt_empty_tree.c
+
+/*
+ * libfdt - Flat Device Tree manipulation
+ * Copyright (C) 2012 David Gibson, IBM Corporation.
+ */
+
+
+libfdt/src/fdt_strerror.c
+
+/*
+ * libfdt - Flat Device Tree manipulation
+ * Copyright (C) 2006 David Gibson, IBM Corporation.
+ *     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+libfdt/src/fdt_overlay.c
+
+/*
+ * libfdt - Flat Device Tree manipulation
+ * Copyright (C) 2016 Free Electrons
+ * Copyright (C) 2016 NextThing Co.
+ */
+
+
+libfdt/src/fdt_addresses.c
+
+/*
+ * libfdt - Flat Device Tree manipulation
+ * Copyright (C) 2014 David Gibson <david@gibson.dropbear.id.au>
+ * Copyright (C) 2018 embedded brains GmbH
+ */
+
+
+libfdt/src/fdt.h, libfdt/src/libfdt_env.h
+
+/*
+ * libfdt - Flat Device Tree manipulation
+ * Copyright (C) 2006 David Gibson, IBM Corporation.
+ * Copyright 2012 Kim Phillips, Freescale Semiconductor.
+ */

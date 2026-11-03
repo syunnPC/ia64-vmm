@@ -1,0 +1,34 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = VmmRuntime
+  FILE_GUID = 0356392a-0198-480a-8f02-070060006012
+  MODULE_TYPE = DXE_RUNTIME_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = VmmRuntimeEntry
+[Sources]
+  runtime.c
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  HobLib
+  DxeServicesTableLib
+  DebugLib
+[Protocols]
+  gEfiWatchdogTimerArchProtocolGuid
+  gEfiResetArchProtocolGuid
+  gEfiRealTimeClockArchProtocolGuid
+  gEfiMonotonicCounterArchProtocolGuid
+  gEfiCapsuleArchProtocolGuid
+  gEfiVariableArchProtocolGuid
+  gEfiVariableWriteArchProtocolGuid
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+[Depex]
+  gEfiVariableArchProtocolGuid AND gEfiVariableWriteArchProtocolGuid

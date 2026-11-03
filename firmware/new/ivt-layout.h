@@ -1,0 +1,139 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/* offsetof(EFI_SYSTEM_CONTEXT_IPF, field) + 16-byte dispatch descriptor. */
+#define IPF_CONTEXT_Reserved 16
+#define IPF_CONTEXT_R1 24
+#define IPF_CONTEXT_R2 32
+#define IPF_CONTEXT_R3 40
+#define IPF_CONTEXT_R4 48
+#define IPF_CONTEXT_R5 56
+#define IPF_CONTEXT_R6 64
+#define IPF_CONTEXT_R7 72
+#define IPF_CONTEXT_R8 80
+#define IPF_CONTEXT_R9 88
+#define IPF_CONTEXT_R10 96
+#define IPF_CONTEXT_R11 104
+#define IPF_CONTEXT_R12 112
+#define IPF_CONTEXT_R13 120
+#define IPF_CONTEXT_R14 128
+#define IPF_CONTEXT_R15 136
+#define IPF_CONTEXT_R16 144
+#define IPF_CONTEXT_R17 152
+#define IPF_CONTEXT_R18 160
+#define IPF_CONTEXT_R19 168
+#define IPF_CONTEXT_R20 176
+#define IPF_CONTEXT_R21 184
+#define IPF_CONTEXT_R22 192
+#define IPF_CONTEXT_R23 200
+#define IPF_CONTEXT_R24 208
+#define IPF_CONTEXT_R25 216
+#define IPF_CONTEXT_R26 224
+#define IPF_CONTEXT_R27 232
+#define IPF_CONTEXT_R28 240
+#define IPF_CONTEXT_R29 248
+#define IPF_CONTEXT_R30 256
+#define IPF_CONTEXT_R31 264
+#define IPF_CONTEXT_F2 272
+#define IPF_CONTEXT_F3 288
+#define IPF_CONTEXT_F4 304
+#define IPF_CONTEXT_F5 320
+#define IPF_CONTEXT_F6 336
+#define IPF_CONTEXT_F7 352
+#define IPF_CONTEXT_F8 368
+#define IPF_CONTEXT_F9 384
+#define IPF_CONTEXT_F10 400
+#define IPF_CONTEXT_F11 416
+#define IPF_CONTEXT_F12 432
+#define IPF_CONTEXT_F13 448
+#define IPF_CONTEXT_F14 464
+#define IPF_CONTEXT_F15 480
+#define IPF_CONTEXT_F16 496
+#define IPF_CONTEXT_F17 512
+#define IPF_CONTEXT_F18 528
+#define IPF_CONTEXT_F19 544
+#define IPF_CONTEXT_F20 560
+#define IPF_CONTEXT_F21 576
+#define IPF_CONTEXT_F22 592
+#define IPF_CONTEXT_F23 608
+#define IPF_CONTEXT_F24 624
+#define IPF_CONTEXT_F25 640
+#define IPF_CONTEXT_F26 656
+#define IPF_CONTEXT_F27 672
+#define IPF_CONTEXT_F28 688
+#define IPF_CONTEXT_F29 704
+#define IPF_CONTEXT_F30 720
+#define IPF_CONTEXT_F31 736
+#define IPF_CONTEXT_Pr 752
+#define IPF_CONTEXT_B0 760
+#define IPF_CONTEXT_B1 768
+#define IPF_CONTEXT_B2 776
+#define IPF_CONTEXT_B3 784
+#define IPF_CONTEXT_B4 792
+#define IPF_CONTEXT_B5 800
+#define IPF_CONTEXT_B6 808
+#define IPF_CONTEXT_B7 816
+#define IPF_CONTEXT_ArRsc 824
+#define IPF_CONTEXT_ArBsp 832
+#define IPF_CONTEXT_ArBspstore 840
+#define IPF_CONTEXT_ArRnat 848
+#define IPF_CONTEXT_ArFcr 856
+#define IPF_CONTEXT_ArEflag 864
+#define IPF_CONTEXT_ArCsd 872
+#define IPF_CONTEXT_ArSsd 880
+#define IPF_CONTEXT_ArCflg 888
+#define IPF_CONTEXT_ArFsr 896
+#define IPF_CONTEXT_ArFir 904
+#define IPF_CONTEXT_ArFdr 912
+#define IPF_CONTEXT_ArCcv 920
+#define IPF_CONTEXT_ArUnat 928
+#define IPF_CONTEXT_ArFpsr 936
+#define IPF_CONTEXT_ArPfs 944
+#define IPF_CONTEXT_ArLc 952
+#define IPF_CONTEXT_ArEc 960
+#define IPF_CONTEXT_CrDcr 968
+#define IPF_CONTEXT_CrItm 976
+#define IPF_CONTEXT_CrIva 984
+#define IPF_CONTEXT_CrPta 992
+#define IPF_CONTEXT_CrIpsr 1000
+#define IPF_CONTEXT_CrIsr 1008
+#define IPF_CONTEXT_CrIip 1016
+#define IPF_CONTEXT_CrIfa 1024
+#define IPF_CONTEXT_CrItir 1032
+#define IPF_CONTEXT_CrIipa 1040
+#define IPF_CONTEXT_CrIfs 1048
+#define IPF_CONTEXT_CrIim 1056
+#define IPF_CONTEXT_CrIha 1064
+#define IPF_CONTEXT_Dbr0 1072
+#define IPF_CONTEXT_Dbr1 1080
+#define IPF_CONTEXT_Dbr2 1088
+#define IPF_CONTEXT_Dbr3 1096
+#define IPF_CONTEXT_Dbr4 1104
+#define IPF_CONTEXT_Dbr5 1112
+#define IPF_CONTEXT_Dbr6 1120
+#define IPF_CONTEXT_Dbr7 1128
+#define IPF_CONTEXT_Ibr0 1136
+#define IPF_CONTEXT_Ibr1 1144
+#define IPF_CONTEXT_Ibr2 1152
+#define IPF_CONTEXT_Ibr3 1160
+#define IPF_CONTEXT_Ibr4 1168
+#define IPF_CONTEXT_Ibr5 1176
+#define IPF_CONTEXT_Ibr6 1184
+#define IPF_CONTEXT_Ibr7 1192
+#define IPF_CONTEXT_IntNat 1200
+
+/* Private post-flush RSE snapshot, after the unaligned call descriptor. */
+#define CONTROL_RseBspstore 5704
+#define CONTROL_RseRnat 5712
+/* BSP block only: physical address of ap_wake_block (ap.h) for DXE. */
+#define CONTROL_ApBlock 5720
+
+/* r12 for a C call from an interruption of translated code (ivt.S): the
+ * physical top of this CPU's interruption stack minus 16; ipl.c sets the
+ * BSP's, ap.c an AP's. */
+#define CONTROL_InterruptStack 5728
+
+/* Installed ITR(0), published by the IPL for the SAL TR descriptor. */
+#define CONTROL_BootItrAddress 5736
+#define CONTROL_BootItrItir 5744
+
+/* BSP block only: physical address of sal_mc (sal/mc.h) for DXE. */
+#define CONTROL_SalMc 5752

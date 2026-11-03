@@ -1,0 +1,115 @@
+# SPDX-License-Identifier: GPL-2.0-or-later AND BSD-2-Clause
+--- a/IdeMode.c
++++ b/IdeMode.c
+@@ -9,14 +9,15 @@
+
+   THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+   WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+ **/
+
+ #include "AtaAtapiPassThru.h"
++#include "atapi-dma.h"
+
+ /**
+   read a one-byte data from a IDE port.
+
+   @param  PciIo  A pointer to EFI_PCI_IO_PROTOCOL data structure
+   @param  Port   The IDE Port number
+
+@@ -2073,14 +2074,19 @@
+   IN  EFI_EXT_SCSI_PASS_THRU_SCSI_REQUEST_PACKET    *Packet
+   )
+ {
+   EFI_ATA_COMMAND_BLOCK       AtaCommandBlock;
+   EFI_STATUS                  Status;
+   UINT8                       Count;
+   UINT8                       PacketCommand[12];
++
++  Status = vmm_atapi_dma (PciIo, IdeRegisters, Device, Packet);
++  if (Status != EFI_UNSUPPORTED) {
++    return Status;
++  }
+
+   ZeroMem (&AtaCommandBlock, sizeof (EFI_ATA_COMMAND_BLOCK));
+
+   //
+   // Fill ATAPI Command Packet according to CDB.
+   // For Atapi cmd, its length should be less than or equal to 12 bytes.
+   //
+@@ -2769,17 +2775,15 @@
+         DEBUG ((EFI_D_ERROR, "Set transfer Mode Fail, Status = %r\n", Status));
+         continue;
+       }
+     }
+
+     //
+     // Set supported DMA mode on this IDE device. Note that UDMA & MDMA cann't
+-    // be set together. Only one DMA mode can be set to a device. If setting
+-    // DMA mode operation fails, we can continue moving on because we only use
+-    // PIO mode at boot time. DMA modes are used by certain kind of OS booting
++    // be set together. A failed MWDMA SET FEATURES retains the PIO mode.
+     //
+     if (SupportedModes->UdmaMode.Valid) {
+       TransferMode.ModeCategory = EFI_ATA_MODE_UDMA;
+       TransferMode.ModeNumber   = (UINT8) (SupportedModes->UdmaMode.Mode);
+       Status = SetDeviceTransferMode (Instance, IdeChannel, IdeDevice, &TransferMode, NULL);
+
+       if (EFI_ERROR (Status)) {
+@@ -2789,15 +2793,15 @@
+     } else if (SupportedModes->MultiWordDmaMode.Valid) {
+       TransferMode.ModeCategory = EFI_ATA_MODE_MDMA;
+       TransferMode.ModeNumber   = (UINT8) SupportedModes->MultiWordDmaMode.Mode;
+       Status = SetDeviceTransferMode (Instance, IdeChannel, IdeDevice, &TransferMode, NULL);
+
+       if (EFI_ERROR (Status)) {
+         DEBUG ((EFI_D_ERROR, "Set transfer Mode Fail, Status = %r\n", Status));
+-        continue;
++        SupportedModes->MultiWordDmaMode.Valid = FALSE;
+       }
+     }
+
+     //
+     // Set Parameters for the device:
+     // 1) Init
+     // 2) Establish the block count for READ/WRITE MULTIPLE (EXT) command
+@@ -2812,19 +2816,34 @@
+
+       Status = SetDriveParameters (Instance, IdeChannel, IdeDevice, &DriveParameters, NULL);
+     }
+
+     //
+     // Set IDE controller Timing Blocks in the PCI Configuration Space
+     //
+-    IdeInit->SetTiming (IdeInit, IdeChannel, IdeDevice, SupportedModes);
+-
+-    //
+-    // IDE controller and IDE device timing is configured successfully.
+-    // Now insert the device into device list.
++    Status = IdeInit->SetTiming (IdeInit, IdeChannel, IdeDevice, SupportedModes);
++    if (EFI_ERROR (Status)) {
++      SupportedModes->UdmaMode.Valid = FALSE;
++      SupportedModes->MultiWordDmaMode.Valid = FALSE;
++      IdeInit->SetTiming (IdeInit, IdeChannel, IdeDevice, SupportedModes);
++    }
++    // AtaBus chooses READ DMA from the cached IDENTIFY word 88 validity.
++    if (DeviceType == EfiIdeHarddisk && !SupportedModes->UdmaMode.Valid &&
++        !SupportedModes->MultiWordDmaMode.Valid) {
++      // ATA IDENTIFY word 255 optionally checksums all 512 bytes.
++      if ((Buffer.AtaData.field_validity & BIT2) &&
++          (Buffer.AtaData.integrity_word & 0xff) == 0xa5) {
++        Buffer.AtaData.integrity_word += (UINT16) (BIT2 << 8);
++      }
++      Buffer.AtaData.field_validity &= ~BIT2;
++    }
++    FreePool (SupportedModes);
++
++    //
++    // Register the device even when DMA setup fell back to PIO.
+     //
+     Status = CreateNewDeviceInfo (Instance, IdeChannel, IdeDevice, DeviceType, &Buffer);
+     if (EFI_ERROR (Status)) {
+       continue;
+     }
+
+     if (DeviceType == EfiIdeHarddisk) {

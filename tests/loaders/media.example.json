@@ -1,0 +1,145 @@
+{
+  "gentoo": {
+    "iso": "install-ia64-minimal.iso",
+    "menu": [
+      "GNU GRUB  version 2.12",
+      "Boot LiveCD (kernel: gentoo)",
+      "Special console options"
+    ],
+    "gate": "Special console options",
+    "keys": [
+      "down",
+      "up",
+      "ret"
+    ],
+    "required": true,
+    "debug_serial": "console"
+  },
+  "debian": {
+    "iso": "debian-12-ia64.iso",
+    "menu": [
+      "GNU GRUB  version 2.06-13",
+      "Install",
+      "Advanced options ...",
+      "Accessible dark contrast installer menu ..."
+    ],
+    "gate": "Accessible dark contrast installer menu ...",
+    "keys": [
+      "down",
+      "up",
+      "ret"
+    ],
+    "required": true,
+    "auto_timeout": 60,
+    "debug_serial": "console"
+  },
+  "windows": {
+    "iso": "windows-server-2003-ia64.iso",
+    "menu": [
+      "Press any key to boot from CD-ROM"
+    ],
+    "gate": "Press any key to boot from CD-ROM",
+    "keys": [
+      "spc"
+    ],
+    "required": true,
+    "capture_delay": 0.25,
+    "capture_text": true,
+    "input_delay": 1,
+    "debug_serial": "off"
+  },
+  "freebsd": {
+    "iso": "freebsd-ia64-dvd1.iso",
+    "menu": [
+      "FreeBSD/ia64 EFI boot, Revision 3.1"
+    ],
+    "gate": "Boot Manager: +trying Boot0000",
+    "capture_delay": 10,
+    "keys": [
+      "ret"
+    ],
+    "required": false,
+    "debug_serial": "console"
+  },
+  "hpux": {
+    "iso": "hp-ux-11i-v3-ia64.iso",
+    "menu": [
+      "HP-UX Boot Loader for IPF",
+      "Press Any Key to interrupt Autoboot"
+    ],
+    "gate": "HP-UX Boot Loader for IPF",
+    "keys": [
+      "ret"
+    ],
+    "required": false,
+    "debug_serial": "console"
+  },
+  "openvms": {
+    "iso": "openvms-i64.iso",
+    "menu": [
+      "%VMS_LOADER-I-Memorydisk allocated at:"
+    ],
+    "gate": "%VMS_LOADER-I-Memorydisk allocated at:",
+    "keys": [
+      "ret"
+    ],
+    "required": false,
+    "debug_serial": "console"
+  },
+  "sles": {
+    "iso": "sles-11-sp4-ia64-dvd1.iso",
+    "menu": [
+      "Installation - Safe Settings",
+      "Manual Installation",
+      "Rescue System"
+    ],
+    "gate": "Have a lot of fun",
+    "keys": [
+      "ret"
+    ],
+    "required": false,
+    "debug_serial": "console"
+  },
+  "rhel": {
+    "iso": "rhel-5-ia64-dvd.iso",
+    "menu": [
+      "ELILO"
+    ],
+    "gate": "ELILO|Red Hat|boot:",
+    "keys": [
+      "ret"
+    ],
+    "required": false,
+    "debug_serial": "console"
+  },
+  "windows2008": {
+    "iso": "windows-server-2008-ia64.iso",
+    "menu": [
+      "Press any key to boot from CD or DVD."
+    ],
+    "gate": "Press any key to boot from CD or DVD.",
+    "keys": [
+      "spc"
+    ],
+    "required": true,
+    "capture_delay": 0.25,
+    "capture_text": true,
+    "input_delay": 1,
+    "debug_serial": "off"
+  },
+  "windows2008r2": {
+    "iso": "windows-server-2008-r2-ia64.iso",
+    "menu": [
+      "Press any key to boot from CD or DVD."
+    ],
+    "gate": "Press any key to boot from CD or DVD.",
+    "keys": [
+      "spc"
+    ],
+    "required": true,
+    "capture_delay": 0.25,
+    "capture_text": true,
+    "input_delay": 1,
+    "debug_serial": "off"
+  }
+}

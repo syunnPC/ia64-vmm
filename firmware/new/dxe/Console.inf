@@ -1,0 +1,29 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = VmmConsole
+  FILE_GUID = 0356392a-0198-480a-8f02-070060006014
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = VmmConsoleEntry
+[Sources]
+  console.c
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  HobLib
+  DebugLib
+[Protocols]
+  gEfiGraphicsOutputProtocolGuid
+  gEfiSimpleTextOutProtocolGuid
+  gEfiSimpleTextInProtocolGuid
+  gEfiSimpleTextInputExProtocolGuid
+  gEfiDevicePathProtocolGuid
+[Depex]
+  TRUE

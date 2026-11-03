@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: GPL-2.0-or-later AND BSD-2-Clause
+--- a/SataController.c
++++ b/SataController.c
+@@ -13,6 +13,7 @@
+ **/
+ 
+ #include "SataController.h"
++#include "piix-ide.h"
+ 
+ ///
+ /// EFI_DRIVER_BINDING_PROTOCOL instance
+@@ -978,6 +979,11 @@
+   }
+   DEBUG ((EFI_D_INFO, "IdeInitCalculateMode: UdmaMode = %x\n", (*SupportedModes)->UdmaMode.Mode));
+ 
++  Status = vmm_piix_modes (Private->PciIo, IdentifyData, DisqualifiedModes, *SupportedModes);
++  if (Status != EFI_UNSUPPORTED) {
++    return Status;
++  }
++
+   //
+   // The modes other than PIO and UDMA are not supported
+   //
+@@ -1016,6 +1022,17 @@
+   IN EFI_ATA_COLLECTIVE_MODE            *Modes
+   )
+ {
++  EFI_SATA_CONTROLLER_PRIVATE_DATA *Private;
++  EFI_STATUS Status;
++
++  Private = SATA_CONTROLLER_PRIVATE_DATA_FROM_THIS (This);
++  if (Channel >= This->ChannelCount || Device >= Private->DeviceCount || Modes == NULL) {
++    return EFI_INVALID_PARAMETER;
++  }
++  Status = vmm_piix_timing (Private->PciIo, Channel, Device, Modes);
++  if (Status != EFI_UNSUPPORTED) {
++    return Status;
++  }
+   return EFI_SUCCESS;
+ }
+ 

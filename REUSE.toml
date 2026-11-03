@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+version = 1
+
+# Preserve the pinned import's bytes and original per-file notices.
+[[annotations]]
+path = ["third_party/edk2-ipf/FatPkg/**", "third_party/edk2-ipf/MdePkg/**", "third_party/edk2-ipf/MdeModulePkg/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "EDK2 contributors; see each file and third_party/edk2-ipf/License.txt"
+SPDX-License-Identifier = "BSD-2-Clause"
+
+[[annotations]]
+path = ["third_party/edk2-ipf/MdeModulePkg/Library/BrotliCustomDecompressLib/LICENSE"]
+precedence = "override"
+SPDX-FileCopyrightText = "2009, 2010, 2013-2016 the Brotli Authors"
+SPDX-License-Identifier = "MIT"
+
+# These Linaro-derived bindings offer GPL-2.0-or-later as an alternative
+# to their custom permissive notice; select that explicit grant here.
+[[annotations]]
+path = ["third_party/gnu-efi/inc/aarch64/efibind.h", "third_party/gnu-efi/inc/arm/efibind.h", "third_party/gnu-efi/inc/loongarch64/efibind.h", "third_party/gnu-efi/inc/mips64el/efibind.h"]
+precedence = "override"
+SPDX-FileCopyrightText = "Linaro, Lemote and Loongson; see each original notice"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["third_party/gnu-efi/inc/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "GNU-EFI contributors; see each file and third_party/gnu-efi/LICENSE.efilib"
+SPDX-License-Identifier = "BSD-2-Clause"
+
+[[annotations]]
+path = ["third_party/gnu-efi/crt0-efi-ia64.S", "third_party/gnu-efi/reloc_ia64.S", "third_party/gnu-efi/elf_ia64_efi.lds"]
+precedence = "closest"
+SPDX-FileCopyrightText = "1999 Hewlett-Packard Co.; see each file"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = ["third_party/gnu-efi/inc/efipoint.h"]
+precedence = "override"
+SPDX-FileCopyrightText = "2014 John Cronin"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["third_party/gnu-efi/inc/subst/elf.h"]
+precedence = "override"
+SPDX-FileCopyrightText = "2024 GNU-EFI Contributors"
+SPDX-License-Identifier = "LGPL-2.1-or-later"
+
+[[annotations]]
+path = ["third_party/gnu-efi/inc/efishellintf.h"]
+precedence = "override"
+SPDX-FileCopyrightText = "2006-2010 Intel Corporation"
+SPDX-License-Identifier = "BSD-2-Clause"

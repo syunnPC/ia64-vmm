@@ -1,0 +1,99 @@
+IA-64 VMM
+
+The combined VMM is distributed under GPL-3.0-or-later. Project files
+without Asteria code retain GPL-2.0-or-later. The expression
+"GPL-3.0-or-later AND Apache-2.0" requires both sets of obligations;
+it is not a choice between licences. Full texts are in LICENSES/.
+
+Asteria
+Copyright 2026 syunnPC
+Project-authored code and documentation: Apache License, Version 2.0.
+
+The following parts are adapted to this project's interfaces and C11
+(assembly where applicable). Each file names all contributing Asteria
+source files in its Origin comment:
+
+- Host timing and interrupt guards: host/amd64/calibration.c, time.c, hal.c.
+- Host interrupt routing and IOMMU handoff:
+  host/amd64/intx.c, iommu_tables.c; tests in
+  host/amd64/tests/prep.c.
+- USB xHCI/EHCI/BOT/SCSI and AHCI persistence: host/amd64/plog_xhci.c,
+  plog_ehci.c, plog_ahci.c, persist/bot.c, persist/protocol.c, persist/sbc.c.
+- AML parsing, opcode grammar and routing facts: platform/aml.c, aml.h,
+  aml-grammar.h, acpi-irq.c; tests in platform/tests/aml.c and aml-core.asl.
+- PCI addressing, BAR probing, MSI, INTx, IOSAPIC, PIB and locking:
+  platform/pci.c, msi.c, intx.c, iosapic.c, pib.c, lock.h;
+  tests in tests/hosted/platform.c.
+- UART probe tests: tests/loaders/physical.c.
+- Firmware timer, IVT, translation activation, PCI ECAM and SAL tables:
+  firmware/new/dxe/arch.c, ivt.S, gate/virtual.S, boot-translation.h,
+  pci/root.c, sal/sal.c, sal/table.c; tests in
+  tests/firmware/sal.c.
+- EFI linker layout and ELF-to-PE conversion: firmware/edk2/module.lds,
+  tools/firmware/elf_to_pe.py, tests/firmware/test_converter.py.
+
+Asteria's third-party font and cryptographic test data are not included in
+these ports. Its project-code notice above is retained; the licence is
+LICENSES/Apache-2.0.txt. Every Asteria-derived file carries
+"SPDX-License-Identifier: GPL-3.0-or-later AND Apache-2.0", the copyright
+line above and an "Origin: Asteria" line naming its source files.
+
+Bundled third-party components
+
+Limine v11.4.1 (third_party/limine)
+Copyright (C) 2019-2026 Mintsuki and contributors (bootloader).
+Copyright (C) 2022-2026 Mintsuki and contributors (protocol).
+The bundled BOOTX64.EFI bootloader is BSD-2-Clause; the protocol header is
+0BSD. Retain third_party/limine/LICENSE and LICENSE.protocol, including
+their copyright notices and disclaimers, with distributions.
+Its embedded dependencies have separate terms: cc-runtime (Apache-2.0
+WITH LLVM-exception), freestanding C headers and protocol (0BSD), Flanterm
+and libfdt (BSD-2-Clause), stb_image (MIT), and PicoEFI (BSD-2-Clause,
+BSD-2-Clause-Patent, BSD-3-Clause, MIT and
+LicenseRef-scancode-bsd-no-disclaimer-unmodified). These permissive terms
+allow GPLv3 distribution. Retain docs/limine-dependencies.md and
+NOTICE.dependencies: the latter preserves the exact release's component
+copyrights, conditions and disclaimers. Additional full terms are in
+LICENSES/LLVM-exception.txt and
+LICENSES/LicenseRef-scancode-bsd-no-disclaimer-unmodified.txt.
+
+GNU-EFI (third_party/gnu-efi)
+Retain LICENSE.sources, LICENSE.efilib, LICENSE.BSD-3-Clause, licenses/,
+and every per-file notice. The IA-64 startup and relocator carry the
+Hewlett-Packard 1999 BSD-3-Clause notice. The EFI Toolkit headers carry
+Intel's permissive two-condition notice (LICENSE.efilib); some headers
+retain their own MIT, BSD-2-Clause-Patent or dual GPL-2.0-or-later/BSD notices.
+Linaro-derived bindings offer an explicit GPL-2.0-or-later alternative,
+selected in REUSE.toml. inc/subst/elf.h is LGPL-2.1-or-later (the upstream
+licence inventory also describes its LGPLv3/GPLv3 conversion option). The complete LGPL-2.1 text
+is supplied in LICENSES/. These permissions allow GPLv3 distribution.
+
+Tianocore EDK2 vUDK2018, commit 3e72ffe8afdd03f1f89eba65c921cbdcb004cfee
+(third_party/edk2-ipf)
+The selected source files retain the historical BSD-2-Clause licence,
+copyright notices and disclaimers in License.txt and each source file.
+The Brotli licence text (MIT) is retained at
+MdeModulePkg/Library/BrotliCustomDecompressLib/LICENSE; no Brotli
+implementation is selected. REUSE.toml supplies SPDX metadata without
+changing the imported source bytes.
+firmware/edk2/generated: BSD-2-Clause BaseTools templates; Copyright (c) 2007 - 2017, Intel Corporation. All rights reserved.
+The patches under firmware/new/dxe and firmware/new/pci modify build
+copies of BSD sources and carry GPL-2.0-or-later AND BSD-2-Clause;
+original notices remain. Project overlays are
+GPL-2.0-or-later except for the Asteria-derived files listed above.
+
+qemu-system-ia64 fork, commit 5f67e29d0fb6bea1f3bbae86d2af2674036f1b9c
+The retained CPU-model ports, console data, ELF loader and
+firmware/new/fpswa code retain GPL-2.0-or-later terms and origin comments.
+The "or later" permission permits GPLv3 distribution.
+The fork's QEMU-derived ui/vgafont data retain their source attribution.
+
+X.Org misc-fixed 9x15 bitmap glyphs (host/fb/font.h)
+Public domain font. Share and enjoy.
+The generator and surrounding project code are GPL-2.0-or-later.
+These glyphs are distinct from Asteria's fonts.
+
+USB images include this NOTICE, LICENSES/ and the component notices at
+their source-tree paths. Binary distributions must include the applicable licence,
+copyright and disclaimer files referenced above. GPL distributions must
+also provide the corresponding source under the applicable terms.

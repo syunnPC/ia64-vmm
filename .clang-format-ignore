@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+third_party/**
+firmware/edk2/generated/**
+firmware/include/**
+host/fb/font.h
+# Assembly-only header.
+firmware/new/sal-handoff.h

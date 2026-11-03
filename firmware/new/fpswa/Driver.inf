@@ -1,0 +1,26 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = VmmFpswa
+  FILE_GUID = 6931222a-74ae-4d44-bde8-fc5ba42b7ac4
+  MODULE_TYPE = DXE_RUNTIME_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = _ModuleEntryPoint
+[Sources]
+  support.c
+  driver.c
+  assist.c
+  fpswa-entry.S
+  model-fp.c
+  model-arith.c
+  model-round.c
+  model-parallel.c
+  model-decode.c
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  BaseMemoryLib
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+[Depex]
+  TRUE

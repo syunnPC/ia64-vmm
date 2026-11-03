@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+line-length = 100
+target-version = "py311"
+extend-exclude = ["third_party", "build", "firmware/edk2/generated"]
+
+[lint]
+select = ["E9", "F"]

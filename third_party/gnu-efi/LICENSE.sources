@@ -1,0 +1,25 @@
+
+The following is licensed under GPL-2.0-or-later OR BSD-3-Clause (LICENSE.GPL-2.0-or-later/LICENSE.BSD-3-Clause):
+* The top directory of the repository
+* The apps directory
+* The gnuefi directory
+* The docs directory
+* The licenses directory
+
+The following is licensed under BSD-3-Clause (LICENSE.efilib):
+* The inc directory
+* The lib directory
+
+inc/subst/elf.h is licensed under LGPL-2.1-or-later but is licensed under our own terms per compliance with
+Section 3 of the GNU Lesser General Public License v3.0
+(LICENSE.LGPL-3.0-or-later/LICENSE.GPL-3.0-or-later)
+
+The following is licensed under GPL-2.0-or-later (LICENSE.GPL-2.0-or-later):
+* The tests directory
+* The .vs directory
+* The .github directory
+
+Where stated, some code which has originated from EDK II is licensed under BSD-3-Clause-Patent:
+(LICENSE.edk2)
+
+

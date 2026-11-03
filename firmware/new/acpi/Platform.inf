@@ -1,0 +1,34 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = VmmTables
+  FILE_GUID = cfe5c6c8-8b4d-49f2-a567-200060006003
+  MODULE_TYPE = DXE_RUNTIME_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = VmmTablesEntry
+[Sources]
+  driver.c
+  tables.c
+  aml.c
+  ../smbios/smbios.c
+  ../sal/sal.c
+  ../sal/table.c
+  ../sal/runtime.c
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  DxeServicesTableLib
+  BaseMemoryLib
+  HobLib
+  DebugLib
+[Guids]
+  gEfiAcpi20TableGuid
+  gEfiSmbiosTableGuid
+  gEfiSalSystemTableGuid
+  gEfiEventVirtualAddressChangeGuid
+[Depex]
+  TRUE

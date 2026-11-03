@@ -1,0 +1,313 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/*
+ * The Tier1 IR opcode table.
+ *
+ * The single definition of every IR op: name, immediate layout, effect
+ * class, operands (name, type) and results (name, type). It is included by
+ * C (rules.h builds enum t1_ir_op and the result-index constants from it)
+ * and parsed textually by engine/tier1/rules/rulelib.py, which resolves the
+ * rule language's (OP ...)@name references against the T1_IR_RESULT rows.
+ * Row syntax is therefore fixed: one row per line, no line continuation.
+ *
+ *   T1_IR_OP(NAME, IMM, EFFECT, NOPND, NRES)
+ *   T1_IR_OPERAND(NAME, INDEX, operand_name, TYPE)
+ *   T1_IR_RESULT(NAME, INDEX, result_name, TYPE)
+ *
+ * The includer defines the row macros it needs; the ones left undefined
+ * expand to nothing. All three are #undef'd at the end.
+ *
+ * Types: I64 (GR value, address, AR.LC, and the significand of an
+ * integer-form FR value: exponent 0x1003e, sign 0),
+ * I1 (predicate, NaT bit),
+ * MEM (memory token), T (the op's type parameter, I64 or I1, stored in the
+ * op), VAR (operand only: a variable-length tail, e.g. block arguments or a
+ * helper's read set; always last).
+ *
+ * Value identity: a value is (defining op, result INDEX); every op
+ * has at most four results; there are no projection ops. The rule language
+ * names a result as (OP ...)@result_name.
+ *
+ * Immediate layouts: every op has one int64 attribute `imm`, packed as
+ * IMM says. Patterns in the rule language constrain this packed value.
+ *   NONE      unused (0)
+ *   VALUE     CONST: the constant (I1: 0 or 1)
+ *   ELEMENT   LIVEIN: the architectural element id
+ *   COUNT     SHL_IMM: shift count c, 0..63
+ *   FIELD     EXTR/EXTRU/DEPZ: pos | len << 8 (pos 0..63, len 1..64)
+ *   WIDTH     SXT/ZXT: source width in bits, 8/16/32
+ *   CMP       CMP: rel | width << 8 (rel: T1_CMP_*, width 32 or 64)
+ *   ACCESS    LOAD/STORE: bytes | ordered << 8 | site << 16
+ *             (bytes 1/2/4/8; ordered = .acq for LOAD, .rel for STORE)
+ *   HELPER    HELPER: insn index | site << 16
+ *   POINT     EXIT: point id
+ *
+ * Effects:
+ *   PURE      no side effect; may be moved along data dependencies, never
+ *             above a may-fault op it feeds
+ *   PSEUDO    NATCHK: must fold away; one that survives makes the
+ *             instruction a region boundary
+ *   LOAD      may fault before effect; threaded on the E_MEM chain
+ *   STORE     may fault before effect; writes memory; E_MEM chain
+ *   ORDER     FENCE (mf -> mfence); E_MEM chain
+ *   HELPER    exact in-region call of ia64_execute; E_MEM chain
+ *   TERM      block terminator
+ *   PARAM     block parameter: a value defined at the
+ *             start of its block, bound on each incoming edge to that
+ *             edge's argument (JUMP/BRANCH/BACKEDGE args, in parameter
+ *             order); never matched by a rule (rulelib accepts only PURE
+ *             ops in patterns); imm = the element it carries, 0 if none
+ *
+ * Semantics of the integer ops are those of the IA-64 instructions they are
+ * lifted from (SDM Rev 2.3 Vol.3 Ch.2; tests/tier1/rules/sem_ia64.py cites
+ * each), on values whose NaT bits are tracked separately:
+ *   SHL/SHR/SHRU: count >= 64 gives 0 (SHL, SHRU) or the sign fill (SHR).
+ *   shladd d = a, c, b lifts to ADD(SHL_IMM c a, b), c = 1..4.
+ *   CLOOP: taken = LC != 0; next = taken ? LC - 1 : LC (br.cloop).
+ *   CMP rel width: eq/lt (signed)/ltu (unsigned) on the full 64 bits or,
+ *   width 32, on bits 31:0 (cmp4). Pseudo-op compares (gt, ge, ne, ...)
+ *   reach the IR already normalized by the decoder.
+ *   SELECT c, t, f: c ? t : f.
+ *
+ * FR integer ops (lifted and selected with integer rules, SDM Vol.3 setf, getf, xma; ia64/fp.c):
+ *   SETF_SIG a: a (setf.sig; the NaTVal of a NaT source is the source NaT,
+ *     tracked separately and folded away by the GR NaT guard).
+ *   GETF_SIG a: a (getf.sig; its NaT is the NaTVal-ness of the FR value).
+ *   XMA_L a, b, c: bits 63:0 of a * b + c.
+ *   XMA_HU a, b, c: bits 127:64 of a * b + c, a, b unsigned.
+ *   XMA_H a, b, c: bits 127:64 of a * b + c, a, b signed.
+ *   The addend c is zero-extended to 128 bits in every form (ia64/fp.c,
+ *   "the addend is zero-extended in every form").
+ *
+ * Effects of a false qualifying predicate (qp = 0, SDM Vol.1 §4.3.3)
+ * as lifted; the lifter is the only place that creates them:
+ *   ordinary integer, shift, normal and parallel cmp/cmp4, tbit other than
+ *     .unc, ld, st, br.cond, mf, nop: no state change. Pure results become SELECT(qp, new, old) for the
+ *     value and its NaT; LOAD/STORE sit in a block entered by BRANCH qp
+ *     (no access, no fault on the false path; a synthetic false-path block
+ *     charges the retirement).
+ *   cmp/cmp4 and TBIT .unc (native): p1 = AND1(qp, AND1(NOT1 n, c)),
+ *     p2 = AND1(qp, AND1(NOT1 n, NOT1 c)); p1 = p2 = 0 when qp = 0.
+ *   TNAT (helper): HELPER is emitted unconditionally and ia64_execute
+ *     applies qp itself.
+ *   br.cloop: qp is ignored; CLOOP has no qp operand.
+ *   clear_p2_before_predicate forms (FP only): region boundary.
+ */
+#ifndef T1_IR_OP
+#define T1_IR_OP(name, imm, effect, nopnd, nres)
+#endif
+#ifndef T1_IR_OPERAND
+#define T1_IR_OPERAND(op, index, name, type)
+#endif
+#ifndef T1_IR_RESULT
+#define T1_IR_RESULT(op, index, name, type)
+#endif
+
+T1_IR_OP(CONST, VALUE, PURE, 0, 1)
+T1_IR_RESULT(CONST, 0, value, T)
+
+T1_IR_OP(LIVEIN, ELEMENT, PURE, 0, 1)
+T1_IR_RESULT(LIVEIN, 0, value, T)
+
+T1_IR_OP(ADD, NONE, PURE, 2, 1)
+T1_IR_OPERAND(ADD, 0, a, I64)
+T1_IR_OPERAND(ADD, 1, b, I64)
+T1_IR_RESULT(ADD, 0, value, I64)
+
+T1_IR_OP(SUB, NONE, PURE, 2, 1)
+T1_IR_OPERAND(SUB, 0, a, I64)
+T1_IR_OPERAND(SUB, 1, b, I64)
+T1_IR_RESULT(SUB, 0, value, I64)
+
+T1_IR_OP(AND, NONE, PURE, 2, 1)
+T1_IR_OPERAND(AND, 0, a, I64)
+T1_IR_OPERAND(AND, 1, b, I64)
+T1_IR_RESULT(AND, 0, value, I64)
+
+T1_IR_OP(OR, NONE, PURE, 2, 1)
+T1_IR_OPERAND(OR, 0, a, I64)
+T1_IR_OPERAND(OR, 1, b, I64)
+T1_IR_RESULT(OR, 0, value, I64)
+
+T1_IR_OP(XOR, NONE, PURE, 2, 1)
+T1_IR_OPERAND(XOR, 0, a, I64)
+T1_IR_OPERAND(XOR, 1, b, I64)
+T1_IR_RESULT(XOR, 0, value, I64)
+
+T1_IR_OP(ANDCM, NONE, PURE, 2, 1)
+T1_IR_OPERAND(ANDCM, 0, a, I64)
+T1_IR_OPERAND(ANDCM, 1, b, I64)
+T1_IR_RESULT(ANDCM, 0, value, I64)
+
+T1_IR_OP(SHL, NONE, PURE, 2, 1)
+T1_IR_OPERAND(SHL, 0, a, I64)
+T1_IR_OPERAND(SHL, 1, count, I64)
+T1_IR_RESULT(SHL, 0, value, I64)
+
+T1_IR_OP(SHR, NONE, PURE, 2, 1)
+T1_IR_OPERAND(SHR, 0, a, I64)
+T1_IR_OPERAND(SHR, 1, count, I64)
+T1_IR_RESULT(SHR, 0, value, I64)
+
+T1_IR_OP(SHRU, NONE, PURE, 2, 1)
+T1_IR_OPERAND(SHRU, 0, a, I64)
+T1_IR_OPERAND(SHRU, 1, count, I64)
+T1_IR_RESULT(SHRU, 0, value, I64)
+
+T1_IR_OP(SHL_IMM, COUNT, PURE, 1, 1)
+T1_IR_OPERAND(SHL_IMM, 0, a, I64)
+T1_IR_RESULT(SHL_IMM, 0, value, I64)
+
+T1_IR_OP(EXTR, FIELD, PURE, 1, 1)
+T1_IR_OPERAND(EXTR, 0, a, I64)
+T1_IR_RESULT(EXTR, 0, value, I64)
+
+T1_IR_OP(EXTRU, FIELD, PURE, 1, 1)
+T1_IR_OPERAND(EXTRU, 0, a, I64)
+T1_IR_RESULT(EXTRU, 0, value, I64)
+
+T1_IR_OP(DEPZ, FIELD, PURE, 1, 1)
+T1_IR_OPERAND(DEPZ, 0, a, I64)
+T1_IR_RESULT(DEPZ, 0, value, I64)
+
+T1_IR_OP(SXT, WIDTH, PURE, 1, 1)
+T1_IR_OPERAND(SXT, 0, a, I64)
+T1_IR_RESULT(SXT, 0, value, I64)
+
+T1_IR_OP(ZXT, WIDTH, PURE, 1, 1)
+T1_IR_OPERAND(ZXT, 0, a, I64)
+T1_IR_RESULT(ZXT, 0, value, I64)
+
+T1_IR_OP(CLOOP, NONE, PURE, 1, 2)
+T1_IR_OPERAND(CLOOP, 0, lc, I64)
+T1_IR_RESULT(CLOOP, 0, next, I64)
+T1_IR_RESULT(CLOOP, 1, taken, I1)
+
+T1_IR_OP(CMP, CMP, PURE, 2, 1)
+T1_IR_OPERAND(CMP, 0, a, I64)
+T1_IR_OPERAND(CMP, 1, b, I64)
+T1_IR_RESULT(CMP, 0, value, I1)
+
+T1_IR_OP(NOT1, NONE, PURE, 1, 1)
+T1_IR_OPERAND(NOT1, 0, a, I1)
+T1_IR_RESULT(NOT1, 0, value, I1)
+
+T1_IR_OP(AND1, NONE, PURE, 2, 1)
+T1_IR_OPERAND(AND1, 0, a, I1)
+T1_IR_OPERAND(AND1, 1, b, I1)
+T1_IR_RESULT(AND1, 0, value, I1)
+
+T1_IR_OP(OR1, NONE, PURE, 2, 1)
+T1_IR_OPERAND(OR1, 0, a, I1)
+T1_IR_OPERAND(OR1, 1, b, I1)
+T1_IR_RESULT(OR1, 0, value, I1)
+
+T1_IR_OP(SELECT, NONE, PURE, 3, 1)
+T1_IR_OPERAND(SELECT, 0, c, I1)
+T1_IR_OPERAND(SELECT, 1, t, T)
+T1_IR_OPERAND(SELECT, 2, f, T)
+T1_IR_RESULT(SELECT, 0, value, T)
+
+T1_IR_OP(NATCHK, NONE, PSEUDO, 1, 0)
+T1_IR_OPERAND(NATCHK, 0, nat, I1)
+
+T1_IR_OP(LOAD, ACCESS, LOAD, 2, 2)
+T1_IR_OPERAND(LOAD, 0, addr, I64)
+T1_IR_OPERAND(LOAD, 1, mem, MEM)
+T1_IR_RESULT(LOAD, 0, value, I64)
+T1_IR_RESULT(LOAD, 1, mem, MEM)
+
+T1_IR_OP(STORE, ACCESS, STORE, 3, 1)
+T1_IR_OPERAND(STORE, 0, addr, I64)
+T1_IR_OPERAND(STORE, 1, value, I64)
+T1_IR_OPERAND(STORE, 2, mem, MEM)
+T1_IR_RESULT(STORE, 0, mem, MEM)
+
+T1_IR_OP(FENCE, NONE, ORDER, 1, 1)
+T1_IR_OPERAND(FENCE, 0, mem, MEM)
+T1_IR_RESULT(FENCE, 0, mem, MEM)
+
+/* Taken br.call: remember that BSP has passed any entry RNaT slot.
+ * Ordered with accesses so exits before the call retain the entry BSP. */
+T1_IR_OP(BSPCALL, NONE, ORDER, 1, 1)
+T1_IR_OPERAND(BSPCALL, 0, mem, MEM)
+T1_IR_RESULT(BSPCALL, 0, mem, MEM)
+
+T1_IR_OP(HELPER, HELPER, HELPER, 2, 3)
+T1_IR_OPERAND(HELPER, 0, mem, MEM)
+T1_IR_OPERAND(HELPER, 1, reads, VAR)
+T1_IR_RESULT(HELPER, 0, p1, I1)
+T1_IR_RESULT(HELPER, 1, p2, I1)
+T1_IR_RESULT(HELPER, 2, mem, MEM)
+
+T1_IR_OP(JUMP, NONE, TERM, 1, 0)
+T1_IR_OPERAND(JUMP, 0, args, VAR)
+
+T1_IR_OP(BRANCH, NONE, TERM, 2, 0)
+T1_IR_OPERAND(BRANCH, 0, c, I1)
+T1_IR_OPERAND(BRANCH, 1, args, VAR)
+
+T1_IR_OP(BACKEDGE, NONE, TERM, 1, 0)
+T1_IR_OPERAND(BACKEDGE, 0, args, VAR)
+
+T1_IR_OP(EXIT, POINT, TERM, 0, 0)
+
+T1_IR_OP(PARAM, ELEMENT, PARAM, 0, 1)
+T1_IR_RESULT(PARAM, 0, value, T)
+
+T1_IR_OP(SETF_SIG, NONE, PURE, 1, 1)
+T1_IR_OPERAND(SETF_SIG, 0, a, I64)
+T1_IR_RESULT(SETF_SIG, 0, value, I64)
+
+T1_IR_OP(GETF_SIG, NONE, PURE, 1, 1)
+T1_IR_OPERAND(GETF_SIG, 0, a, I64)
+T1_IR_RESULT(GETF_SIG, 0, value, I64)
+
+T1_IR_OP(XMA_L, NONE, PURE, 3, 1)
+T1_IR_OPERAND(XMA_L, 0, a, I64)
+T1_IR_OPERAND(XMA_L, 1, b, I64)
+T1_IR_OPERAND(XMA_L, 2, c, I64)
+T1_IR_RESULT(XMA_L, 0, value, I64)
+
+T1_IR_OP(XMA_HU, NONE, PURE, 3, 1)
+T1_IR_OPERAND(XMA_HU, 0, a, I64)
+T1_IR_OPERAND(XMA_HU, 1, b, I64)
+T1_IR_OPERAND(XMA_HU, 2, c, I64)
+T1_IR_RESULT(XMA_HU, 0, value, I64)
+
+T1_IR_OP(XMA_H, NONE, PURE, 3, 1)
+T1_IR_OPERAND(XMA_H, 0, a, I64)
+T1_IR_OPERAND(XMA_H, 1, b, I64)
+T1_IR_OPERAND(XMA_H, 2, c, I64)
+T1_IR_RESULT(XMA_H, 0, value, I64)
+
+/* General helpers return a memory token; HREAD snapshots each cached
+ * write-set home after that call. HGUARD leaves after completion when a
+ * helper retired the region or the window backend stopped. */
+T1_IR_OP(GHELPER, HELPER, HELPER, 2, 1)
+T1_IR_OPERAND(GHELPER, 0, mem, MEM)
+T1_IR_OPERAND(GHELPER, 1, reads, VAR)
+T1_IR_RESULT(GHELPER, 0, mem, MEM)
+
+T1_IR_OP(HREAD, ELEMENT, PURE, 1, 1)
+T1_IR_OPERAND(HREAD, 0, completed, MEM)
+T1_IR_RESULT(HREAD, 0, value, T)
+
+T1_IR_OP(HGUARD, NONE, ORDER, 1, 1)
+T1_IR_OPERAND(HGUARD, 0, mem, MEM)
+T1_IR_RESULT(HGUARD, 0, mem, MEM)
+
+/* Exact entry NaT snapshot, introduced by natguard for inputs consumed
+ * only by exact helpers or carried to restoration. Native consumption
+ * still requires the guarded CONST path or a compilation boundary. */
+T1_IR_OP(NATIN, ELEMENT, PURE, 0, 1)
+T1_IR_RESULT(NATIN, 0, value, I1)
+
+/* Exact NaTVal classification; unlike GR NaT consumption, it never faults. */
+T1_IR_OP(FRNATTEST, NONE, PURE, 2, 1)
+T1_IR_OPERAND(FRNATTEST, 0, sig, I64)
+T1_IR_OPERAND(FRNATTEST, 1, meta, I64)
+T1_IR_RESULT(FRNATTEST, 0, value, I1)
+
+#undef T1_IR_OP
+#undef T1_IR_OPERAND
+#undef T1_IR_RESULT

@@ -1,0 +1,2 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+z3-solver==5.1.0.0

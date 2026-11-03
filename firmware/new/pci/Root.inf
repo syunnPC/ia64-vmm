@@ -1,0 +1,27 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later */
+[Defines]
+  INF_VERSION = 0x00010005
+  BASE_NAME = VmmPci
+  FILE_GUID = 0356392a-0198-480a-8f02-070060006040
+  MODULE_TYPE = DXE_DRIVER
+  VERSION_STRING = 1.0
+  ENTRY_POINT = VmmPciEntry
+[Sources]
+  root.c
+[Packages]
+  MdePkg/MdePkg.dec
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  HobLib
+  BaseLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  TimerLib
+  DebugLib
+[Protocols]
+  gEfiPciHostBridgeResourceAllocationProtocolGuid
+  gEfiPciRootBridgeIoProtocolGuid
+  gEfiDevicePathProtocolGuid
+[Depex]
+  TRUE

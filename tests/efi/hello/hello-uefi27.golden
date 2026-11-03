@@ -1,0 +1,14 @@
+IA64-VMM: hello from IA-64 EFI
+fw-revision   0x0000000000010000
+hdr-revision  0x0000000000020046
+ops-acc       0xb9756cfc962487a6
+udiv          0x0000001000000790
+umod          0x0000000000000401
+sdiv          -10309278
+udiv32        0x00000000220f4edb
+fib(20)       0x0000000000001a6d
+depth(200)    0x1c71c71c71c71cba
+alloc-status  0x0000000000000000
+pool-hash     0xe3db629899874325
+memmap-probe  0x0000000000000001
+IA64-VMM: done

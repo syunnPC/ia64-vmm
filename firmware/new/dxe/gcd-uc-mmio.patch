@@ -1,0 +1,28 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later AND BSD-2-Clause */
+--- a/third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem/Page.c
++++ b/third_party/edk2-ipf/MdeModulePkg/Core/Dxe/Mem/Page.c
+@@ -1681,7 +1681,7 @@
+     if ((GcdMapEntry->GcdMemoryType == EfiGcdMemoryTypePersistent) || 
+         (GcdMapEntry->GcdMemoryType == EfiGcdMemoryTypeReserved) ||
+         ((GcdMapEntry->GcdMemoryType == EfiGcdMemoryTypeMemoryMappedIo) &&
+-        ((GcdMapEntry->Attributes & EFI_MEMORY_RUNTIME) == EFI_MEMORY_RUNTIME))) {
++        ((GcdMapEntry->Attributes & (EFI_MEMORY_RUNTIME | EFI_MEMORY_UC)) != 0))) {
+       NumberOfEntries ++;
+     }
+   }
+@@ -1789,9 +1789,14 @@
+       }
+     }
+ 
++    //
++    // IA-64 VMM overlay: an MMIO entry whose UC attribute the firmware set
++    // (assigned PCI BAR spans) is reported as well, without EFI_MEMORY_RUNTIME,
++    // as the reference firmware lists them.
++    //
+     if ((MergeGcdMapEntry.GcdMemoryType == EfiGcdMemoryTypeReserved) ||
+         ((MergeGcdMapEntry.GcdMemoryType == EfiGcdMemoryTypeMemoryMappedIo) &&
+-        ((MergeGcdMapEntry.Attributes & EFI_MEMORY_RUNTIME) == EFI_MEMORY_RUNTIME))) {
++        ((MergeGcdMapEntry.Attributes & (EFI_MEMORY_RUNTIME | EFI_MEMORY_UC)) != 0))) {
+       //
+       // Page Align GCD range is required. When it is converted to EFI_MEMORY_DESCRIPTOR, 
+       // it will be recorded as page PhysicalStart and NumberOfPages. 

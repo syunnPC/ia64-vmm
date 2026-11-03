@@ -1,0 +1,12 @@
+# /* SPDX-License-Identifier: GPL-2.0-or-later AND BSD-2-Clause */
+--- a/third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressHci.c
++++ b/third_party/edk2-ipf/MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressHci.c
+@@ -1034,7 +1034,7 @@
+   DEBUG ((EFI_D_INFO, "    MN        : %a\n",   Mn));
+   DEBUG ((EFI_D_INFO, "    FR        : 0x%x\n", *((UINT64*)Private->ControllerData->Fr)));
+   DEBUG ((EFI_D_INFO, "    RAB       : 0x%x\n", Private->ControllerData->Rab));
+-  DEBUG ((EFI_D_INFO, "    IEEE      : 0x%x\n", *(UINT32*)Private->ControllerData->Ieee_oui));
++  DEBUG ((EFI_D_INFO, "    IEEE      : 0x%x\n", ReadUnaligned32 ((CONST UINT32 *) Private->ControllerData->Ieee_oui)));
+   DEBUG ((EFI_D_INFO, "    AERL      : 0x%x\n", Private->ControllerData->Aerl));
+   DEBUG ((EFI_D_INFO, "    SQES      : 0x%x\n", Private->ControllerData->Sqes));
+   DEBUG ((EFI_D_INFO, "    CQES      : 0x%x\n", Private->ControllerData->Cqes));
