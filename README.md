@@ -1,5 +1,7 @@
 # ia64-vmm
 
+<img width="50%" alt="Microsoft Windows Server 2008 R2 for Itanium-Based Systems is running on ThinkPad X220 using this hypervisor." src="https://github.com/user-attachments/assets/3922d1ab-fe32-47ae-8df5-03ce60807d8a" />
+
 **ia64-vmm** is an experimental Type-1 hypervisor that runs IA-64 (Itanium) guest operating systems on AMD64 hosts, powered by original instruction set translators.
 
 ## System Requirements
