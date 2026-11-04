@@ -78,10 +78,10 @@ static void test_models(void)
             CHECK(r == IA64_HOSTFP_DOWN);
             CHECK(p.result == (pc ? IA64_HOSTFP_DOUBLE : IA64_HOSTFP_SINGLE));
             CHECK(p.exact_only == (pc == 3));
-            /* fp_approx: the 64-bit model runs on double, inexact or not. */
+            /* Approximation still preserves the 64-bit computation model. */
             CHECK(ia64_hostfp_plan(zero, one, one, 0, true, controls, 0, IA64_HOSTFP_OPT_APPROX,
                                    &p) == IA64_HOSTFP_DOWN);
-            CHECK(!p.exact_only);
+            CHECK(p.exact_only == (pc == 3));
         }
 }
 
@@ -696,12 +696,11 @@ static void test_packed_execution(struct vcpu *v, struct vcpu *ref)
     CHECK(downgraded() - before > 20000);
 }
 
-/* fp_approx: 64-bit precision, double-range operands run on double. The
- * result is the double result; special cases stay on the soft-float. */
+/* Approximation remains available for explicit double precision. */
 static void test_approx(struct vcpu *v, struct vcpu *ref)
 {
     ia64_hostfp_configure(IA64_HOSTFP_CFG_APPROX | IA64_HOSTFP_CFG_EXPERIMENTAL);
-    Ia64Instruction i = scalar(IA64_OP_FMA, 1, 0);
+    Ia64Instruction i = scalar(IA64_OP_FMA, 1, 2);
     v->s.ar[AR_FPSR] = 63 | (uint64_t)0x0e << 19; /* sf1: pc 11, wre */
     v->s.fr[7] = fr(0, 0xffff, IBIT);
     v->s.fr[8] = fr(0, 0xffff, IBIT | UINT64_C(1) << 11);
@@ -709,17 +708,59 @@ static void test_approx(struct vcpu *v, struct vcpu *ref)
     uint64_t before = downgraded();
     CHECK(ia64_hostfp(v, &i).kind == IA64_STEP_COMPLETE);
     CHECK(downgraded() == before + 1);
-    /* (1 + 2^-52) 2^-53 + 1 is above the midpoint 1 + 2^-53: double
-     * rounds to 1 + 2^-52, the 64-bit soft-float to 1 + 2^-53. */
+    /* (1 + 2^-52) 2^-53 + 1 is above the double midpoint 1 + 2^-53. */
     CHECK(same(v->s.fr[6], fr(0, 0xffff, IBIT | UINT64_C(1) << 11)));
-    v->s.ar[AR_FPSR] = 63 | (uint64_t)0x0e << 19;
-    sync(ref, v);
-    CHECK(ia64_fp(ref, &i).kind == IA64_STEP_COMPLETE);
-    CHECK(same(ref->s.fr[6], fr(0, 0xffff, IBIT | UINT64_C(1) << 10)));
     v->s.fr[9] = fr(0, 0x1ffff, IBIT | IA64_FP_QUIET_BIT | 5);
     compare(v, ref, &i);
     v->s.fr[9] = fr(0, 0x0fc01, 1);
     compare(v, ref, &i);
+    ia64_hostfp_configure(0);
+}
+
+static void test_approx_extended(struct vcpu *v, struct vcpu *ref)
+{
+    for (unsigned nofma = 0; nofma < 2; ++nofma) {
+        ia64_hostfp_configure(IA64_HOSTFP_CFG_APPROX | IA64_HOSTFP_CFG_EXPERIMENTAL |
+                              (nofma ? IA64_HOSTFP_CFG_NOFMA3 : 0));
+        for (unsigned sf = 0; sf < 4; ++sf)
+            for (unsigned rc = 0; rc < 4; ++rc) {
+                uint64_t fpsr = 63 | (uint64_t)(0x0e | rc << 4) << (6 + sf * 13);
+                Ia64Instruction i = scalar(IA64_OP_FMPY, sf, 0);
+                v->s.ar[AR_FPSR] = fpsr;
+                /* (2^53 + 1) * 1 must retain the bit below double precision. */
+                struct ia64_fr input = fr(0, 0xffff + 53, IBIT | UINT64_C(1) << 10);
+                v->s.fr[7] = input;
+                v->s.fr[8] = one;
+                uint64_t before = downgraded();
+                compare(v, ref, &i);
+                CHECK(same(v->s.fr[6], input));
+                CHECK(v->s.ar[AR_FPSR] == fpsr && downgraded() == before);
+
+                /* An exact result with exact double operands can still use the host. */
+                v->s.fr[7] = one;
+                compare(v, ref, &i);
+                CHECK(same(v->s.fr[6], one));
+                CHECK(v->s.ar[AR_FPSR] == fpsr && downgraded() == before + 1);
+
+                /* 1 - (1 + 2^-52) * (1 - 2^-52) = 2^-104 requires fusion. */
+                i = scalar(IA64_OP_FNMA, sf, 0);
+                v->s.fr[7] = one;
+                v->s.fr[8] = ia64_fp_from_ieee(UINT64_C(0x3ff0000000000001), false);
+                v->s.fr[9] = ia64_fp_from_ieee(UINT64_C(0x3feffffffffffffe), false);
+                compare(v, ref, &i);
+                CHECK(same(v->s.fr[6], fr(0, 0xffff - 104, IBIT)));
+                CHECK(v->s.ar[AR_FPSR] == fpsr);
+
+                /* The exact sum is 1 + 2^-53 + 2^-105: round once to 64 bits. */
+                i = scalar(IA64_OP_FMA, sf, 0);
+                v->s.fr[9] = fr(0, 0xffff - 53, IBIT);
+                before = downgraded();
+                compare(v, ref, &i);
+                CHECK(same(v->s.fr[6], fr(0, 0xffff, IBIT | UINT64_C(1) << 10 | (rc == 2))));
+                CHECK(v->s.ar[AR_FPSR] == (fpsr | (uint64_t)FP_I << (13 + sf * 13)));
+                CHECK(downgraded() == before);
+            }
+    }
     ia64_hostfp_configure(0);
 }
 
@@ -772,6 +813,7 @@ unsigned test_hostfp(void)
     }
     ia64_hostfp_configure(0);
     test_approx(v, ref);
+    test_approx_extended(v, ref);
     vcpu_destroy(v);
     vcpu_destroy(ref);
     printf("hostfp (FMA3 %s): %u checks passed\n", ia64_hostfp_fma3() ? "yes" : "no", checks);

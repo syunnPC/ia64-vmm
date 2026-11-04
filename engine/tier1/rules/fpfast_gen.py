@@ -280,7 +280,7 @@ def rules():
     out = []
     exact = (0x1032, 0x1000)  # rc nearest, i set, wre clear
     approx = (0x1030, 0x1000)  # rc nearest, i set
-    wide = (0x1038, 0x1008)  # and pc 10 or 11 (precision none)
+    double_pc = (0x103C, 0x1008)  # pc 10 only (precision none)
     for fmt, prec in (("s", "s"), ("d", "d")):
         for insn in ("FMA", "FMS", "FNMA"):
             out.append(
@@ -309,7 +309,7 @@ def rules():
     for insn in ("FPMA", "FPMS", "FPNMA"):
         out.append(packed("%s_fused" % insn.lower(), insn, "reg", "fma3"))
         out.append(packed("%s_f0" % insn.lower(), insn, "f0", "base"))
-    # fp_approx: fused forms without FMA3 as two roundings; precision none on double.
+    # fp_approx: fused forms without FMA3 as two roundings; pc 10 on double.
     for fmt, prec in (("s", "s"), ("d", "d")):
         for insn in ("FMA", "FMS", "FNMA"):
             out.append(
@@ -326,16 +326,22 @@ def rules():
             )
     for insn in ("FMA", "FMS", "FNMA"):
         out.append(
-            scalar("%s_x_fused" % insn.lower(), insn, "d", "none", "reg", "fma3", "approx", *wide)
+            scalar(
+                "%s_x_fused" % insn.lower(), insn, "d", "none", "reg", "fma3", "approx", *double_pc
+            )
         )
         out.append(
-            scalar("%s_x_approx" % insn.lower(), insn, "d", "none", "reg", "base", "approx", *wide)
+            scalar(
+                "%s_x_approx" % insn.lower(), insn, "d", "none", "reg", "base", "approx", *double_pc
+            )
         )
         out.append(
-            scalar("%s_x_f0" % insn.lower(), insn, "d", "none", "f0", "base", "approx", *wide)
+            scalar("%s_x_f0" % insn.lower(), insn, "d", "none", "f0", "base", "approx", *double_pc)
         )
     for insn in ("FMPY", "FADD", "FSUB", "FNORM"):
-        out.append(scalar("%s_x" % insn.lower(), insn, "d", "none", "any", "base", "approx", *wide))
+        out.append(
+            scalar("%s_x" % insn.lower(), insn, "d", "none", "any", "base", "approx", *double_pc)
+        )
     return out
 
 

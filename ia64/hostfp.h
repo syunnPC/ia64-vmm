@@ -30,7 +30,7 @@ enum ia64_hostfp_reason {
 };
 
 #define IA64_HOSTFP_OPT_FMA3 1u         /* host fused multiply-add is usable */
-#define IA64_HOSTFP_OPT_APPROX 2u       /* fp_approx=1: host double for any precision */
+#define IA64_HOSTFP_OPT_APPROX 2u       /* fp_approx=1: approximate 24/53-bit arithmetic */
 #define IA64_HOSTFP_OPT_EXPERIMENTAL 8u /* explicit opt-in to direct Tier1 FP */
 #define IA64_HOSTFP_OPT_SOFT 4u         /* no engine uses host FP: fp_host=0 or no host execution */
 

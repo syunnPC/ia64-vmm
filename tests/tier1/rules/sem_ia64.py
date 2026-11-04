@@ -374,11 +374,11 @@ def fp_result(fmt, r):
     return normal, zero, sig, meta
 
 
-def fp_controls(fpsr, sf, exact, pc_wide=False):
+def fp_controls(fpsr, sf, exact, pc_double=False):
     """FPSR conditions under which FPSR stays unchanged and nothing traps
     (Vol.1 §5.2, Table 5-6): traps.id set; the status field (sf: z3 or int)
     rounds to nearest and has i set already; exact: wre clear (the format's
-    own exponent range); pc_wide: pc 10 or 11 (precision none, fp_approx)."""
+    own exponent range); pc_double: pc 10 (precision none, fp_approx)."""
     field = z3.Extract(12, 0, z3.LShR(fpsr, 6 + 13 * bv(sf)))
     conds = [
         z3.Extract(5, 5, fpsr) == 1,
@@ -387,8 +387,8 @@ def fp_controls(fpsr, sf, exact, pc_wide=False):
     ]
     if exact:
         conds.append(z3.Extract(1, 1, field) == 0)
-    if pc_wide:
-        conds.append(z3.Extract(3, 3, field) == 1)
+    if pc_double:
+        conds.append(z3.Extract(3, 2, field) == 2)
     return z3.And(conds)
 
 

@@ -1157,6 +1157,7 @@ EXPAND_SELFTEST = [
     ("fma_d_fused", "jns $BAIL", "jo $BAIL", "an operand without the integer bit (unnormal)"),
     ("fma_d_fused", "test64 $s, 0x7ff", "test64 $s, 0x3ff", "an operand with 54 significant bits"),
     ("fma_d_fused", "and64 $s, 0x1032", "and64 $s, 0x1030", "wre set: the 17-bit exponent range"),
+    ("fma_x_fused", "and64 $s, 0x103c", "and64 $s, 0x1038", "pc 11: 64-bit precision"),
     ("fma_s_fused", "test64 $s, 32", "test64 $s, 16", "the inexact trap enabled"),
     ("fmpy_d", "add64 $s, 0xfc00", "add64 $s, 0xfc01", "a wrong result exponent"),
     (

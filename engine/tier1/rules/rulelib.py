@@ -55,7 +55,7 @@ Rule format (format 2 additions marked +):
 
     expand <name>                  # fpfast.rules: a proved FP helper expansion
       insn      <OPCODE>           # FMA FMS FNMA FMPY FADD FSUB FNORM FPMA FPMS FPNMA
-      precision s | d | none       # the completer (none: fp_approx's double)
+      precision s | d | none       # the completer (none: fp_approx, pc 10 only)
       addend    f0 | reg | any     # the f2 field is f0 (a multiply) or another FR
       host      fma3 | base        # host FMA3 required (dispatch honours it)
       mode      exact | approx     # the promise proved (approx: fp_approx only)

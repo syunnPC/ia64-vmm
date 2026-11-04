@@ -486,10 +486,117 @@ static unsigned fpx_promise(void)
     return done;
 }
 
+/* Precision none with pc=11 requires 64 significand bits (SDM Vol.1
+ * Table 5-6), even when the operands fit in an SSE format. */
+static unsigned fpx_precision(void)
+{
+    uint8_t buf[4096];
+    void *page =
+        mmap(NULL, sizeof(buf), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    UM_CHECK(page != MAP_FAILED);
+    unsigned runs = 0;
+    for (unsigned k = 0; k < t1_fpx_rule_count; ++k) {
+        const struct t1_fpx_rule *r = &t1_fpx_rules[k];
+        if ((r->fma3 && !fpx_host_fma3()) || r->opcode == IA64_OP_FPMA ||
+            r->opcode == IA64_OP_FPMS || r->opcode == IA64_OP_FPNMA)
+            continue;
+        for (unsigned sf = 0; sf < 4; ++sf)
+            for (unsigned pc = 2; pc <= 3; ++pc)
+                for (unsigned wre = 0; wre <= (r->precision == 0); ++wre) {
+                    struct fpx_block blk = {0};
+                    blk.in[T1_FPX_QP] = 1;
+                    blk.in[T1_FPX_FPSR] = UINT64_C(0x3f) | (uint64_t)(0x1000 | pc << 2 | wre << 1)
+                                                               << (6 + 13 * sf);
+                    /* a=1 (or f0), b=2, c=3: each operation is normal. */
+                    blk.in[T1_FPX_A_SIG] = r->addend == T1_FPX_F0 ? 0 : IA64_FP_INTEGER_BIT;
+                    blk.in[T1_FPX_A_META] = r->addend == T1_FPX_F0 ? 0 : IA64_FP_BIAS;
+                    blk.in[T1_FPX_B_SIG] = IA64_FP_INTEGER_BIT;
+                    blk.in[T1_FPX_B_META] = IA64_FP_BIAS + 1;
+                    blk.in[T1_FPX_C_SIG] = UINT64_C(0xc000000000000000);
+                    blk.in[T1_FPX_C_META] = IA64_FP_BIAS + 1;
+                    unsigned exit;
+                    UM_CHECK(
+                        fpx_native_run(r, sf, IA64_PSR_MFL, &blk, &exit, buf, page, sizeof(buf)));
+                    bool allowed = r->precision != 0 || pc == 2;
+                    if (exit != allowed)
+                        fprintf(stderr, "fpx precision: %s sf%u pc%u wre%u: exit %u\n", r->name, sf,
+                                pc, wre, exit);
+                    UM_CHECK(exit == allowed);
+                    if (!allowed)
+                        UM_CHECK(blk.out[0] == FPX_POISON && blk.out[1] == FPX_POISON &&
+                                 blk.out[2] == FPX_POISON);
+                    ++runs;
+                }
+    }
+    munmap(page, sizeof(buf));
+    return runs;
+}
+
+/* Exact dyadic results, independently of the interpreter's host-FP policy:
+ * b=c=1+2^-27, a=1, delta=2^-60. The product retains its 2^-54 term;
+ * subtracting a must not round the product before the cancellation. */
+static unsigned fparith_precision64(const char *image)
+{
+    static const struct ia64_fr expected[] = {
+        {UINT64_C(0x8000001000000100), IA64_FP_BIAS + 1, false},
+        {UINT64_C(0x8000000800000000), IA64_FP_BIAS - 26, false},
+        {UINT64_C(0x8000000800000000), IA64_FP_BIAS - 26, true},
+        {UINT64_C(0x8000002000000200), IA64_FP_BIAS, false},
+        {UINT64_C(0x8000001000000008), IA64_FP_BIAS, false},
+        {UINT64_C(0x8000000ffffffff8), IA64_FP_BIAS, false},
+        {UINT64_C(0x8000000000000008), IA64_FP_BIAS, false},
+    };
+    unsigned runs = 0;
+    for (unsigned pass = 0; pass < 2; ++pass)
+        for (unsigned wre = 0; wre < 2; ++wre) {
+            ia64_hostfp_configure(IA64_HOSTFP_CFG_EXPERIMENTAL | IA64_HOSTFP_CFG_APPROX |
+                                  (pass ? IA64_HOSTFP_CFG_NOFMA3 : 0));
+            struct vcpu *v = um_vcpu(UM_CODE + 0x1c00), *ref = um_vcpu(UM_CODE);
+            um_load_file(UM_CODE, image);
+            v->s.fr[6] = v->s.fr[7] =
+                (struct ia64_fr){UINT64_C(0x8000001000000000), IA64_FP_BIAS, false};
+            v->s.fr[8] = (struct ia64_fr){IA64_FP_INTEGER_BIT, IA64_FP_BIAS, false};
+            v->s.fr[9] = (struct ia64_fr){IA64_FP_INTEGER_BIT, IA64_FP_BIAS - 60, false};
+            v->s.fr[17] = expected[6];
+            v->s.ar[AR_FPSR] =
+                (FPSR_LINUX & ~(UINT64_C(0x1fff) << 19)) | (uint64_t)(0x104c | wre << 1) << 19;
+            v->s.ar[AR_LC] = 1;
+            struct t1_compile_report rep;
+            uint32_t id = umt_compile(v, T1_COMPILE_VERIFY, 0, 0, &rep, "fparith precision64");
+            UM_CHECK(id && t1_region_get(id)->loop);
+            struct um_snapshot snap;
+            um_snapshot_take(&snap, v);
+            struct umt_run out;
+            struct umt_arm arm = {.point = UINT32_MAX};
+            unsigned calls = helper_calls();
+            UM_CHECK(umt_case(v, ref, &snap, T1_COMPILE_VERIFY, 128, id, &arm, &out, false,
+                              "fparith precision64") == 0);
+            UM_CHECK(out.run.entries && t1_region_get(id)->entries);
+            for (unsigned f = 0; f < sizeof(expected) / sizeof(expected[0]); ++f) {
+                const struct ia64_fr *got = &v->s.fr[10 + f], *want = &expected[f];
+                if (got->significand != want->significand || got->exponent != want->exponent ||
+                    got->sign != want->sign)
+                    fprintf(stderr, "fparith precision64: pass%u wre%u f%u: %llx %x/%u\n", pass,
+                            wre, 10 + f, (unsigned long long)got->significand, got->exponent,
+                            got->sign);
+                UM_CHECK(got->significand == want->significand && got->exponent == want->exponent &&
+                         got->sign == want->sign);
+            }
+            UM_CHECK(helper_calls() - calls == 14);
+            um_snapshot_free(&snap);
+            umt_release(v);
+            vcpu_destroy(ref);
+            vcpu_destroy(v);
+            ++runs;
+        }
+    return runs;
+}
+
 void fparith_tests(const char *image)
 {
     umt_init();
-    unsigned runs = 0;
+    unsigned runs = fparith_precision64(image);
+    unsigned precision = fpx_precision();
     ia64_hostfp_configure(0);
     bool fma3 = ia64_hostfp_options() & IA64_HOSTFP_OPT_FMA3;
     /* Stable mode uses the checked host-FP helper and native bit transfers. */
@@ -514,11 +621,14 @@ void fparith_tests(const char *image)
         /* The predicated sf2 fpma has the i flag clear. */
         runs += program(image, 0x1400, PACKED, 400, 1 + fused, "fparith parallel");
     }
-    /* fp_approx: Tier1 and the interpreter both run the 64-bit model on
-     * double; they must still agree with each other. */
-    ia64_hostfp_configure(IA64_HOSTFP_CFG_EXPERIMENTAL | IA64_HOSTFP_CFG_APPROX);
-    runs += program(image, 0xc00, DOUBLE, 200, 0, "fparith approx");
-    runs += program(image, 0x800, DOUBLE, 100, -1, "fparith approx mixed");
+    /* fp_approx keeps precision-none pc 11 operations on the helper. */
+    for (unsigned pass = 0; pass < 2; ++pass) {
+        ia64_hostfp_configure(IA64_HOSTFP_CFG_EXPERIMENTAL | IA64_HOSTFP_CFG_APPROX |
+                              (pass ? IA64_HOSTFP_CFG_NOFMA3 : 0));
+        runs += program(image, 0xc00, DOUBLE, 100, 4, "fparith approx");
+        UM_CHECK(last_iterations && last_calls >= 4 * last_iterations);
+        runs += program(image, 0x800, DOUBLE, 50, -1, "fparith approx mixed");
+    }
     ia64_hostfp_configure(IA64_HOSTFP_CFG_EXPERIMENTAL | IA64_HOSTFP_CFG_APPROX |
                           IA64_HOSTFP_CFG_NOFMA3);
     runs +=
@@ -531,6 +641,6 @@ void fparith_tests(const char *image)
     ia64_hostfp_configure(0);
     unsigned promise = fpx_promise();
     printf(
-        "fparith: %u differential runs passed, %u expansion results equal the soft-float's (host FMA3 %s)\n",
-        runs, promise, fma3 ? "yes" : "no");
+        "fparith: %u differential runs passed, %u precision checks, %u expansion results equal the soft-float's (host FMA3 %s)\n",
+        runs, precision, promise, fma3 ? "yes" : "no");
 }

@@ -23,7 +23,11 @@ in Configure VMM Options on the USB stick.
 
 Experimental mode alone preserves the requested precision. Approximation
 requires both `fp_experimental=1 fp_approx=1`; numeric results and FPSR
-inexact status can differ. Safe mode and diagnostics
+inexact status can differ for single/double operations. Requested 64-bit
+significand precision retains IA-64 operand precision and fused rounding,
+including in approximate mode: integer division and remainder algorithms
+depend on it. These operations use checked helpers or soft-float.
+Safe mode and diagnostics
 ignore saved FP settings and retain only saved media selectors.
 
 ## Helper acceptance

@@ -448,3 +448,52 @@ _start:
       nop.i 0
       nop.b 0 ;;
     }
+
+/* Exact 64-bit dyadic arithmetic, including product cancellation. */
+.org 0x1c00
+.Lprecision64:
+    { .mfi
+      nop.m 0
+      fma.s1 f10 = f6, f7, f8
+      nop.i 0 ;;
+    }
+    { .mfi
+      nop.m 0
+      fms.s1 f11 = f6, f7, f8
+      nop.i 0 ;;
+    }
+    { .mfi
+      nop.m 0
+      fnma.s1 f12 = f6, f7, f8
+      nop.i 0 ;;
+    }
+    { .mfi
+      nop.m 0
+      fmpy.s1 f13 = f6, f7
+      nop.i 0 ;;
+    }
+    { .mfi
+      nop.m 0
+      fadd.s1 f14 = f6, f9
+      nop.i 0 ;;
+    }
+    { .mfi
+      nop.m 0
+      fsub.s1 f15 = f6, f9
+      nop.i 0 ;;
+    }
+    { .mfi
+      nop.m 0
+      fnorm.s1 f16 = f17
+      nop.i 0 ;;
+    }
+    { .mib
+      nop.m 0
+      nop.i 0
+      br.cloop.sptk.few .Lprecision64 ;;
+    }
+    { .mib
+      break.m 0x1ffff
+      nop.i 0
+      nop.b 0 ;;
+    }

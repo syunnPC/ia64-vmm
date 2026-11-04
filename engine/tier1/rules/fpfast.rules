@@ -5022,7 +5022,7 @@ expand fma_x_fused
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -5199,7 +5199,7 @@ expand fma_x_approx
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -5377,7 +5377,7 @@ expand fma_x_f0
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -5519,7 +5519,7 @@ expand fms_x_fused
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -5698,7 +5698,7 @@ expand fms_x_approx
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -5878,7 +5878,7 @@ expand fms_x_f0
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -6020,7 +6020,7 @@ expand fnma_x_fused
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -6199,7 +6199,7 @@ expand fnma_x_approx
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -6379,7 +6379,7 @@ expand fnma_x_f0
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -6523,7 +6523,7 @@ expand fmpy_x
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, a.meta
@@ -6665,7 +6665,7 @@ expand fadd_x
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta
@@ -6800,7 +6800,7 @@ expand fsub_x
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, a.meta
@@ -6937,7 +6937,7 @@ expand fnorm_x
             test64 $s, 32
             jz $BAIL
             shr64 $s, (add 6 (shl #sf 3) (shl #sf 2) #sf)
-            and64 $s, 0x1038
+            and64 $s, 0x103c
             cmp64 $s, 0x1008
             jne $BAIL
             in $s, b.meta

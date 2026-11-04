@@ -21,9 +21,9 @@
  * Table 4-9 use the same encoding). The flags map one to one: MXCSR bits
  * 5:0 IE DE ZE OE UE PE are the status field's v d z o u i.
  * A product with an addend is fused (§5.4.8): host FMA3, or a separate
- * multiply that is exact. fp_approx=1 also accepts the double result of
- * 64-bit precision, double-rounded fused operations and operands rounded
- * to double; special cases still follow these rules.
+ * multiply that is exact. For 24/53-bit precision, fp_approx=1 also accepts
+ * double-rounded fused operations and operands rounded to double. The
+ * 64-bit model always preserves operands, fusion and result precision.
  */
 #include "ia64/hostfp.h"
 #include "ia64vmm/hal.h"
@@ -146,7 +146,8 @@ enum ia64_hostfp_reason ia64_hostfp_plan(struct ia64_fr a, struct ia64_fr b, str
                                          unsigned precision, unsigned opts,
                                          struct ia64_hostfp_plan *plan)
 {
-    bool approx = opts & IA64_HOSTFP_OPT_APPROX;
+    bool extended = !precision && ((controls >> 2) & 3) == 3;
+    bool approx = (opts & IA64_HOSTFP_OPT_APPROX) && !extended;
     *plan = (struct ia64_hostfp_plan){0};
     if (precision == 1)
         plan->result = IA64_HOSTFP_SINGLE;

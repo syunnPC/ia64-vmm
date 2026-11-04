@@ -5,6 +5,7 @@
 #include <math.h>
 #include <fenv.h>
 #include "ia64/fp.h"
+#include "ia64/hostfp.h"
 #include "ia64vmm/guest_mem.h"
 #include "build/tests/ia64/fp-compiler.h"
 
@@ -861,6 +862,60 @@ static void test_compiler(struct vcpu *v)
     CHECK(fesetround(FE_TONEAREST) == 0);
 }
 
+/* GCC implements integer division with extended-precision FP refinements. */
+static void test_compiler_integer_approx(struct vcpu *v)
+{
+    const uint64_t numerators[] = {
+        UINT64_C(0x020000004000c601),
+        UINT64_C(0x020000004000c600),
+        UINT64_C(0x020000004000c602),
+        0,
+        1,
+        4,
+        5,
+        6,
+        (UINT64_C(1) << 53) - 1,
+        UINT64_C(1) << 53,
+        (UINT64_C(1) << 53) + 1,
+        (UINT64_C(1) << 57) - 1,
+        UINT64_C(1) << 57,
+        (UINT64_C(1) << 57) + 1,
+        (UINT64_C(1) << 63) - 1,
+        UINT64_C(1) << 63,
+        UINT64_MAX - 1,
+        UINT64_MAX,
+    };
+    const uint64_t divisors[] = {5, 1, 3, 7, UINT64_C(1) << 32, UINT64_MAX};
+    for (unsigned nofma = 0; nofma < 2; ++nofma) {
+        ia64_hostfp_configure(IA64_HOSTFP_CFG_EXPERIMENTAL | IA64_HOSTFP_CFG_APPROX |
+                              (nofma ? IA64_HOSTFP_CFG_NOFMA3 : 0));
+        for (unsigned fn = 0; fn < sizeof(fp_guest_functions) / sizeof(*fp_guest_functions); ++fn) {
+            const char *name = fp_guest_functions[fn].name;
+            if (strcmp(name, "ud") && strcmp(name, "um"))
+                continue;
+            for (unsigned n = 0; n < sizeof(numerators) / sizeof(*numerators); ++n)
+                for (unsigned d = 0; d < sizeof(divisors) / sizeof(*divisors); ++d) {
+                    uint64_t a = numerators[n], b = divisors[d];
+                    uint64_t expected = name[1] == 'm' ? a % b : a / b;
+                    vcpu_reset(v, NULL);
+                    v->s.cfm = 2;
+                    v->s.gr[32] = a;
+                    v->s.gr[33] = b;
+                    run_compiler_function(v, fp_guest_functions[fn].offset);
+                    uint64_t actual = ia64_gr_read(&v->s, 8);
+                    if (actual != expected)
+                        fprintf(
+                            stderr,
+                            "GCC approximate %s nofma=%u: a=%llx b=%llx got %llx expected %llx\n",
+                            name, nofma, (unsigned long long)a, (unsigned long long)b,
+                            (unsigned long long)actual, (unsigned long long)expected);
+                    CHECK(actual == expected);
+                }
+        }
+    }
+    ia64_hostfp_configure(0);
+}
+
 unsigned test_fp(void)
 {
     struct vcpu_config cfg = {.engine = ENGINE_INTERP, .itc_icount = true};
@@ -875,6 +930,7 @@ unsigned test_fp(void)
     test_parallel(v);
     test_completion_trap(v);
     test_compiler(v);
+    test_compiler_integer_approx(v);
     vcpu_destroy(v);
     printf("FP: %u checks passed\n", checks);
     return checks;
