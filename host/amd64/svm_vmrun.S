@@ -40,13 +40,20 @@ amd64_svm_vmrun:
     push %r13
     push %r14
     push %r15
+    sub $8,%rsp
     push %rcx
     push %rsi
     push %rdi
     push %rdx
     mov (%rcx), %rdi
     mov 8(%rcx), %rsi
+    cmpq $0,16(%rcx)
+    jne .Lsvm_native_fp_enter
     call amd64_xstate_switch
+    jmp .Lsvm_fp_entered
+.Lsvm_native_fp_enter:
+    call amd64_ia32_fp_enter
+.Lsvm_fp_entered:
     mov (%rsp), %rdx
     mov 16(%rsp), %rax
     vmsave %rax
@@ -92,9 +99,18 @@ amd64_svm_vmrun:
     pop %rax
     vmload %rax
     pop %rax
+    cmpq $0,16(%rax)
+    jne .Lsvm_native_fp_leave
     mov 8(%rax), %rdi
     mov (%rax), %rsi
     call amd64_xstate_switch
+    jmp .Lsvm_fp_left
+.Lsvm_native_fp_leave:
+    mov (%rax),%rdi
+    mov 8(%rax),%rsi
+    call amd64_ia32_fp_leave
+.Lsvm_fp_left:
+    add $8,%rsp
     pop %r15
     pop %r14
     pop %r13

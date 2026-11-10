@@ -88,7 +88,14 @@ INDIRECT = {
     "host/amd64/hyperv.c:amd64_hyperv_signal": [],
 }
 # The only functions of the checked objects that may manage SIMD state.
-STATE_SETUP = {"host/amd64/cpu.c:amd64_simd_enable", "host/amd64/xstate.S:amd64_xstate_switch"}
+STATE_SETUP = {
+    "host/amd64/cpu.c:amd64_simd_enable",
+    "host/amd64/xstate.S:amd64_xstate_switch",
+    "host/amd64/xstate.S:amd64_xstate_init_x87",
+    "host/amd64/ia32_fp_switch.S:amd64_ia32_fp_enter",
+    "host/amd64/ia32_fp_switch.S:amd64_ia32_fp_leave",
+    "host/amd64/ia32_fp_switch.S:amd64_ia32_fp_mxcsr_mask",
+}
 
 SIMD_OPERAND = re.compile(r"%([xyzt]mm\d+|mm\d|st\b|k[0-7]\b)")
 SIMD_MNEMONIC = re.compile(

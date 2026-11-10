@@ -1238,6 +1238,10 @@ static struct vcpu_exit run(struct vcpu *v, uint64_t budget)
         unsigned requested = tier0_take_notification(&v->requested_exit);
         if (requested)
             return exit_at(v, requested - 1, 0, "requested exit");
+        if (v->s.psr & IA64_PSR_IS)
+            return exit_at(v, VCPU_EXIT_BUDGET, 0, "instruction set transition");
+        if (v->execution_deadline && hal_counter() >= v->execution_deadline)
+            return exit_at(v, VCPU_EXIT_BUDGET, 0, "execution deadline");
         if (tier0_take_notification(&v->irq_kick))
             return exit_at(v, VCPU_EXIT_BUDGET, 0, "interrupt mailbox kick");
         if (ia64_break_ips)

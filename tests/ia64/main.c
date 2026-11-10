@@ -462,8 +462,6 @@ static void test_cache_and_exits(void)
     CHECK(engine_run(v, 1).reason == VCPU_EXIT_BUDGET);
     uint64_t stored;
     CHECK(gm_read(ENTRY + 8, &stored, 8) && stored == __builtin_bswap64(v->s.gr[9]));
-    v->s.psr = IA64_PSR_IS;
-    CHECK(engine_run(v, 1).reason == VCPU_EXIT_UNIMPLEMENTED);
     v->s.psr = IA64_PSR_I;
     vcpu_raise_external(v, 200);
     CHECK(v->s.cr[CR_IRR0 + 3] == (1u << 8));

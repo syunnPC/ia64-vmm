@@ -2,6 +2,7 @@
 #include "ia64/interrupt.h"
 #include "ia64/rse.h"
 #include "ia64/tlb.h"
+#include "ia64/ia32/run.h"
 #include "ia64vmm/interrupts.h"
 extern bool platform_irq_update_lid(struct vcpu *, uint64_t) __attribute__((weak));
 
@@ -61,8 +62,7 @@ struct ia64_result ia64_control(struct vcpu *v, const Ia64Instruction *insn)
             /* Fork arch/rse.c: reject absent ISA before restored PSR/RSE. */
             if (v->cfg.cpu_model == IA64_CPU_MONTECITO)
                 return ia64_fault(IA64_FAULT_DISABLED_ISA, insn->raw);
-            return ia64_exit(VCPU_EXIT_UNIMPLEMENTED, psr,
-                             "IA-32 native backend not implemented (cpu_model=madison)");
+            return ia32_enter(v, IA32_ENTRY_RFI, s->cr[CR_IIP]);
         }
         if (reserved(CR_IPSR, psr) || reserved(CR_IFS, ifs))
             return ia64_fault(IA64_FAULT_RESERVED, psr);

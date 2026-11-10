@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 #include "ia64/interrupt.h"
+#include "ia64/ia32/run.h"
 #include "ia64vmm/hal.h"
 #include "ia64vmm/log.h"
 #include "ia64/tlb.h"
@@ -305,8 +306,14 @@ static void deliver_ei(struct vcpu *v, uint64_t vector, uint64_t isr, unsigned e
         s->cr[CR_IIPA] = v->last_successful_bundle;
         s->cr[CR_IFS] = 0; /* cover saves IFM; until then the frame stays current. */
     }
+    if (s->psr & IA64_PSR_IS) {
+        /* IA-32 has no non-access, speculation, RSE, nesting, slot or ED bits. */
+        isr &= ~((UINT64_C(0x1f) << 35) | (UINT64_C(1) << 43));
+        ei = 0;
+    } else if (!collect)
+        isr |= UINT64_C(1) << 39;
     if (vector != 0x1400) /* SDM Vol.2 §5.5: Data Nested TLB preserves ISR. */
-        s->cr[CR_ISR] = isr | ((uint64_t)ei << 41) | (collect ? 0 : UINT64_C(1) << 39);
+        s->cr[CR_ISR] = isr | ((uint64_t)ei << 41);
     /* SDM Vol.2 §5.5: translations and machine-check mask persist, user
      * profiling bits persist, DCR supplies BE/PP, and bank 0 becomes visible. */
     uint64_t psr = s->psr & (UINT64_C(0x30) | (UINT64_C(1) << 2) | (UINT64_C(1) << 15) |
@@ -321,6 +328,19 @@ static void deliver_ei(struct vcpu *v, uint64_t vector, uint64_t isr, unsigned e
 static void deliver(struct vcpu *v, uint64_t vector, uint64_t isr)
 {
     deliver_ei(v, vector, isr, v->s.slot);
+}
+void ia32_deliver(struct vcpu *v, const struct ia32_interruption *r)
+{
+    bool collect = (v->s.psr & IA64_PSR_IC) != 0;
+    v->s.ip = r->iip;
+    v->s.slot = 0;
+    deliver_ei(v, r->ivt, r->isr, 0);
+    if (collect && r->iipa_valid)
+        v->s.cr[CR_IIPA] = r->iipa;
+    if (r->ifa_valid)
+        v->s.cr[CR_IFA] = r->ifa;
+    if (r->iim_valid)
+        v->s.cr[CR_IIM] = r->iim;
 }
 bool ia64_external_deliver(struct vcpu *v)
 {
@@ -592,6 +612,8 @@ void ia64_deliver_fault(struct vcpu *v, const Ia64Instruction *insn, struct ia64
                     (ia64_opcode_info(insn->opcode)->family == IA64_FAMILY_MEMORY ||
                      insn->opcode == IA64_OP_TPA || insn->opcode == IA64_OP_TAK)));
     isr |= r.fault_isr;
+    if ((s->psr & IA64_PSR_IS) && data && !(s->psr & (UINT64_C(3) << 32)))
+        isr |= UINT64_C(1) << 40;
     if (data && !r.translation_fault && !(r.fault_isr & (UINT64_C(1) << 37))) {
         bool store = ia64_opcode_is_store(insn->opcode);
         isr |= UINT64_C(1) << (store ? 33 : 34);
@@ -628,7 +650,7 @@ void ia64_deliver_fault(struct vcpu *v, const Ia64Instruction *insn, struct ia64
     }
     if (s->psr & IA64_PSR_IC) {
         if (data || fetch)
-            s->cr[CR_IFA] = r.info;
+            s->cr[CR_IFA] = fetch && (s->psr & IA64_PSR_IS) ? r.info & ~UINT64_C(15) : r.info;
         if ((r.translation_fault && r.fault != IA64_FAULT_UNIMPL_DATA &&
              r.fault != IA64_FAULT_UNIMPL_INST) ||
             r.fault == IA64_FAULT_ALT_DTLB || r.fault == IA64_FAULT_PAGE_NOT_PRESENT ||
@@ -651,7 +673,8 @@ void ia64_deliver_fault(struct vcpu *v, const Ia64Instruction *insn, struct ia64
               r.fault == IA64_FAULT_ACCESS_RIGHTS || r.fault == IA64_FAULT_ACCESS_BIT ||
               r.fault == IA64_FAULT_DIRTY_BIT || r.fault == IA64_FAULT_UNALIGNED ||
               r.fault == IA64_FAULT_UNSUPPORTED_DATA || r.fault == IA64_FAULT_DEBUG;
-    if (ed && data && !(r.fault_isr & (UINT64_C(1) << 37)) && (s->psr & IA64_PSR_IT)) {
+    if (ed && data && !(s->psr & IA64_PSR_IS) && !(r.fault_isr & (UINT64_C(1) << 37)) &&
+        (s->psr & IA64_PSR_IT)) {
         const struct ia64_tlb_entry *code = ia64_tlb_lookup(v, s->ip, 0);
         if (code && (code->pte & (UINT64_C(1) << 52)))
             isr |= UINT64_C(1) << 43;

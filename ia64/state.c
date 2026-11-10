@@ -166,6 +166,12 @@ struct vcpu *vcpu_create(const struct vcpu_config *cfg)
 }
 void vcpu_reset(struct vcpu *v, const struct ia64_entry_regs *regs)
 {
+    if (v->native) {
+        struct ia32_setup_error error = {0};
+        const struct engine_ia32_ops *native = engine_ia32_glue();
+        if (native && !native->reset(v, &error))
+            hal_panic(error.detail ? error.detail : "IA-32 reset failed");
+    }
     memset(&v->s, 0, sizeof(v->s));
     v->s.version = IA64_STATE_VERSION;
     v->s.cpu_model = v->cfg.cpu_model;
@@ -186,6 +192,7 @@ void vcpu_reset(struct vcpu *v, const struct ia64_entry_regs *regs)
     v->clock_offset = v->retired = 0;
     v->requested_exit = 0;
     v->irq_kick = 0;
+    v->execution_deadline = 0;
     v->loader_sample_counter = 0;
     v->pal_tr_selector = v->pal_tr_buffer = v->pal_tr_valid = 0;
     v->pal_tr_status = -2;
@@ -225,6 +232,9 @@ void vcpu_reset(struct vcpu *v, const struct ia64_entry_regs *regs)
 void vcpu_destroy(struct vcpu *v)
 {
     if (v) {
+        const struct engine_ia32_ops *native = engine_ia32_glue();
+        if (native)
+            native->detach(v);
         code_cache_vcpu_destroy(v);
         ia64_set_trace(v, 0);
         if (v->check_workspace)

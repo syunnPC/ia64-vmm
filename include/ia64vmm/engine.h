@@ -81,7 +81,7 @@ enum vcpu_exit_reason {
 
 struct vcpu_exit {
     enum vcpu_exit_reason reason;
-    uint64_t ip; /* bundle address of the stopping instruction */
+    uint64_t ip; /* IA-64 bundle or IA-32 linear byte address */
     unsigned slot;
     uint64_t info;      /* reason-specific (e.g. faulting GPA, raw instruction bits) */
     const char *detail; /* static string, may be NULL */
@@ -252,8 +252,7 @@ void engine_fp_log(const struct vcpu *v);
  * false for binaries without it. */
 bool engine_compile_ticks(uint64_t *ticks);
 
-/* The legacy engine_run,
- * vcpu_exit, progress and bundle-IP APIs keep their IA-64 meanings. */
+/* ISA-aware positions distinguish IA-32 byte addresses from IA-64 bundles. */
 enum vcpu_isa { VCPU_ISA_IA64, VCPU_ISA_IA32 };
 struct vcpu_position {
     enum vcpu_isa isa;

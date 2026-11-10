@@ -8,6 +8,7 @@
 #include "ia64/debug.h"
 #include "ia64/fault-count.h"
 #include "ia64/pmu.h"
+#include "ia64vmm/hal.h"
 
 static struct vcpu_exit exit_at(const struct vcpu *v, enum vcpu_exit_reason reason, uint64_t info,
                                 const char *detail)
@@ -37,6 +38,8 @@ static struct vcpu_exit run(struct vcpu *v, uint64_t budget, bool fallback)
         unsigned requested = take_notification(&v->requested_exit);
         if (requested)
             return exit_at(v, requested - 1, 0, "requested exit");
+        if (v->execution_deadline && hal_counter() >= v->execution_deadline)
+            return exit_at(v, VCPU_EXIT_BUDGET, 0, "execution deadline");
         /* Tier0-owned fallback may stop before retirement, leaving the
          * kick to its outer checkpoint. Direct and checked stepping keep
          * their requested retirement boundary. */
@@ -45,7 +48,7 @@ static struct vcpu_exit run(struct vcpu *v, uint64_t budget, bool fallback)
                                               __atomic_load_n(&v->irq_kick, __ATOMIC_ACQUIRE)))
             return exit_at(v, VCPU_EXIT_BUDGET, 0, "interrupt mailbox kick");
         if (s->psr & IA64_PSR_IS)
-            return exit_at(v, VCPU_EXIT_UNIMPLEMENTED, s->psr, "psr.is: IA-32 not built");
+            return exit_at(v, VCPU_EXIT_BUDGET, 0, "instruction set transition");
         if (s->slot > 2)
             return exit_at(v, VCPU_EXIT_BAD_ACCESS, s->slot, "invalid restart slot");
         ia64_timer_poll(v);
@@ -149,8 +152,9 @@ static struct vcpu_exit run(struct vcpu *v, uint64_t budget, bool fallback)
          * A deferred br.ret fill is an exception even without trap enables:
          * it must retain DA/DD for the first mandatory RSE reference. */
         bool branch = result.kind == IA64_STEP_BRANCH;
-        if ((old_psr & IA64_PSR_SS) || (branch && ((old_psr & (IA64_PSR_LP | IA64_PSR_TB)) ||
-                                                   (s->rse_completion_pending && s->rse_cfle)))) {
+        if (insn.opcode != IA64_OP_BR_IA &&
+            ((old_psr & IA64_PSR_SS) || (branch && ((old_psr & (IA64_PSR_LP | IA64_PSR_TB)) ||
+                                                    (s->rse_completion_pending && s->rse_cfle))))) {
             struct ia64_result trap =
                 ia64_completion_trap(v, &insn, old_psr, branch, ia64_complete());
             if (trap.kind == IA64_STEP_FAULT) {

@@ -18,4 +18,17 @@ amd64_xstate_switch:
     xrstor (%rsi)
     ret
 .size amd64_xstate_switch, .-amd64_xstate_switch
+.global amd64_xstate_init_x87
+.type amd64_xstate_init_x87,@function
+amd64_xstate_init_x87:
+    mov $1,%eax
+    xor %edx,%edx
+    lea .Linitial_x87(%rip),%rcx
+    xrstor64 (%rcx)
+    ret
+.size amd64_xstate_init_x87,.-amd64_xstate_init_x87
+.section .rodata
+.balign 64
+.Linitial_x87:
+    .zero 576
 .section .note.GNU-stack,"",@progbits

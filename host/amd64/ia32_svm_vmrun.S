@@ -1,0 +1,90 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+/* Native debug/CR2 ownership around the shared SVM/FP transport. GIF is
+ * clear until the caller has exported native state. */
+.section .text
+.global amd64_svm_ia32_vmrun
+.type amd64_svm_ia32_vmrun,@function
+amd64_svm_ia32_vmrun:
+    push %r12
+    push %r13
+    push %r14
+    push %r15
+    sub $104,%rsp
+    mov %rdx,%r12
+    mov %rdi,%r13
+    mov %rsi,%r14
+    mov %rcx,64(%rsp)
+    mov %r8,72(%rsp)
+    movq $1,80(%rsp)
+    mov %cr2,%rax
+    mov %rax,48(%rsp)
+    mov %dr7,%rax
+    mov %rax,40(%rsp)
+    xor %eax,%eax
+    mov %rax,%dr7
+    mov %dr0,%rax
+    mov %rax,0(%rsp)
+    mov %dr1,%rax
+    mov %rax,8(%rsp)
+    mov %dr2,%rax
+    mov %rax,16(%rsp)
+    mov %dr3,%rax
+    mov %rax,24(%rsp)
+    mov %dr6,%rax
+    mov %rax,32(%rsp)
+    mov $0x1d9,%ecx
+    rdmsr
+    mov %eax,56(%rsp)
+    mov %edx,60(%rsp)
+    xor %eax,%eax
+    xor %edx,%edx
+    wrmsr
+    mov 112(%r12),%rax
+    mov %rax,%dr0
+    mov 120(%r12),%rax
+    mov %rax,%dr1
+    mov 128(%r12),%rax
+    mov %rax,%dr2
+    mov 136(%r12),%rax
+    mov %rax,%dr3
+    mov %r13,%rdi
+    mov %r14,%rsi
+    mov %r12,%rdx
+    lea 64(%rsp),%rcx
+    call amd64_svm_vmrun
+    xor %eax,%eax
+    mov %rax,%dr7
+    mov %dr0,%rax
+    mov %rax,112(%r12)
+    mov %dr1,%rax
+    mov %rax,120(%r12)
+    mov %dr2,%rax
+    mov %rax,128(%r12)
+    mov %dr3,%rax
+    mov %rax,136(%r12)
+    mov 48(%rsp),%rax
+    mov %rax,%cr2
+    mov 0(%rsp),%rax
+    mov %rax,%dr0
+    mov 8(%rsp),%rax
+    mov %rax,%dr1
+    mov 16(%rsp),%rax
+    mov %rax,%dr2
+    mov 24(%rsp),%rax
+    mov %rax,%dr3
+    mov 32(%rsp),%rax
+    mov %rax,%dr6
+    mov 56(%rsp),%eax
+    mov 60(%rsp),%edx
+    mov $0x1d9,%ecx
+    wrmsr
+    mov 40(%rsp),%rax
+    mov %rax,%dr7
+    add $104,%rsp
+    pop %r15
+    pop %r14
+    pop %r13
+    pop %r12
+    ret
+.size amd64_svm_ia32_vmrun,.-amd64_svm_ia32_vmrun
+.section .note.GNU-stack,"",@progbits

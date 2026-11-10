@@ -3,7 +3,7 @@
 # See docs/testing.md. mk/*.mk is included alphabetically, so this
 # file cannot use ia64.mk's variables in prerequisite lists.
 FUZZ_RUNNER_SOURCES = tests/fuzz/runner.c \
-	$(wildcard ia64/*.c ia64/decode/*.c engine/interp/*.c engine/cache/*.c engine/tier0/*.c) \
+	$(wildcard ia64/*.c ia64/decode/*.c ia64/ia32/*.c engine/interp/*.c engine/cache/*.c engine/tier0/*.c) \
 	engine/engine.c core/log.c core/guest_mem.c tests/hal/hal_linux.c
 FUZZ_RUNNER_OBJECTS = $(addprefix build/hosted/,$(FUZZ_RUNNER_SOURCES:.c=.o))
 SEEDS ?= 200

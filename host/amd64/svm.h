@@ -55,6 +55,9 @@
 #define VMCB_RIP 0x578u
 #define VMCB_RSP 0x5d8u
 #define VMCB_RAX 0x5f8u
+#define VMCB_SYSENTER_CS 0x628u
+#define VMCB_SYSENTER_ESP 0x630u
+#define VMCB_SYSENTER_EIP 0x638u
 #define VMCB_CR2 0x640u
 #define VMCB_GPAT 0x668u
 

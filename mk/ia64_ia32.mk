@@ -10,3 +10,14 @@ build/tests/ia32-state: $(IA32_STATE_TEST_OBJECTS) build/hosted/.flags
 	@mkdir -p $(@D)
 	$(HOSTCC) $(IA32_STATE_TEST_OBJECTS) $(HOSTED_LDFLAGS) $(LDFLAGS) -lm -o $@
 -include $(IA32_STATE_TEST_OBJECTS:.o=.d)
+
+IA32_RUN_TEST_OBJECTS = build/hosted/tests/host/ia32/run.o $(filter-out build/hosted/tests/host/ia32/state.o,$(IA32_STATE_TEST_OBJECTS))
+IA32_RUN_TEST_OBJECTS += build/hosted/host/amd64/vmx_ia32_layout.o build/hosted/host/amd64/ia32_svm_layout.o
+TEST_TARGETS += test-ia32-run
+.PHONY: test-ia32-run
+test-ia32-run: build/tests/ia32-run
+	./build/tests/ia32-run
+build/tests/ia32-run: $(IA32_RUN_TEST_OBJECTS) build/hosted/.flags
+	@mkdir -p $(@D)
+	$(HOSTCC) $(IA32_RUN_TEST_OBJECTS) $(HOSTED_LDFLAGS) $(LDFLAGS) -lm -o $@
+-include build/hosted/tests/host/ia32/run.d

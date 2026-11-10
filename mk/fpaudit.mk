@@ -8,7 +8,7 @@
 # Curated minimized cases: build/fpaudit-harness < tests/fuzz/fp/cases/<file>
 # This file is read before mk/ia64.mk, so the source list is spelled out here.
 FPAUDIT_SOURCES = tests/fuzz/fp/fp_harness.c \
-	$(wildcard ia64/*.c ia64/decode/*.c engine/interp/*.c engine/cache/*.c engine/tier0/*.c) engine/engine.c \
+	$(wildcard ia64/*.c ia64/decode/*.c ia64/ia32/*.c engine/interp/*.c engine/cache/*.c engine/tier0/*.c) engine/engine.c \
 	core/log.c core/guest_mem.c tests/hal/hal_linux.c
 FPAUDIT_OBJECTS = $(addprefix build/hosted/,$(FPAUDIT_SOURCES:.c=.o))
 FPAUDIT_ARGS ?=

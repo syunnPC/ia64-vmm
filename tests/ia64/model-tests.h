@@ -92,8 +92,7 @@ static void test_model(const char *image)
         struct ia64_state before = v->s;
         struct ia64_result r = ia64_execute(v, &i);
         CHECK(model ? r.kind == IA64_STEP_EXIT && r.exit == VCPU_EXIT_UNIMPLEMENTED &&
-                          !strcmp(r.detail,
-                                  "IA-32 native backend not implemented (cpu_model=madison)")
+                          !strcmp(r.detail, "IA-32 architectural state cannot be represented")
                     : r.fault == IA64_FAULT_DISABLED_ISA);
         CHECK(!memcmp(&before, &v->s, sizeof(before)));
         v->s.psr |= IA64_PSR_DI;
@@ -107,8 +106,7 @@ static void test_model(const char *image)
         before = v->s;
         r = ia64_execute(v, &i);
         CHECK(model ? r.kind == IA64_STEP_EXIT && r.exit == VCPU_EXIT_UNIMPLEMENTED &&
-                          !strcmp(r.detail,
-                                  "IA-32 native backend not implemented (cpu_model=madison)")
+                          !strcmp(r.detail, "IA-32 architectural state cannot be represented")
                     : r.fault == IA64_FAULT_DISABLED_ISA);
         CHECK(!memcmp(&before, &v->s, sizeof(before)));
         if (!model) {
@@ -276,8 +274,7 @@ static void test_model(const char *image)
                 CHECK(out.reason == VCPU_EXIT_UNIMPLEMENTED && out.ip == ENTRY + 16 * n &&
                       out.slot == 2);
                 CHECK(out.detail &&
-                      !strcmp(out.detail,
-                              "IA-32 native backend not implemented (cpu_model=madison)"));
+                      !strcmp(out.detail, "IA-32 architectural state cannot be represented"));
                 CHECK(!memcmp(&before, &v->s, sizeof(before)));
             } else {
                 CHECK(v->fault.kind == IA64_FAULT_DISABLED_ISA && v->fault.ip == ENTRY + 16 * n);

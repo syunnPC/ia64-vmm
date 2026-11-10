@@ -367,6 +367,7 @@ struct vcpu {
      * architectural reset/free, on the pinned executor. Never shallow-copy
      * this pointer into an executing lockstep clone. */
     struct ia32_vcpu_private *native;
+    uint64_t execution_deadline; /* zero outside engine_run_bounded */
 };
 
 /* Appends one change to v's MMU log. Every writer of

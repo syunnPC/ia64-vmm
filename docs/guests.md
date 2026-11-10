@@ -43,8 +43,19 @@ hours. Set `timeout_sec=0` (no limit) for long runs.
 ## Known limits
 
 - An instruction or feature that is not implemented stops the vCPU with a
-  message (exit code 2) instead of being skipped. Native IA-32 execution on
-  the IA-64 guest (the `Madison` model reports it) is not implemented.
+  message (exit code 2) instead of being skipped.
+- `cpu_model=madison` supports native IA-32 execution with VMX or SVM.
+  `br.ia` and `rfi` enter IA-32; JMPE returns to IA-64. Instruction, gate,
+  lock, system-flag and software-interrupt events use the IA-64 interruption
+  vectors. Descriptor queries, segment loads, privilege-changing far returns,
+  real/VM86 execution, virtual interrupt flags, counters, ENTER and FP context
+  transfers are supported. Device operands use checked accesses; separate
+  instruction and data translations may map the same address differently.
+  Execution requires code validation and uses one native instruction per
+  entry. The native FP context covers x87, MMX and XMM registers; AVX guest
+  state is not enabled. Recognized newer scalar and SSE instructions can
+  execute on hosts that support them. Encodings without a complete access
+  classification stop with a diagnostic.
 - VT-d and AMD-Vi DMA protection have limited topology coverage. Interrupt
   remapping requires VT-d support (real-hardware.md).
 - Defects of guest operating systems are not worked around; a guest that

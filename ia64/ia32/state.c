@@ -60,15 +60,13 @@ enum ia32_state_status ia32_segment_encode(const struct ia32_segment *seg, uint6
     *out = value | (loaded ? 0 : original & ignored);
     return IA32_STATE_OK;
 }
-/* SDM Vol.2 Fig.10-1/Table 10-2: GDTD still has a 20-bit limit
- * and G scaling. Native GDTR has only base/16-bit limit and no attributes
- * (Intel SDM Vol.3C §25.4.1). Retain the original encoding, including G,
- * and stop when the effective limit cannot be represented by native GDTR. */
+/* SDM Vol.2 Fig.10-1/Table 10-2: preserve GDTD's 20-bit limit and G scaling.
+ * Native GDTR is private; descriptor references are handled by assists. */
 static enum ia32_state_status gdt_encode(const struct ia32_segment *seg, uint64_t original,
                                          uint64_t *out)
 {
-    if (seg->base > UINT32_MAX || seg->limit > 0xffff || seg->attrib || seg->selector ||
-        seg->unusable)
+    if (seg->base > UINT32_MAX || seg->attrib != ((original >> 52) & 0x8ff) ||
+        seg->selector || seg->unusable)
         return IA32_STATE_UNREPRESENTABLE;
     uint32_t limit = seg->limit;
     if (original >> 63) {
@@ -76,6 +74,8 @@ static enum ia32_state_status gdt_encode(const struct ia32_segment *seg, uint64_
             return IA32_STATE_UNREPRESENTABLE;
         limit >>= 12;
     }
+    if (limit > 0xfffff)
+        return IA32_STATE_UNREPRESENTABLE;
     *out = merge(original, (uint64_t)limit << 32 | seg->base, UINT64_C(0x000fffffffffffff));
     return IA32_STATE_OK;
 }
@@ -211,10 +211,9 @@ static enum ia32_state_status export_view(const struct ia64_state *s, uint64_t p
     }
     struct ia32_segment gdt;
     ia32_segment_decode(descriptor(s, IA32_SEG_GDT, bank), 0, true, &gdt);
-    if (gdt.limit > 0xffff)
-        return IA32_STATE_UNREPRESENTABLE;
-    gdt.attrib = 0;
     memset(n, 0, sizeof(*n));
+    n->dr6 = UINT64_C(0xffff0ff0);
+    n->dr7 = 0x400;
     for (unsigned i = 0; i < IA32_GPRS; ++i)
         n->gpr[i] = s->gr[8 + i];
     n->eflag = (s->ar[AR_EFLAG] & IA32_EFLAG_DEFINED) | 2;
@@ -285,8 +284,17 @@ enum ia32_state_status ia32_state_import(struct ia64_state *s, const struct ia32
 {
     uint64_t descriptors[IA32_SEG_COUNT];
     bool low_fp = !(s->psr & (UINT64_C(1) << 18));
+    unsigned old_cpl = (s->psr >> 32) & 3;
+    bool outer_return = completed && (dirty & IA32_DIRTY_SEGMENTS) &&
+                        (loaded & ((1u << IA32_SEG_CS) | (1u << IA32_SEG_SS))) ==
+                            ((1u << IA32_SEG_CS) | (1u << IA32_SEG_SS)) &&
+                        n->cpl > old_cpl && n->cpl <= 3 && (n->cs.selector & 3) == n->cpl &&
+                        (n->ss.selector & 3) == n->cpl && (n->cs.attrib & 0x98) == 0x98 &&
+                        (n->ss.attrib & 0x9a) == 0x92 && ((n->ss.attrib >> 5) & 3) == n->cpl &&
+                        ((n->cs.attrib & 4) ? ((n->cs.attrib >> 5) & 3) <= n->cpl
+                                            : ((n->cs.attrib >> 5) & 3) == n->cpl);
     if ((dirty & ~IA32_DIRTY_ALL) || loaded >> IA32_SEG_COUNT ||
-        (loaded && !(dirty & IA32_DIRTY_SEGMENTS)) || n->cpl != ((s->psr >> 32) & 3))
+        (loaded && !(dirty & IA32_DIRTY_SEGMENTS)) || (n->cpl != old_cpl && !outer_return))
         return IA32_STATE_UNREPRESENTABLE;
     if ((dirty & IA32_DIRTY_FP) && low_fp && (read_le(n->fp.bytes + 24, 4) & ~UINT64_C(0xffbf)))
         return IA32_STATE_UNREPRESENTABLE;
@@ -347,6 +355,8 @@ enum ia32_state_status ia32_state_import(struct ia64_state *s, const struct ia32
     }
     if ((dirty & IA32_DIRTY_FP) && low_fp)
         import_fp(s, &n->fp);
+    if (outer_return)
+        s->psr = (s->psr & ~(UINT64_C(3) << 32)) | (uint64_t)n->cpl << 32;
     if (completed)
         s->psr &= ~IA64_PSR_ID;
     return IA32_STATE_OK;

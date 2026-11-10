@@ -132,6 +132,16 @@ static struct tag_lease **find(struct amd64_virtualization_cpu *c,
         l = &(*l)->next;
     return l;
 }
+bool amd64_virtualization_tag_invalidate(struct amd64_virtualization_cpu *c,
+                                         enum amd64_virtualization_user user,
+                                         const struct amd64_virtualization_tag *tag)
+{
+    if (!owned(c, user) || !tag) return false;
+    struct tag_lease *l = *find(c, user, tag);
+    if (!l) return false;
+    l->pending = true;
+    return true;
+}
 void amd64_virtualization_tag_release(struct amd64_virtualization_cpu *c,
                                       enum amd64_virtualization_user user,
                                       const struct amd64_virtualization_tag *tag)

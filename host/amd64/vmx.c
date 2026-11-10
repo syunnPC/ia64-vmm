@@ -445,3 +445,51 @@ void amd64_vmx_destroy(struct vmx_container *rm)
         hal_panic("VMX: VMCLEAR failed during destroy");
     release(rm);
 }
+
+static uint64_t vmx_native_irq_save(void)
+{
+    uint64_t flags;
+    __asm__ volatile("pushfq; pop %0; cli" : "=r"(flags) :: "memory");
+    return flags;
+}
+static void vmx_native_irq_restore(uint64_t flags, bool dispatch, bool nmi)
+{
+    if (nmi)
+        __asm__ volatile("int $2" ::: "memory");
+    if (dispatch)
+        __asm__ volatile("sti; nop" ::: "memory");
+    else if (flags & (1u << 9))
+        __asm__ volatile("sti" ::: "memory");
+    if (!(flags & (1u << 9)))
+        __asm__ volatile("cli" ::: "memory");
+}
+static bool vmx_native_tsc_aux_supported(void)
+{
+    uint32_t a, b, c, d;
+    amd64_cpuid(0x80000000, 0, &a, &b, &c, &d);
+    if (a >= 0x80000001) {
+        amd64_cpuid(0x80000001, 0, &a, &b, &c, &d);
+        if (d & (1u << 27))
+            return true;
+    }
+    amd64_cpuid(0, 0, &a, &b, &c, &d);
+    if (a < 7)
+        return false;
+    amd64_cpuid(7, 0, &a, &b, &c, &d);
+    return (c & (1u << 22)) != 0;
+}
+static uint64_t vmx_native_tsc_aux_enter(bool supported)
+{
+    if (!supported)
+        return 0;
+    uint64_t saved = amd64_rdmsr(0xc0000103);
+    amd64_wrmsr(0xc0000103, 0);
+    return saved;
+}
+static void vmx_native_tsc_aux_leave(bool supported, uint64_t saved)
+{
+    if (supported)
+        amd64_wrmsr(0xc0000103, saved);
+}
+
+#include "host/amd64/vmx_ia32.inc"

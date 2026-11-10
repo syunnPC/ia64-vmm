@@ -140,7 +140,12 @@ int main(void)
     CHECK(amd64_virtualization_tag_prepare(a, AMD64_VIRT_VBIOS, &t[0], 0x101e, &tlb));
     CHECK(invalidations == 2);
     CHECK(amd64_virtualization_tag_prepare(a, AMD64_VIRT_VBIOS, &t[0], 0x201e, &tlb));
-    CHECK(invalidations == 3);
+    unsigned before_invalidate = invalidations;
+    CHECK(amd64_virtualization_tag_invalidate(a, AMD64_VIRT_VBIOS, &t[0]));
+    CHECK(invalidations == before_invalidate);
+    CHECK(amd64_virtualization_tag_prepare(a, AMD64_VIRT_VBIOS, &t[0], 0x201e, &tlb));
+    CHECK(invalidations == before_invalidate + 1);
+    CHECK(invalidations == 4);
     /* Zero VPID leases still have distinct identities and share VMXON. */
     CHECK(amd64_virtualization_acquire(0, IA32_BACKEND_VMX, AMD64_VIRT_VBIOS, &b, &error) &&
           a == b);

@@ -120,9 +120,10 @@ __attribute__((noinline)) unsigned amd64_simd_enable(void)
     cr0 = (cr0 | (1u << 5) | (1u << 1)) & ~((1u << 2) | (1u << 3));
     cr4 |= (1u << 9) | (1u << 10) | (1u << 18);
     uint32_t mxcsr = AMD64_MXCSR_DEFAULT;
-    __asm__ volatile("mov %0,%%cr0; mov %1,%%cr4; xsetbv; ldmxcsr %4; fninit" ::"r"(cr0), "r"(cr4),
+    __asm__ volatile("mov %0,%%cr0; mov %1,%%cr4; xsetbv; ldmxcsr %4" ::"r"(cr0), "r"(cr4),
                      "c"(0), "a"((uint32_t)mask), "m"(mxcsr), "d"((uint32_t)(mask >> 32))
                      : "memory");
+    amd64_xstate_init_x87();
     uint32_t lo, hi;
     __asm__ volatile("xgetbv" : "=a"(lo), "=d"(hi) : "c"(0));
     amd64_cpuid(1, 0, &a, &b, &c, &d);

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "ia64/state.h"
 #include "ia64vmm/ia32_state.h"
+#include "ia64/ia32/segment.h"
 
 /* Expectations are numerical SDM Rev.2.3 Vol.1 Tables 6-1/5/6/7,
  * Figs.6-4/5, Vol.2 Tables 10-1/2/4 and Ch.9, Vol.4 JMPE.
@@ -112,7 +113,8 @@ static void segment_boundaries(void)
             s.gr[31] = raw;
             CHECK(ia32_state_export(&s, &n) == IA32_STATE_OK);
             CHECK(n.gdtr.base == 0x12345678 && n.gdtr.limit == (g ? 0x7fff : 7));
-            CHECK(!n.gdtr.attrib && !n.gdtr.selector && !n.gdtr.unusable);
+            CHECK(n.gdtr.attrib == ((attributes & 0xff) | (g ? 0x800 : 0)) &&
+                  !n.gdtr.selector && !n.gdtr.unusable);
             CHECK(ia32_state_import(&s, &n, IA32_DIRTY_SEGMENTS, 0, false) == IA32_STATE_OK);
             CHECK(s.gr[31] == raw);
             n.gdtr.base = 0x87654321;
@@ -124,11 +126,18 @@ static void segment_boundaries(void)
     init();
     s.gr[31] = UINT64_C(0x8000001000000000);
     before = s;
-    CHECK(ia32_state_export(&s, &n) == IA32_STATE_UNREPRESENTABLE);
+    CHECK(ia32_state_export(&s, &n) == IA32_STATE_OK);
+    CHECK(n.gdtr.limit == 0x10fff && !memcmp(&s, &before, sizeof(s)));
+    init();
+    s.gr[31] = UINT64_C(0x0800001000000000);
+    CHECK(ia32_state_export(&s, &n) == IA32_STATE_OK && n.gdtr.attrib == 0x80);
+    before = s;
+    n.gdtr.attrib = 0;
+    CHECK(ia32_state_import(&s, &n, IA32_DIRTY_SEGMENTS, 0, false) == IA32_STATE_UNREPRESENTABLE);
     CHECK(!memcmp(&s, &before, sizeof(s)));
     init();
     CHECK(ia32_state_export(&s, &n) == IA32_STATE_OK);
-    n.gdtr.limit = 0x10000;
+    n.gdtr.limit = 0x100000;
     before = s;
     CHECK(ia32_state_import(&s, &n, IA32_DIRTY_SEGMENTS, 0, false) == IA32_STATE_UNREPRESENTABLE);
     CHECK(!memcmp(&s, &before, sizeof(s)));
@@ -184,6 +193,103 @@ static void segment_boundaries(void)
         CHECK(ia32_state_import(&s, &n, groups[i], 0, false) == IA32_STATE_OK);
         CHECK(s.ar[1] == UINT64_C(0x8b00010012345678));
     }
+}
+static void segment_integrity(void)
+{
+    /* Vol.1 Table 6-4: checks happen on references, including caches
+     * established directly by Itanium instructions. */
+    n = (struct ia32_native_state){.eflag = 2,
+                                    .cs = {.attrib = 0x93},
+                                    .ss = {.attrib = 0x93},
+                                    .ds = {.attrib = 0x93},
+                                    .es = {.attrib = 0x93},
+                                    .fs = {.attrib = 0x93},
+                                    .gs = {.attrib = 0x93}};
+    CHECK(ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH));
+    n.cs.attrib = 0x97;
+    CHECK(!ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH));
+    n.cs.attrib = 0x9b;
+    for (unsigned bit = 0; bit < 8; ++bit) {
+        if (bit != 0 && bit != 4 && bit != 7)
+            continue;
+        n.cs.attrib = 0x9b ^ (1u << bit);
+        CHECK(!ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH));
+    }
+    n.cs.attrib = 0x49b;
+    for (unsigned pe = 0; pe < 2; ++pe)
+        for (unsigned vm = 0; vm < 2; ++vm)
+            for (unsigned cpl = 0; cpl < 4; ++cpl) {
+                n.cflg = pe;
+                n.eflag = 2 | (vm ? 0x20000 : 0);
+                n.cpl = cpl;
+                n.cs.attrib = vm ? 0xf3 : 0x49b;
+                CHECK(ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH) ==
+                      (vm ? pe && cpl == 3 : pe || cpl == 0));
+            }
+    n.cflg = 1;
+    n.cpl = 3;
+    n.eflag = 0x20002;
+    n.cs.attrib = 0x4f3;
+    CHECK(!ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH));
+    n.cs.attrib = 0xd3;
+    CHECK(!ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH));
+    n.cs.attrib = 0xf7;
+    CHECK(!ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH));
+    n.cs.attrib = 0xf3;
+    for (unsigned vm = 0; vm < 2; ++vm)
+        for (unsigned virtual = 0; virtual < 4; ++virtual)
+            for (unsigned flags = 0; flags < 4; ++flags) {
+                n.cflg = 1 | ((uint64_t)virtual << 32);
+                n.eflag = 2 | (vm ? 0x20000 : 0) | flags << 19;
+                CHECK(ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_FETCH) ==
+                      !(flags == 3 && ((virtual & 2) || (vm && (virtual & 1)))));
+            }
+    const unsigned data[] = {IA32_SEG_ES, IA32_SEG_SS, IA32_SEG_DS, IA32_SEG_FS, IA32_SEG_GS};
+    struct ia32_segment *segments[] = {&n.es, &n.ss, &n.ds, &n.fs, &n.gs};
+    for (unsigned mode = 0; mode < 3; ++mode) {
+        n.cpl = mode == 2 ? 3 : 0;
+        n.cflg = mode != 0;
+        n.eflag = mode == 2 ? 0x20002 : 2;
+        for (unsigned i = 0; i < 5; ++i) {
+            unsigned good = mode == 2 ? 0xf3 : 0x493;
+            segments[i]->attrib = good;
+            CHECK(ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ));
+            CHECK(ia32_segment_valid(&n, data[i], IA32_SEGMENT_WRITE));
+            const unsigned missing[] = {1, 0x10, 0x80};
+            for (unsigned bit = 0; bit < 3; ++bit) {
+                segments[i]->attrib = good ^ missing[bit];
+                CHECK(!ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ));
+            }
+            segments[i]->attrib = good ^ 2;
+            CHECK(ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ));
+            CHECK(!ia32_segment_valid(&n, data[i], IA32_SEGMENT_WRITE));
+            segments[i]->attrib = (good & ~15u) | 9;
+            CHECK(!ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ));
+            segments[i]->attrib |= 2;
+            CHECK(ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ));
+            CHECK(!ia32_segment_valid(&n, data[i], IA32_SEGMENT_WRITE));
+            segments[i]->attrib = good | 4;
+            CHECK(ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ) == (mode != 2));
+            segments[i]->attrib = good | 0x400;
+            CHECK(ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ) == (mode != 2));
+            segments[i]->attrib = good;
+            segments[i]->unusable = true;
+            CHECK(!ia32_segment_valid(&n, data[i], IA32_SEGMENT_READ));
+            segments[i]->unusable = false;
+        }
+        n.ss.attrib = mode == 2 ? 0xd3 : 0xb3;
+        CHECK(!ia32_segment_valid(&n, IA32_SEG_SS, IA32_SEGMENT_READ));
+        n.cs.attrib = mode == 2 ? 0xf9 : 0x99;
+        CHECK(ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_READ) == (mode != 1));
+        CHECK(ia32_segment_valid(&n, IA32_SEG_CS, IA32_SEGMENT_WRITE) == (mode != 1));
+    }
+    struct ia32_segment *system[] = {&n.ldtr, &n.tr, &n.gdtr};
+    for (unsigned i = 0; i < 3; ++i)
+        for (unsigned a = 0; a < 256; ++a) {
+            system[i]->attrib = a;
+            CHECK(ia32_segment_valid(&n, IA32_SEG_LDT + i, IA32_SEGMENT_READ) ==
+                  ((a & 0x90) == 0x80));
+        }
 }
 static void mxcsr_reserved(void)
 {
@@ -904,6 +1010,7 @@ int main(void)
 {
     descriptors();
     segment_boundaries();
+    segment_integrity();
     mxcsr_reserved();
     extended_denormals();
     integer_bits();

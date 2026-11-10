@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 #include "ia64/semantics.h"
 #include "ia64/rse.h"
+#include "ia64/ia32/run.h"
 
 struct ia64_result ia64_branch(struct vcpu *v, const Ia64Instruction *insn)
 {
@@ -16,8 +17,7 @@ struct ia64_result ia64_branch(struct vcpu *v, const Ia64Instruction *insn)
             return ia64_fault(IA64_FAULT_ILLEGAL, insn->raw);
         if ((s->psr & IA64_PSR_DI) || v->cfg.cpu_model == IA64_CPU_MONTECITO)
             return ia64_fault(IA64_FAULT_DISABLED_ISA, insn->raw);
-        return ia64_exit(VCPU_EXIT_UNIMPLEMENTED, s->br[op->target],
-                         "IA-32 native backend not implemented (cpu_model=madison)");
+        return ia32_enter(v, IA32_ENTRY_BRANCH, s->br[op->target]);
     case IA64_OP_BR_CALL:
     case IA64_OP_BRL_CALL:
         return ia64_rse_call(v, insn, target);

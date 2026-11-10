@@ -91,7 +91,7 @@ struct ia32_native_state {
     uint64_t cflg, kr0, kr1, kr2; /* virtual state, not hardware CR0/3/4 */
     struct ia32_segment es, cs, ss, ds, fs, gs, ldtr, tr, gdtr, idtr;
     uint64_t dr[4], dr6, dr7; /* native debug snapshot; IA-64 IBR/DBR remain in v->s */
-    uint8_t cpl;              /* PSR.cpl; VMX requires cpl == SS.DPL, else import fails */
+    uint8_t cpl; /* Semantic PSR.cpl; hardware privilege/cache normalization is private. */
     struct ia32_fp_image fp;
     /* Baseline VMX/SVM restart state, not semantic EFLAG. Export/import
      * preserves STI/MOV-SS blocking and debug state across host exits. */
@@ -159,14 +159,18 @@ struct ia32_native_exit {
  * particular descriptor_read_exit does not prove a one-shot rearm boundary.
  * Baseline means Sandy Bridge VMX / Zen 2 SVM; still probe each executor.
  * Optional bits never become unconditional setup requirements. */
+#define IA32_NATIVE_SSE3 (1u << 0)
+#define IA32_NATIVE_POPCNT (1u << 1)
 struct ia32_capabilities {
     enum ia32_backend_kind backend;
     unsigned host_cpu;
+    uint32_t native_features; /* Optional instruction sets on the pinned executor. */
     bool nested_paging, unrestricted_guest, nested_invalidate;
     /* Baseline VMX MTF: probe primary allowed-1 control bit 27; false on
-     * SVM. If hidden by a backend, exact step fails before entry and SS/flag
-     * notification gaps are reported. Other foundations are baseline and
-     * individually probed; absent NPT/EPT/FP/bounded exit -> setup stop. */
+     * SVM. SVM private TF requires the separate svm_step_safe caller proof;
+     * without that proof exact step fails before entry. Other foundations
+     * are baseline and individually probed; absent NPT/EPT/FP/bounded exit
+     * -> setup stop. */
     bool mtf, descriptor_read_exit, bounded_exit, legacy_fp;
     /* NRIP/decode assists are Zen 2 baseline, CPUID.8000000A-probed;
      * selective ASID flush is an optional accelerator. Missing NRIP/decode
@@ -199,6 +203,10 @@ struct ia32_run_limit {
     uint64_t instructions; /* 0 = no count limit; >0 needs exact counting */
     bool step;             /* host-only instruction/REP-iteration boundary;
                                     unsupported mechanism fails before entry */
+    /* SVM-only caller proof for private TF: decoded instruction cannot read
+     * or write TF, load SS, switch tasks or deliver an event. Entry has no
+     * interrupt shadow. The engine handles excluded instructions itself. */
+    bool svm_step_safe;
 };
 struct ia32_run_usage {
     uint64_t residence_ticks, instructions;
@@ -239,8 +247,9 @@ struct ia32_container;
  * for nested walk caches. Sandy Bridge: INVEPT type 1 or 2, plus INVVPID
  * when enabled, before next entry. Caller acknowledges remote purges AFTER
  * success while stopped; every later entry must honor the pending flush.
- * VMX import fails with UNIMPLEMENTED and exact stop when PSR.cpl differs
- * from SSD.dpl (cpl != SS.DPL); never repair either descriptor or privilege.
+ * Private hardware selectors/attributes may satisfy VMX/SVM entry constraints;
+ * export preserves the semantic cached segments, CPL and VM flag. Callers
+ * assist selector/cache changes and x87 environment image transfers.
  * Reset drops leases/launch state/maps and flushes tags by the same rule;
  * destroy releases this instance
  * only, after native execution stopped. Neither migrates a vCPU. */
@@ -269,5 +278,8 @@ struct ia32_backend_ops {
 /* The HAL provides the table. NULL weak default means unavailable, never
  * native success. Successful probe is still subject to qualification. */
 const struct ia32_backend_ops *hal_ia32_backend(void);
+/* Translate the already validated guest-owned backing pointer to HPA.
+ * Failure forbids publishing a nested leaf; numeric IA-64 GPA is not HPA. */
+bool hal_ia32_backing_hpa(const void *backing, hpa_t *out);
 
 #endif

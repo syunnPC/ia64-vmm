@@ -15,6 +15,13 @@ and run QEMU tests one guest at a time with
 | `make -j4 test-tier1` | Tier1 compiler, optimizer, allocator, host-window, region and rule-table tests; random-program smoke test | AMD64 GCC, IA-64 cross toolchain, Python |
 | `make -j4 check-freestanding` | The VMM's objects use no hosted library symbols | |
 | `make test-hyperv` | SynIC, VMBus, synthetic SCSI/keyboard, media selection and guest AHCI/ATAPI/i8042 protocols | AMD64 GCC |
+| `make test-ia32-state test-ia32-decode test-ia32-io test-ia32-run test-native-ia32` | IA-32 state, decoding, interruption delivery, virtual I/O, MMIO restart, VMX/SVM transport and FP ownership | AMD64 GCC |
+
+`make test-ia32-extended test-ia32-clock test-ia32-string test-ia32-scalar`
+checks frame construction, FP environments, counter permissions, REP iterations
+and synchronous device RMW. The native engine smoke also checks independent
+I/D mappings, MMIO through integer/x87/SSE instructions, x87 store suppression,
+and VM86 cached segments.
 
 `make test-host`, `make test-ia64` and `make test-qemu` run parts of
 `make test`. `SAN=1` builds the unit tests with ASan and UBSan.
@@ -66,6 +73,14 @@ assemble with the IA-64 cross toolchain, link at `0x100000`, convert to
 raw binary, and pass the image to `build/ia64-test`.
 
 ## Hardware-virtualization and real-hardware checks
+
+`make test-native-ia32-qemu` boots a native VMX/SVM transport test.
+`make test-native-ia32-engine-qemu` also checks IA-64 translation, native
+execution, MMIO divide/SSE exceptions, invalid-encoding side effects,
+data-type CS execution, x87 environment preservation across host interrupts,
+and the JMPE return through the production engine. Both use
+prebuilt OVMF images (`NATIVE_OVMF_CODE` and `NATIVE_OVMF_VARS` override
+their system paths), `mtools`, and nested VMX or SVM for KVM execution.
 
 `make test-hostwin-qemu` and `make test-hostwin-vmware` run the host-window
 self-test of the bare-metal Tier1 backend in a virtual machine.

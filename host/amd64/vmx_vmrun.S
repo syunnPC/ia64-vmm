@@ -53,6 +53,7 @@ amd64_vmx_vmrun:
     push %r13
     push %r14
     push %r15
+    sub $8, %rsp
     push %rdx
     push %rdi
     sub $32, %rsp
@@ -61,7 +62,13 @@ amd64_vmx_vmrun:
     mov %esi, %r12d
     mov (%rdx), %rdi
     mov 8(%rdx), %rsi
+    cmpq $0, 16(%rdx)
+    jne .Lnative_fp_enter
     call amd64_xstate_switch
+    jmp .Lfp_entered
+.Lnative_fp_enter:
+    call amd64_ia32_fp_enter
+.Lfp_entered:
     mov F_GPRS(%rsp), %rdi
     mov $VMCS_HOST_RSP, %eax
     vmwrite %rsp, %rax
@@ -92,9 +99,17 @@ amd64_vmx_vmrun:
     jc 4f
     mov $2, %ebx
 4:  mov F_AREAS(%rsp), %rax
+    cmpq $0, 16(%rax)
+    jne .Lnative_fp_failed
     mov 8(%rax), %rdi
     mov (%rax), %rsi
     call amd64_xstate_switch
+    jmp .Lfp_failed_restored
+.Lnative_fp_failed:
+    mov (%rax), %rdi
+    mov 8(%rax), %rsi
+    call amd64_ia32_fp_leave
+.Lfp_failed_restored:
     mov %ebx, %eax
     jmp 3f
 
@@ -120,11 +135,20 @@ amd64_vmx_exit:
     lgdt F_GDTR(%rsp)
     lidt F_IDTR(%rsp)
     mov F_AREAS(%rsp), %rax
+    cmpq $0, 16(%rax)
+    jne .Lnative_fp_exit
     mov 8(%rax), %rdi
     mov (%rax), %rsi
     call amd64_xstate_switch
+    jmp .Lfp_exit_restored
+.Lnative_fp_exit:
+    mov (%rax), %rdi
+    mov 8(%rax), %rsi
+    call amd64_ia32_fp_leave
+.Lfp_exit_restored:
     xor %eax, %eax
 3:  add $48, %rsp
+    add $8, %rsp
     pop %r15
     pop %r14
     pop %r13

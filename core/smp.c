@@ -727,6 +727,9 @@ static void executor(void *arg)
         exit_line(v, who, code, exit);
         break;
     }
+    const struct engine_ia32_ops *native = engine_ia32_glue();
+    if (native)
+        native->detach(v);
     finish(vm, c, code, exit);
 }
 

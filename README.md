@@ -24,7 +24,7 @@ As this is an experimental project, please be aware of the following limitations
 - **Guest Compatibility:** Some guest operating systems may not work properly depending on the host configuration.
 - **Host Compatibility:** This program is not tested enough with real machines.
 - **Nested Virtualization:** Running inside other hypervisors (such as VMware Workstation or VirtualBox) is generally unsupported and incompatible. Hyper-V support is in progress with GOP output only.
-- **IA-32 Execution:** Currently not implemented.
+- **IA-32 Execution:** Implementation in progress.
 
 ## License & Disclaimer
 

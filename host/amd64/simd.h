@@ -61,10 +61,16 @@ static inline size_t amd64_xstate_pages(void)
 /* XSAVE the enabled state to save, then XRSTOR it from load (assembly,
  * host/amd64/xstate.S). Clobbers RAX, RCX and RDX only. */
 void amd64_xstate_switch(void *save, const void *load);
+/* Boot-owned reset: XRSTOR's initial x87 form also clears XINUSE.x87,
+ * allowing exact legacy FP handoffs on AMD/Hygon. */
+void amd64_xstate_init_x87(void);
 /* The two XSAVE areas a native x86 guest's entry and exit swap; the layout
  * is shared with svm_vmrun.S and vmx_vmrun.S. */
 struct amd64_xstate_pair {
     void *host, *guest;
+    /* Native legacy FP brackets interpret host as fp_owner and guest as
+     * ia32_fp_image. Zero keeps the VBIOS XSAVE transport. */
+    uint64_t native;
 };
 
 #endif

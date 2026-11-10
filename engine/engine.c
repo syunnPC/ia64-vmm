@@ -8,6 +8,7 @@
 #include "ia64vmm/hal.h"
 #include "ia64vmm/memory_policy.h"
 #include "ia64vmm/string.h"
+#include "ia64/ia32/run.h"
 
 /* mk/tier1.mk passes it to every object; a build without it times nothing
  * in Tier1. */
@@ -17,12 +18,17 @@
 
 static vcpu_break_hook_fn break_hook;
 
-/* No IA-32 backend or engine glue is implemented: these weak defaults
- * report them absent.
+/* Small test binaries may omit the native backend and dispatcher.
  * Never turn a missing native runner into a successful yield or guest #UD. */
 __attribute__((weak)) const struct ia32_backend_ops *hal_ia32_backend(void)
 {
     return NULL;
+}
+__attribute__((weak)) bool hal_ia32_backing_hpa(const void *ptr, hpa_t *out)
+{
+    (void)ptr;
+    (void)out;
+    return false;
 }
 __attribute__((weak)) const struct engine_ia32_ops *engine_ia32_glue(void)
 {
@@ -404,6 +410,9 @@ bool engine_vcpu_attach(struct vcpu *v)
 
 void engine_vcpu_detach(struct vcpu *v)
 {
+    const struct engine_ia32_ops *native = engine_ia32_glue();
+    if (native)
+        native->detach(v);
     code_unregister_vcpu(v);
     if (!v->upper)
         return;
@@ -532,7 +541,7 @@ static void dump_stats(const struct vcpu *v)
     engine_dump_stats();
 }
 
-struct vcpu_exit engine_run(struct vcpu *v, uint64_t budget)
+struct vcpu_exit engine_run_ia64(struct vcpu *v, uint64_t budget)
 {
     code_quiescent(v);
     struct vcpu_exit out;
@@ -545,7 +554,7 @@ struct vcpu_exit engine_run(struct vcpu *v, uint64_t budget)
     v->code_entry_generation = 0;
     code_quiescent(v);
     if (out.reason == VCPU_EXIT_UNIMPLEMENTED || out.reason == VCPU_EXIT_BAD_ACCESS) {
-        vcpu_dump(v);
+        vcpu_dump_isa(v);
         dump_stats(v);
     } else if (out.reason != VCPU_EXIT_BUDGET) {
         ia64_trace_dump(v);
@@ -553,4 +562,22 @@ struct vcpu_exit engine_run(struct vcpu *v, uint64_t budget)
             dump_stats(v);
     }
     return out;
+}
+
+struct vcpu_exit engine_run(struct vcpu *v, uint64_t budget)
+{
+    if (!(v->s.psr & IA64_PSR_IS) || !engine_ia32_glue())
+        return engine_run_ia64(v, budget);
+    uint64_t now = hal_counter(), ticks = hal_counter_hz() / 1000;
+    if (!ticks)
+        ticks = 1;
+    struct vcpu_run_budget b = {
+        .ia64_instructions = budget,
+        .native = {.deadline = now < UINT64_MAX - ticks ? now + ticks : UINT64_MAX - 1}};
+    struct vcpu_run_exit e = engine_run_bounded(v, &b);
+    return (struct vcpu_exit){.reason = e.stop == VCPU_RUN_YIELD ? VCPU_EXIT_BUDGET : e.reason,
+                              .ip = e.position.ip,
+                              .slot = e.position.slot,
+                              .info = e.info,
+                              .detail = e.detail};
 }

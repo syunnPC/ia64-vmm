@@ -104,7 +104,7 @@ struct ia32_record_input {
     uint8_t vector;
     uint16_t code; /* classified SDM error/intercept/concurrent trap code */
     bool execute, read, write, ifa_valid;
-    uint32_t ifa;
+    uint64_t ifa;
     uint64_t iim; /* stripped opcode bytes, raw gate, or prior EFLAG */
 };
 struct ia32_interruption {
